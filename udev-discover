@@ -1,0 +1,95 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+# vim: ts=4 
+###
+#
+# Copyright (c) 2010 J. Félix Ontañón
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 3 as
+# published by the Free Software Foundation
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Authors : J. Félix Ontañón <fontanon@emergya.es>
+# 
+###
+
+import sys
+import gtk
+import gobject
+
+from udevdiscover.utils import GConfStore
+from udevdiscover.udevicefinder import DeviceFinder
+
+# FIXME: This path needs to be assigned at installing time
+UDEVMAN_UI = 'udev-discover.ui'
+GCONF_KEY = '/apps/udevman'
+
+# Load icons
+theme = gtk.icon_theme_get_default()
+device_icon = theme.load_icon('audio-card', 24, 0)
+
+class UDevManGUI(GConfStore):
+
+    defaults = {
+            'width': 600,
+            'height': 350,
+    }
+
+    def __init__(self):
+        GConfStore.__init__(self, GCONF_KEY)
+
+        self.builder = gtk.Builder()
+        if not self.builder.add_from_file(UDEVMAN_UI):
+            raise 'Cant load %s' % UDEVMAN_UI
+        self.builder.connect_signals(self)
+
+        self.main_window = self.builder.get_object('main_window')
+        self.devices_treestore = self.builder.get_object('devices_treestore')
+        
+        # About dialog
+        self.about_dialog = self.builder.get_object('about_dialog')
+        self.about_dialog.connect('response', lambda d, r: d.hide())
+
+        # Store main window width/height
+        def catch_window_size(widget, allocate, options):
+            options['width'] = allocate.width
+            options['height'] = allocate.height
+
+        self.main_window.connect('size_allocate', catch_window_size, 
+                self.options)
+
+        self.loadconf()
+        self.main_window.resize(self.options['width'], self.options['height'])
+        
+        # Populate treeview
+        self.device_finder = DeviceFinder(['usb'])
+        self.populate(self.device_finder.devices)
+        
+        self.main_window.show_all()
+
+    def populate(self, devices):
+        for path, device in devices.items():
+            #import pdb; pdb.set_trace()
+            self.devices_treestore.append(None, [path, device_icon, device[0].device.get_name() or '??'])
+
+    def about_action_activate_cb(self, widget):
+        self.about_dialog.run()
+
+    def help_action_activate_cb(self, widget):
+        pass
+
+    def quit_action_activate_cb(self, data=None):
+        self.saveconf()
+        sys.exit(0)
+
+if __name__ == '__main__':
+    UDevManGUI()
+    gobject.MainLoop().run()
