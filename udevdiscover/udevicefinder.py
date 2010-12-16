@@ -25,6 +25,8 @@
 import gobject
 import gudev
 
+UNKNOWN_DEV = 'Unknown Device'
+
 class Device(object):
     """A simple object representing a device."""
     
@@ -38,7 +40,15 @@ class Device(object):
 
     @property
     def nice_label(self):
-        return self.device.get_sysfs_attr('name')
+        return self.device.get_name() or UNKNOWN_DEV
+
+    @property
+    def parent(self):
+        parent_device = self.device.get_parent()
+        if parent_device:
+            return Device(parent_device)
+        else:
+            return None
 
     def get_props(self):
         print "subsystem", self.device.get_subsystem()
@@ -68,7 +78,13 @@ class Device(object):
 
     def __repr__(self):
         return self.device.get_name() or '??'
-        
+
+    def __eq__(self, dev):
+        if dev == None:
+            return False
+        else:
+            return self.path == dev.path
+                
 class DeviceFinder(gobject.GObject):
     """
     An object that will find and monitor Wiimote devices on your 
@@ -82,7 +98,7 @@ class DeviceFinder(gobject.GObject):
             (gobject.TYPE_PYOBJECT,)),
     }
     
-    def __init__(self, subsystems=['usb']):
+    def __init__(self, subsystems=['*']):
         """
         Create a new DeviceFinder and attach to the udev system to 
         listen for events.
@@ -91,23 +107,36 @@ class DeviceFinder(gobject.GObject):
 
         self.client = gudev.Client(subsystems)
         self.subsystems = subsystems
-        self.devices = {}
-
-        def explore_parent(device, devices_list):
+        self.devices_tree = {}
+        self.devices_list = []
+        
+        def explore_parent(device, devices_tree, devices_list):
             path = device.get_sysfs_path()        
             parent = device.get_parent()
             
             if parent:
-                explore_parent(parent, devices_list)
-                devices_list[path] = (Device(device), Device(parent))
+                explore_parent(parent, devices_tree, devices_list)
+                devices_tree[path] = (Device(device), Device(parent))
             else:
-                devices_list[path] = (Device(device), None)
+                devices_tree[path] = (Device(device), None)
+                
+            dev = Device(device)
+            if not dev in devices_list:
+                devices_list.append(dev)
 
         for subsystem in subsystems:
             for device in self.client.query_by_subsystem(subsystem):
-                explore_parent(device, self.devices)
+                #explore_parent(device, self.devices_tree, self.devices_list)
+                self.devices_list.append(Device(device))
                                 
         self.client.connect('uevent', self.event)
+
+    def get_devices_tree(self):
+        return self.devices_tree
+        
+    def get_devices(self):
+        return self.devices_list
+        #return [device_tuple[0] for sysfs_path, device_tuple in self.devices.items()]
 
     def event(self, client, action, device):
         """Handle a udev event"""
@@ -138,12 +167,12 @@ if __name__ == "__main__":
     def lost(finder, device):
         print device.path + ": " + device.nice_label
     
-    finder = DeviceFinder(['usb'])
+    finder = DeviceFinder()
     finder.connect('connected', found)
     finder.connect('disconnected', lost)
     
     import pprint
-    pprint.pprint(finder.devices)
+    pprint.pprint(finder.devices_tree)
     
     loop = gobject.MainLoop()
     loop.run()

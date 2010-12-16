@@ -36,7 +36,7 @@ GCONF_KEY = '/apps/udevman'
 theme = gtk.icon_theme_get_default()
 device_icon = theme.load_icon('audio-card', 24, 0)
 
-class UDevManGUI(GConfStore):
+class UDevDiscoverGUI(GConfStore):
 
     defaults = {
             'width': 600,
@@ -53,6 +53,7 @@ class UDevManGUI(GConfStore):
 
         self.main_window = self.builder.get_object('main_window')
         self.devices_treestore = self.builder.get_object('devices_treestore')
+        self.devices_tv = self.builder.get_object('devices_tv')
         
         # About dialog
         self.about_dialog = self.builder.get_object('about_dialog')
@@ -71,14 +72,29 @@ class UDevManGUI(GConfStore):
         
         # Populate treeview
         self.device_finder = DeviceFinder(['usb'])
-        self.populate(self.device_finder.devices)
+        self.rows = {}
+        self.populate(self.device_finder.get_devices())
+        self.devices_tv.expand_all()
         
         self.main_window.show_all()
 
     def populate(self, devices):
-        for path, device in devices.items():
-            #import pdb; pdb.set_trace()
-            self.devices_treestore.append(None, [path, device_icon, device[0].device.get_name() or '??'])
+        for device in devices:
+            if device.parent == None:
+                treeiter = self.devices_treestore.append(None, [device.path, 
+                    device_icon, device.nice_label])
+            else:
+                if self.rows.has_key(device.parent.path):
+                    parent_treeiter = self.devices_treestore.get_iter(
+                        self.rows[device.parent.path].get_path())
+                    treeiter = self.devices_treestore.append(parent_treeiter, 
+                        [device.path, device_icon, device.nice_label])
+                else:
+                    treeiter = self.devices_treestore.append(None, [device.path, 
+                        device_icon, device.nice_label])
+                    
+            self.rows[device.path] = gtk.TreeRowReference(self.devices_treestore,
+                self.devices_treestore.get_path(treeiter))
 
     def about_action_activate_cb(self, widget):
         self.about_dialog.run()
@@ -91,5 +107,5 @@ class UDevManGUI(GConfStore):
         sys.exit(0)
 
 if __name__ == '__main__':
-    UDevManGUI()
+    UDevDiscoverGUI()
     gobject.MainLoop().run()
