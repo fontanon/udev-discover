@@ -163,7 +163,8 @@ class DeviceFinder(gobject.GObject):
         print device, subsystem
         
         path = device.get_sysfs_path()
-        self.devices[path] = Device(device)
+        self.devices_tree[path] = Device(device)
+        self.devices_list[path] = Device(device)
         self.emit('connected', device)
 
 gobject.type_register(DeviceFinder)
