@@ -41,6 +41,7 @@ class UDevDiscoverGUI(GConfStore):
     defaults = {
             'width': 600,
             'height': 350,
+            'hpaned': 150,
     }
 
     def __init__(self):
@@ -54,7 +55,8 @@ class UDevDiscoverGUI(GConfStore):
         self.main_window = self.builder.get_object('main_window')
         self.devices_treestore = self.builder.get_object('devices_treestore')
         self.devices_tv = self.builder.get_object('devices_tv')
-        
+        self.devices_hpaned = self.builder.get_object('devices_hpaned')
+                
         # About dialog
         self.about_dialog = self.builder.get_object('about_dialog')
         self.about_dialog.connect('response', lambda d, r: d.hide())
@@ -69,6 +71,7 @@ class UDevDiscoverGUI(GConfStore):
 
         self.loadconf()
         self.main_window.resize(self.options['width'], self.options['height'])
+        self.devices_hpaned.set_position(self.options['hpaned'])
         
         # Populate treeview
         self.device_finder = DeviceFinder(['usb'])
@@ -103,6 +106,7 @@ class UDevDiscoverGUI(GConfStore):
         pass
 
     def quit_action_activate_cb(self, data=None):
+        self.options['hpaned'] = self.devices_hpaned.get_position()
         self.saveconf()
         sys.exit(0)
 
