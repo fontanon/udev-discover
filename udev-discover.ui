@@ -246,11 +246,16 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="model">deviceprop_store</property>
-                        <property name="headers_clickable">False</property>
+                        <property name="reorderable">True</property>
                         <property name="search_column">0</property>
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                            <property name="resizable">True</property>
                             <property name="title">Key</property>
+                            <property name="clickable">True</property>
+                            <property name="reorderable">True</property>
+                            <property name="sort_indicator">True</property>
+                            <property name="sort_column_id">0</property>
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderertext1"/>
                               <attributes>
@@ -261,7 +266,12 @@
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                            <property name="resizable">True</property>
                             <property name="title">Value</property>
+                            <property name="clickable">True</property>
+                            <property name="reorderable">True</property>
+                            <property name="sort_indicator">True</property>
+                            <property name="sort_column_id">1</property>
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderertext2"/>
                               <attributes>
