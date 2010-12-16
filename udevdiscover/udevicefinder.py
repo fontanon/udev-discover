@@ -26,16 +26,20 @@ import gobject
 import gudev
 
 UNKNOWN_DEV = 'Unknown Device'
+DEVICE_TYPE_STR = {gudev.DEVICE_TYPE_BLOCK: 'block', 
+    gudev.DEVICE_TYPE_CHAR: 'char',
+    gudev.DEVICE_TYPE_NONE: 'n/a'
+}
 
 class Device(object):
-    """A simple object representing a device."""
+    '''A simple object representing a device.'''
     
     def __init__(self, device):
-        """Create a new input device
+        '''Create a new input device
             
         @type device: gudev.Device
         @param device: The device we are using
-        """
+        '''
         self.device = device
 
     @property
@@ -50,30 +54,34 @@ class Device(object):
         else:
             return None
 
+    def get_info(self):
+        return {'subsystem': self.device.get_subsystem() or 'n/a',
+            'sysfs_path': self.device.get_sysfs_path() or 'n/a',
+            'devtype': self.device.get_devtype() or 'n/a',
+            'driver': self.device.get_driver() or 'n/a',
+            'action': self.device.get_action() or 'n/a',
+            'seqnum': self.device.get_seqnum() or 'n/a',
+            'device type': DEVICE_TYPE_STR[self.device.get_device_type()],
+            'device number': str(self.device.get_device_number()) or 'n/a',
+            'device file': self.device.get_device_file() or 'n/a',
+            'device file symlinks': ', '.join(self.device.get_device_file_symlinks()) or 'n/a',
+            'number': self.device.get_number() or 'n/a',
+        }
+
     def get_props(self):
-        print "subsystem", self.device.get_subsystem()
-        print "devtype", self.device.get_devtype()
-        print "name", self.device.get_name()
-        print "number", self.device.get_number()
-        print "sysfs_path:", self.device.get_sysfs_path()
-        print "driver:", self.device.get_driver()
-        print "action:", self.device.get_action()
-        print "seqnum:", self.device.get_seqnum()
-        print "device type:", self.device.get_device_type()
-        print "device number:", self.device.get_device_number()
-        print "device file:", self.device.get_device_file()
-        print "device file symlinks:", ", ".join(self.device.get_device_file_symlinks())
-        print "device keys:", ", ".join(self.device.get_property_keys())
+        props = {}
         for device_key in self.device.get_property_keys():
-            print "   device property %s: %s"  % (device_key, self.device.get_property(device_key))
+            props[device_key] = self.device.get_property(device_key)
+
+        return props
     
     @property
     def path(self):
-        """Get the sysfs_path for this device
+        '''Get the sysfs_path for this device
             
         @rtype: string
         @return: The sysfs path
-        """
+        '''
         return self.device.get_sysfs_path()
 
     def __repr__(self):
@@ -86,10 +94,10 @@ class Device(object):
             return self.path == dev.path
                 
 class DeviceFinder(gobject.GObject):
-    """
+    '''
     An object that will find and monitor Wiimote devices on your 
     machine and emit signals when are connected / disconnected
-    """
+    '''
     
     __gsignals__ = {
         'connected': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
@@ -99,10 +107,10 @@ class DeviceFinder(gobject.GObject):
     }
     
     def __init__(self, subsystems=['*']):
-        """
+        '''
         Create a new DeviceFinder and attach to the udev system to 
         listen for events.
-        """
+        '''
         self.__gobject_init__()
 
         self.client = gudev.Client(subsystems)
@@ -127,7 +135,9 @@ class DeviceFinder(gobject.GObject):
         for subsystem in subsystems:
             for device in self.client.query_by_subsystem(subsystem):
                 #explore_parent(device, self.devices_tree, self.devices_list)
-                self.devices_list.append(Device(device))
+                dev = Device(device)
+                self.devices_list.append(dev)
+                self.devices_tree[dev.path] = dev
                                 
         self.client.connect('uevent', self.event)
 
@@ -139,16 +149,16 @@ class DeviceFinder(gobject.GObject):
         #return [device_tuple[0] for sysfs_path, device_tuple in self.devices.items()]
 
     def event(self, client, action, device):
-        """Handle a udev event"""
+        '''Handle a udev event'''
         
         return {
-            "add": self.device_added,
-#            "change": self.device_changed,
-#            "remove": self.device_removed,
+            'add': self.device_added,
+#            'change': self.device_changed,
+#            'remove': self.device_removed,
         }.get(action, lambda x,y: None)(device, device.get_subsystem())
 
     def device_added(self, device, subsystem):
-        """Called when a device has been added to the system"""
+        '''Called when a device has been added to the system'''
         
         print device, subsystem
         
@@ -158,14 +168,14 @@ class DeviceFinder(gobject.GObject):
 
 gobject.type_register(DeviceFinder)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import gobject
     
     def found(finder, device):
-        print device.path + ": " + device.nice_label
+        print device.path + ': ' + device.nice_label
     
     def lost(finder, device):
-        print device.path + ": " + device.nice_label
+        print device.path + ': ' + device.nice_label
     
     finder = DeviceFinder()
     finder.connect('connected', found)

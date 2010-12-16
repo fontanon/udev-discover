@@ -32,9 +32,11 @@ from udevdiscover.udevicefinder import DeviceFinder
 UDEVMAN_UI = 'udev-discover.ui'
 GCONF_KEY = '/apps/udevman'
 
+PATH_COL, ICON_COL, NAME_COL = range(3)
+
 # Load icons
 theme = gtk.icon_theme_get_default()
-device_icon = theme.load_icon('audio-card', 24, 0)
+device_icon = theme.load_icon('gtk-dialog-question', 24, 0)
 
 class UDevDiscoverGUI(GConfStore):
 
@@ -56,7 +58,9 @@ class UDevDiscoverGUI(GConfStore):
         self.devices_treestore = self.builder.get_object('devices_treestore')
         self.devices_tv = self.builder.get_object('devices_tv')
         self.devices_hpaned = self.builder.get_object('devices_hpaned')
-                
+        self.devicename_label = self.builder.get_object('devicename_label')
+        self.devicedesc_label = self.builder.get_object('devicedesc_label')
+        
         # About dialog
         self.about_dialog = self.builder.get_object('about_dialog')
         self.about_dialog.connect('response', lambda d, r: d.hide())
@@ -98,6 +102,18 @@ class UDevDiscoverGUI(GConfStore):
                     
             self.rows[device.path] = gtk.TreeRowReference(self.devices_treestore,
                 self.devices_treestore.get_path(treeiter))
+
+    def devices_tv_cursor_changed_cb(self, treeview):
+        selection = self.devices_tv.get_selection()
+        model, selected = selection.get_selected()
+        
+        if selected:
+            row = self.devices_treestore[selected]
+            device = self.device_finder.get_devices_tree()[row[PATH_COL]]
+            self.devicename_label.set_label('<b>'+device.nice_label+'</b>')
+            desc = '\n'.join([': '.join(('<b>'+key.capitalize()+'</b>', val)) \
+                for key, val in device.get_info().items()])
+            self.devicedesc_label.set_label(desc)
 
     def about_action_activate_cb(self, widget):
         self.about_dialog.run()
