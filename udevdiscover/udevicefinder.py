@@ -164,7 +164,7 @@ class DeviceFinder(gobject.GObject):
         
         path = device.get_sysfs_path()
         self.devices_tree[path] = Device(device)
-        self.devices_list[path] = Device(device)
+        self.devices_list.append(Device(device))
         self.emit('connected', device)
 
 gobject.type_register(DeviceFinder)
