@@ -119,7 +119,8 @@ class UDevDiscoverGUI(GConfStore):
 
             self.deviceprop_store.clear()
             for key, val in device.get_props().items():
-                self.deviceprop_store.append([key,val])
+                self.deviceprop_store.append([key,
+                                              val.decode("string-escape")])
 
     def about_action_activate_cb(self, widget):
         self.about_dialog.run()
