@@ -1,6 +1,28 @@
-import gettext
-import __builtin__
-__builtin__._ = gettext.gettext
+# -*- coding: utf-8 -*-
+# vim: ts=4 
+###
+#
+# Copyright (c) 2010 J. Félix Ontañón
+#
+# pci_class_names adapted from gnome-device-manager
+# Copyright (C) 2007 David Zeuthen
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 3 as
+# published by the Free Software Foundation
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Authors : J. Félix Ontañón <fontanon@emergya.es>
+# 
+
+from device import Device
 
 UNKNOWN_NAME = 'Unknown PCI Device'
 
@@ -172,3 +194,24 @@ def get_pci_short_long_names(pci_class, pci_subclass, pci_protocol):
         key.append(pci_protocol)
 
     return pci_class_names[tuple(key)]
+
+class PCIDevice(Device):
+    def __get_class_subclass_protocol(self, pci_id):
+        pci_protocol = int(pci_id[-2:], 16)
+        pci_subclass = int(pci_id[-4:-2], 16)
+        pci_class = int(pci_id[:-4], 16)
+        return pci_class, pci_subclass, pci_protocol
+
+    @property
+    def nice_label(self):
+        if not 'PCI_CLASS' in self.device.get_property_keys():
+            return self.device.get_name() or UNKNOWN_DEV
+
+        #FIXME: Check len(PCI_CLASS) = 5 | 6 first
+        pci_class, pci_subclass, pci_protocol = \
+            self.__get_class_subclass_protocol(str(self.device.get_property('PCI_CLASS')))
+
+        short_name, long_name = get_pci_short_long_names(pci_class, 
+            pci_subclass, pci_protocol)
+
+        return short_name

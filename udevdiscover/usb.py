@@ -1,6 +1,28 @@
-import gettext
-import __builtin__
-__builtin__._ = gettext.gettext
+# -*- coding: utf-8 -*-
+# vim: ts=4 
+###
+#
+# Copyright (c) 2010 J. Félix Ontañón
+#
+# usb_class_names adapted from gnome-device-manager
+# Copyright (C) 2007 David Zeuthen
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 3 as
+# published by the Free Software Foundation
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Authors : J. Félix Ontañón <fontanon@emergya.es>
+# 
+
+from device import Device
 
 UNKNOWN_NAME = 'Unknown USB Device'
 
@@ -127,3 +149,16 @@ def get_usb_short_long_names(usb_class, usb_subclass, usb_protocol):
         key.append(usb_protocol)
 
     return usb_class_names[tuple(key)]
+
+class USBDevice(Device):
+    @property
+    def nice_label(self):
+        if not 'TYPE' in self.device.get_property_keys():
+            return self.device.get_name() or UNKNOWN_DEV
+
+        usb_type = map(int, self.device.get_property('TYPE').split('/'))
+
+        short_name, long_name = get_usb_short_long_names(usb_type[0], 
+            usb_type[1], usb_type[2])
+
+        return short_name

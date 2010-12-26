@@ -30,7 +30,7 @@ from udevdiscover.udevicefinder import DeviceFinder
 
 # FIXME: This path needs to be assigned at installing time
 UDEVMAN_UI = 'udev-discover.ui'
-GCONF_KEY = '/apps/udevman'
+GCONF_KEY = '/apps/udevdiscover'
 
 PATH_COL, ICON_COL, NAME_COL = range(3)
 
