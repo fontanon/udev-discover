@@ -24,6 +24,8 @@
 
 import gobject
 import gudev
+from usb import get_usb_short_long_names
+from pci import get_pci_short_long_names
 
 UNKNOWN_DEV = 'Unknown Device'
 DEVICE_TYPE_STR = {gudev.DEVICE_TYPE_BLOCK: 'block', 
@@ -84,6 +86,11 @@ class Device(object):
         '''
         return self.device.get_sysfs_path()
 
+    @property
+    def subsystem(self):
+        return self.device.get_subsystem()
+
+
     def __repr__(self):
         return self.device.get_name() or '??'
 
@@ -92,7 +99,41 @@ class Device(object):
             return False
         else:
             return self.path == dev.path
-                
+
+class USBDevice(Device):
+    @property
+    def nice_label(self):
+        if not 'TYPE' in self.device.get_property_keys():
+            return self.device.get_name() or UNKNOWN_DEV
+
+        usb_type = map(int, self.device.get_property('TYPE').split('/'))
+
+        short_name, long_name = get_usb_short_long_names(usb_type[0], 
+            usb_type[1], usb_type[2])
+
+        return short_name
+
+class PCIDevice(Device):
+    def __get_class_subclass_protocol(self, pci_id):
+        pci_protocol = int(pci_id[-2:], 16)
+        pci_subclass = int(pci_id[-4:-2], 16)
+        pci_class = int(pci_id[:-4], 16)
+        return pci_class, pci_subclass, pci_protocol
+
+    @property
+    def nice_label(self):
+        if not 'PCI_CLASS' in self.device.get_property_keys():
+            return self.device.get_name() or UNKNOWN_DEV
+
+        #FIXME: Check len(PCI_CLASS) = 5 | 6 first
+        pci_class, pci_subclass, pci_protocol = \
+            self.__get_class_subclass_protocol(str(self.device.get_property('PCI_CLASS')))
+
+        short_name, long_name = get_pci_short_long_names(pci_class, 
+            pci_subclass, pci_protocol)
+
+        return short_name
+
 class DeviceFinder(gobject.GObject):
     '''
     An object that will find and monitor Wiimote devices on your 
@@ -117,29 +158,43 @@ class DeviceFinder(gobject.GObject):
         self.subsystems = subsystems
         self.devices_tree = {}
         self.devices_list = []
-        
+
         def explore_parent(device, devices_tree, devices_list):
             path = device.get_sysfs_path()        
             parent = device.get_parent()
-            
+
             if parent:
                 explore_parent(parent, devices_tree, devices_list)
-                devices_tree[path] = (Device(device), Device(parent))
+                devices_tree[path] = self.get_device_object(device)
             else:
-                devices_tree[path] = (Device(device), None)
+                devices_tree[path] = self.get_device_object(device)
                 
-            dev = Device(device)
+            dev = self.get_device_object(device)
             if not dev in devices_list:
                 devices_list.append(dev)
 
         for subsystem in subsystems:
             for device in self.client.query_by_subsystem(subsystem):
-                #explore_parent(device, self.devices_tree, self.devices_list)
-                dev = Device(device)
+                explore_parent(device, self.devices_tree, self.devices_list)
+                #FIXME: Devices needs a creation factory pattern
+                """
                 self.devices_list.append(dev)
                 self.devices_tree[dev.path] = dev
-                                
+                """
+
         self.client.connect('uevent', self.event)
+
+    def get_device_object(self, device):
+        #FIXME: Devices needs a creation factory pattern
+        subsys = device.get_subsystem()
+        if subsys == 'usb':
+            dev = USBDevice(device)
+        elif subsys == 'pci':
+            dev = PCIDevice(device)
+        else:
+            dev = Device(device)
+        
+        return dev
 
     def get_devices_tree(self):
         return self.devices_tree
