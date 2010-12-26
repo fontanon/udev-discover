@@ -80,7 +80,7 @@ class UDevDiscoverGUI(GConfStore):
         self.devices_hpaned.set_position(self.options['hpaned'])
         
         # Populate treeview
-        self.device_finder = DeviceFinder(['usb'])
+        self.device_finder = DeviceFinder(['usb', 'pci', 'net', 'power_supply', 'block'])
         self.rows = {}
         self.populate(self.device_finder.get_devices())
         self.devices_tv.expand_all()
@@ -112,7 +112,6 @@ class UDevDiscoverGUI(GConfStore):
         if selected:
             row = self.devices_treestore[selected]
             device = self.device_finder.get_devices_tree()[row[PATH_COL]]
-            
             self.devicename_label.set_label('<b>'+device.nice_label+'</b>')
             desc = '\n'.join([': '.join(('<b>'+key.capitalize()+'</b>', val)) \
                 for key, val in device.get_info().items()])
