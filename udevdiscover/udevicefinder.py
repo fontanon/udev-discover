@@ -24,75 +24,10 @@
 
 import gobject
 import gudev
+from usb import USBDevice
+from pci import PCIDevice
+from device import Device
 
-UNKNOWN_DEV = 'Unknown Device'
-DEVICE_TYPE_STR = {gudev.DEVICE_TYPE_BLOCK: 'block', 
-    gudev.DEVICE_TYPE_CHAR: 'char',
-    gudev.DEVICE_TYPE_NONE: 'n/a'
-}
-
-class Device(object):
-    '''A simple object representing a device.'''
-    
-    def __init__(self, device):
-        '''Create a new input device
-            
-        @type device: gudev.Device
-        @param device: The device we are using
-        '''
-        self.device = device
-
-    @property
-    def nice_label(self):
-        return self.device.get_name() or UNKNOWN_DEV
-
-    @property
-    def parent(self):
-        parent_device = self.device.get_parent()
-        if parent_device:
-            return Device(parent_device)
-        else:
-            return None
-
-    def get_info(self):
-        return {'subsystem': self.device.get_subsystem() or 'n/a',
-            'sysfs_path': self.device.get_sysfs_path() or 'n/a',
-            'devtype': self.device.get_devtype() or 'n/a',
-            'driver': self.device.get_driver() or 'n/a',
-            'action': self.device.get_action() or 'n/a',
-            'seqnum': self.device.get_seqnum() or 'n/a',
-            'device type': DEVICE_TYPE_STR[self.device.get_device_type()],
-            'device number': str(self.device.get_device_number()) or 'n/a',
-            'device file': self.device.get_device_file() or 'n/a',
-            'device file symlinks': ', '.join(self.device.get_device_file_symlinks()) or 'n/a',
-            'number': self.device.get_number() or 'n/a',
-        }
-
-    def get_props(self):
-        props = {}
-        for device_key in self.device.get_property_keys():
-            props[device_key] = self.device.get_property(device_key)
-
-        return props
-    
-    @property
-    def path(self):
-        '''Get the sysfs_path for this device
-            
-        @rtype: string
-        @return: The sysfs path
-        '''
-        return self.device.get_sysfs_path()
-
-    def __repr__(self):
-        return self.device.get_name() or '??'
-
-    def __eq__(self, dev):
-        if dev == None:
-            return False
-        else:
-            return self.path == dev.path
-                
 class DeviceFinder(gobject.GObject):
     '''
     An object that will find and monitor Wiimote devices on your 
@@ -117,29 +52,43 @@ class DeviceFinder(gobject.GObject):
         self.subsystems = subsystems
         self.devices_tree = {}
         self.devices_list = []
-        
+
         def explore_parent(device, devices_tree, devices_list):
             path = device.get_sysfs_path()        
             parent = device.get_parent()
-            
+
             if parent:
                 explore_parent(parent, devices_tree, devices_list)
-                devices_tree[path] = (Device(device), Device(parent))
+                devices_tree[path] = self.get_device_object(device)
             else:
-                devices_tree[path] = (Device(device), None)
+                devices_tree[path] = self.get_device_object(device)
                 
-            dev = Device(device)
+            dev = self.get_device_object(device)
             if not dev in devices_list:
                 devices_list.append(dev)
 
         for subsystem in subsystems:
             for device in self.client.query_by_subsystem(subsystem):
-                #explore_parent(device, self.devices_tree, self.devices_list)
-                dev = Device(device)
+                explore_parent(device, self.devices_tree, self.devices_list)
+                #FIXME: Devices needs a creation factory pattern
+                """
                 self.devices_list.append(dev)
                 self.devices_tree[dev.path] = dev
-                                
+                """
+
         self.client.connect('uevent', self.event)
+
+    def get_device_object(self, device):
+        #FIXME: Devices needs a creation factory pattern
+        subsys = device.get_subsystem()
+        if subsys == 'usb':
+            dev = USBDevice(device)
+        elif subsys == 'pci':
+            dev = PCIDevice(device)
+        else:
+            dev = Device(device)
+        
+        return dev
 
     def get_devices_tree(self):
         return self.devices_tree
