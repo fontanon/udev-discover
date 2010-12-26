@@ -88,7 +88,6 @@ class Device(object):
     def subsystem(self):
         return self.device.get_subsystem()
 
-
     def __repr__(self):
         return self.device.get_name() or '??'
 
