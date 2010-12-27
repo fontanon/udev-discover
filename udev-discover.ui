@@ -56,6 +56,19 @@
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">_Ver</property>
                 <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menu2">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkImageMenuItem" id="menuitem2">
+                        <property name="visible">True</property>
+                        <property name="related_action">showparents_toggleaction</property>
+                        <property name="use_action_appearance">True</property>
+                        <property name="use_stock">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
@@ -97,6 +110,28 @@
         <child>
           <object class="GtkToolbar" id="toolbar1">
             <property name="visible">True</property>
+            <child>
+              <object class="GtkToggleToolButton" id="parents_toolbtn">
+                <property name="visible">True</property>
+                <property name="related_action">showparents_toggleaction</property>
+                <property name="use_action_appearance">True</property>
+                <property name="label" translatable="yes">toolbutton3</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparatorToolItem" id="toolbutton4">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
             <child>
               <object class="GtkToolButton" id="toolbutton1">
                 <property name="visible">True</property>
@@ -144,7 +179,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="model">devices_treestore</property>
-                    <property name="reorderable">True</property>
                     <property name="search_column">2</property>
                     <signal name="cursor_changed" handler="devices_tv_cursor_changed_cb"/>
                     <child>
@@ -265,7 +299,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="model">deviceprop_store</property>
-                        <property name="reorderable">True</property>
                         <property name="search_column">0</property>
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn1">
@@ -286,6 +319,7 @@
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn2">
                             <property name="resizable">True</property>
+                            <property name="sizing">autosize</property>
                             <property name="title">Value</property>
                             <property name="clickable">True</property>
                             <property name="reorderable">True</property>
@@ -389,5 +423,13 @@ Juanje Ojeda &lt;jojeda@emergya.es&gt;</property>
     <property name="short_label">About</property>
     <property name="stock_id">gtk-about</property>
     <signal name="activate" handler="about_action_activate_cb"/>
+  </object>
+  <object class="GtkToggleAction" id="showparents_toggleaction">
+    <property name="label" translatable="yes">Show parent tree</property>
+    <property name="short_label" translatable="yes">Parent tree</property>
+    <property name="tooltip" translatable="yes">Recursive displaying of devices parent</property>
+    <property name="stock_id">gtk-sort-ascending</property>
+    <property name="active">True</property>
+    <signal name="toggled" handler="showparents_toggleaction_toggled_cb"/>
   </object>
 </interface>

@@ -41,7 +41,7 @@ class DeviceFinder(gobject.GObject):
             (gobject.TYPE_PYOBJECT,)),
     }
     
-    def __init__(self, subsystems=['*']):
+    def __init__(self, subsystems=['*'], parent_tree=False):
         '''
         Create a new DeviceFinder and attach to the udev system to 
         listen for events.
@@ -69,12 +69,12 @@ class DeviceFinder(gobject.GObject):
 
         for subsystem in subsystems:
             for device in self.client.query_by_subsystem(subsystem):
-                explore_parent(device, self.devices_tree, self.devices_list)
-                #FIXME: Devices needs a creation factory pattern
-                """
-                self.devices_list.append(dev)
-                self.devices_tree[dev.path] = dev
-                """
+                if parent_tree: 
+                    explore_parent(device, self.devices_tree, self.devices_list)
+                else:
+                    self.devices_list.append(self.get_device_object(device))
+                    self.devices_tree[device.get_sysfs_path()] = \
+                        self.get_device_object(device)
 
         self.client.connect('uevent', self.event)
 
