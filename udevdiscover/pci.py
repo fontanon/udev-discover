@@ -23,6 +23,7 @@
 # 
 
 from device import Device
+from utils import memoized
 
 UNKNOWN_NAME = 'Unknown PCI Device'
 
@@ -174,6 +175,7 @@ pci_class_names = {
     (0x11, 0x01,   -1): (_('Performance Counters'), _('Performance Counters'))
 }
 
+@memoized
 def get_pci_short_long_names(pci_class, pci_subclass, pci_protocol):
     key = [pci_class]
 

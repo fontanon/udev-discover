@@ -23,6 +23,7 @@
 # 
 
 from device import Device
+from utils import memoized
 
 UNKNOWN_NAME = 'Unknown USB Device'
 
@@ -129,6 +130,7 @@ usb_class_names = {
     (0xef, 0x02, 0x01): (_('Interface Association'), _('Interface Association')),
 }
 
+@memoized
 def get_usb_short_long_names(usb_class, usb_subclass, usb_protocol):
     key = [usb_class]
 
