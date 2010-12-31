@@ -22,10 +22,17 @@
 # Authors : J. Félix Ontañón <fontanon@emergya.es>
 # 
 
+import subprocess
+import re
+
 from device import Device
 from utils import memoized
 
 UNKNOWN_NAME = 'Unknown PCI Device'
+PCI_DB_CMD = '/lib/udev/pci-db'
+
+vendor_regex = re.compile('(?<=ID_VENDOR_FROM_DATABASE=).*')
+model_regex = re.compile('(?<=ID_MODEL_FROM_DATABASE=).*')
 
 pci_class_names = {
     (0x01,   -1,   -1): (_('Storage Controller'), _('Mass Storage Controller')),
@@ -197,6 +204,20 @@ def get_pci_short_long_names(pci_class, pci_subclass, pci_protocol):
 
     return pci_class_names[tuple(key)]
 
+@memoized
+def get_pci_vendor_model_names(sysfs_path):
+    vendor_name, model_name = None, None
+
+    process = subprocess.Popen([PCI_DB_CMD, sysfs_path], stdout=subprocess.PIPE)
+    if process.wait() == 0:
+        output = process.communicate()[0]
+        vendor_res = vendor_regex.search(output)
+        model_res = model_regex.search(output)
+        if vendor_res: vendor_name = vendor_res.group(0)
+        if model_res: model_name = model_res.group(0)
+
+    return vendor_name, model_name
+
 class PCIDevice(Device):
     def __get_class_subclass_protocol(self, pci_id):
         pci_protocol = int(pci_id[-2:], 16)
@@ -217,3 +238,7 @@ class PCIDevice(Device):
             pci_subclass, pci_protocol)
 
         return short_name
+
+    @property
+    def vendor_model_names(self):
+        return get_pci_vendor_model_names(self.path.split('/sys')[1])

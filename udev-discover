@@ -123,7 +123,7 @@ class UDevDiscoverGUI(GConfStore):
         self.devices_tv.expand_all()        
 
     def reload_action_activate_cb(self, widget):
-        self.device_finder = DeviceFinder(['usb', 'net', 'pci', 'power_supply',
+        self.device_finder = DeviceFinder(['pci', 'power_supply', 'usb', 'net'
             'block'], self.options['parent_tree'])
 
         self.rows = self.populate(self.device_finder.get_devices())
@@ -136,7 +136,12 @@ class UDevDiscoverGUI(GConfStore):
         if selected:
             row = self.devices_treestore[selected]
             device = self.device_finder.get_devices_tree()[row[PATH_COL]]
-            self.devicename_label.set_label('<b>'+device.nice_label+'</b>')
+
+            title = '<b>'+device.nice_label+'</b>'
+            if hasattr(device, 'vendor_model_names'):
+                title += '\n<i>%s</i>\n<i>%s</i>' % device.vendor_model_names
+            self.devicename_label.set_label(title)
+
             desc = '\n'.join([': '.join(('<b>'+key.capitalize()+'</b>', val)) \
                 for key, val in device.get_info().items()])
             self.devicedesc_label.set_label(desc)
