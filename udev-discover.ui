@@ -60,10 +60,20 @@
                   <object class="GtkMenu" id="menu2">
                     <property name="visible">True</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="menuitem2">
+                      <object class="GtkImageMenuItem" id="expand_menuitem">
+                        <property name="visible">True</property>
+                        <property name="related_action">expand_toggleaction</property>
+                        <property name="use_action_appearance">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="parents_menuitem">
                         <property name="visible">True</property>
                         <property name="related_action">showparents_toggleaction</property>
                         <property name="use_action_appearance">True</property>
+                        <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
                     </child>
@@ -72,6 +82,7 @@
                         <property name="visible">True</property>
                         <property name="related_action">reload_action</property>
                         <property name="use_action_appearance">True</property>
+                        <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
                     </child>
@@ -118,6 +129,19 @@
         <child>
           <object class="GtkToolbar" id="toolbar1">
             <property name="visible">True</property>
+            <child>
+              <object class="GtkToggleToolButton" id="toolbutton5">
+                <property name="visible">True</property>
+                <property name="related_action">expand_toggleaction</property>
+                <property name="use_action_appearance">True</property>
+                <property name="label" translatable="yes">toolbutton5</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
             <child>
               <object class="GtkToggleToolButton" id="parents_toolbtn">
                 <property name="visible">True</property>
@@ -275,6 +299,7 @@
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
                             <property name="use_markup">True</property>
+                            <property name="selectable">True</property>
                           </object>
                           <packing>
                             <property name="padding">6</property>
@@ -292,6 +317,7 @@
                         <property name="visible">True</property>
                         <property name="yalign">0</property>
                         <property name="use_markup">True</property>
+                        <property name="selectable">True</property>
                       </object>
                       <packing>
                         <property name="padding">6</property>
@@ -446,18 +472,26 @@ Juanje Ojeda &lt;jojeda@emergya.es&gt;</property>
     <signal name="activate" handler="about_action_activate_cb"/>
   </object>
   <object class="GtkToggleAction" id="showparents_toggleaction">
-    <property name="label" translatable="yes">Show parent tree</property>
-    <property name="short_label" translatable="yes">Parent tree</property>
-    <property name="tooltip" translatable="yes">Recursive displaying of devices parent</property>
+    <property name="label">Show/hide parent tree</property>
+    <property name="short_label">Parent tree</property>
+    <property name="tooltip">Recursive displaying/hiding of devices parent</property>
     <property name="stock_id">gtk-sort-ascending</property>
     <property name="active">True</property>
     <signal name="toggled" handler="showparents_toggleaction_toggled_cb"/>
   </object>
   <object class="GtkAction" id="reload_action">
-    <property name="label" translatable="yes">Reload</property>
-    <property name="short_label" translatable="yes">Reload devices</property>
-    <property name="tooltip" translatable="yes">Reload the devices tree</property>
+    <property name="label">Reload</property>
+    <property name="short_label">Reload devices</property>
+    <property name="tooltip">Reload the devices tree</property>
     <property name="stock_id">gtk-refresh</property>
     <signal name="activate" handler="reload_action_activate_cb"/>
+  </object>
+  <object class="GtkToggleAction" id="expand_toggleaction">
+    <property name="label">Expand/collapse devices tree</property>
+    <property name="short_label">Expand/collapse</property>
+    <property name="tooltip">Expand/collapse devices tree</property>
+    <property name="icon_name">format-indent-more</property>
+    <property name="active">True</property>
+    <signal name="toggled" handler="expand_toggleaction_toggled_cb"/>
   </object>
 </interface>

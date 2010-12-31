@@ -114,20 +114,24 @@ class UDevDiscoverGUI(GConfStore):
 
         return rows
 
-    def showparents_toggleaction_toggled_cb(self, widget):
-        self.options['parent_tree'] = widget.get_active()
+    def showparents_toggleaction_toggled_cb(self, action):
+        self.options['parent_tree'] = action.get_active()
         self.device_finder = DeviceFinder(['usb', 'net', 'pci', 'power_supply',
             'block'], self.options['parent_tree'])
 
         self.rows = self.populate(self.device_finder.get_devices())
-        self.devices_tv.expand_all()        
+
+    def expand_toggleaction_toggled_cb(self, action):
+        if action.get_active():
+            self.devices_tv.expand_all()
+        else:
+            self.devices_tv.collapse_all()
 
     def reload_action_activate_cb(self, widget):
         self.device_finder = DeviceFinder(['pci', 'power_supply', 'usb', 'net'
             'block'], self.options['parent_tree'])
 
         self.rows = self.populate(self.device_finder.get_devices())
-        self.devices_tv.expand_all()        
 
     def devices_tv_cursor_changed_cb(self, treeview):
         selection = self.devices_tv.get_selection()
