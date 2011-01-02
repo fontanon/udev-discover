@@ -31,6 +31,8 @@ from udevdiscover.udevicefinder import DeviceFinder
 # FIXME: This path needs to be assigned at installing time
 UDEVMAN_UI = 'udev-discover.ui'
 GCONF_KEY = '/apps/udevdiscover'
+DEFAULT_SUBSYSTEMS = ['usb', 'pci', 'net', 'power_supply', 'block', 'sound', 
+    'input', 'serio', 'platform']
 
 PATH_COL, ICON_COL, NAME_COL = range(3)
 
@@ -45,6 +47,7 @@ class UDevDiscoverGUI(GConfStore):
             'height': 350,
             'hpaned': 150,
             'parent_tree': True,
+            'expanded': True,
     }
 
     def __init__(self):
@@ -64,6 +67,7 @@ class UDevDiscoverGUI(GConfStore):
         self.devicename_label = self.builder.get_object('devicename_label')
         self.devicedesc_label = self.builder.get_object('devicedesc_label')
         self.parents_toolbtn = self.builder.get_object('parents_toolbtn')
+        self.expand_toggleaction = self.builder.get_object('expand_toggleaction')
 
         # About dialog
         self.about_dialog = self.builder.get_object('about_dialog')
@@ -80,14 +84,16 @@ class UDevDiscoverGUI(GConfStore):
         self.loadconf()
         self.main_window.resize(self.options['width'], self.options['height'])
         self.devices_hpaned.set_position(self.options['hpaned'])
-        self.parents_toolbtn.set_active(self.options['parent_tree'])
 
         # Populate treeview
-        self.device_finder = DeviceFinder(['usb', 'pci', 'net', 'power_supply',
-            'block'], self.options['parent_tree'])
-
+        self.device_finder = DeviceFinder()
+        self.device_finder.scan_subsystems(DEFAULT_SUBSYSTEMS, 
+            self.options['parent_tree'])
         self.rows = self.populate(self.device_finder.get_devices())
-        self.devices_tv.expand_all()        
+
+        self.parents_toolbtn.set_active(self.options['parent_tree'])
+        self.expand_toggleaction.set_active(self.options['expanded'])
+        self.expand_toggleaction_toggled_cb(self.expand_toggleaction)
         self.main_window.show_all()
 
     def populate(self, devices):
@@ -108,7 +114,7 @@ class UDevDiscoverGUI(GConfStore):
                 else:
                     treeiter = self.devices_treestore.append(None, [device.path, 
                         device_icon, device.nice_label, device.subsystem])
-                    
+
             rows[device.path] = gtk.TreeRowReference(self.devices_treestore,
                 self.devices_treestore.get_path(treeiter))
 
@@ -116,10 +122,11 @@ class UDevDiscoverGUI(GConfStore):
 
     def showparents_toggleaction_toggled_cb(self, action):
         self.options['parent_tree'] = action.get_active()
-        self.device_finder = DeviceFinder(['usb', 'net', 'pci', 'power_supply',
-            'block'], self.options['parent_tree'])
+        self.device_finder.scan_subsystems(DEFAULT_SUBSYSTEMS, 
+            self.options['parent_tree'])
 
         self.rows = self.populate(self.device_finder.get_devices())
+        self.expand_toggleaction_toggled_cb(self.expand_toggleaction)
 
     def expand_toggleaction_toggled_cb(self, action):
         if action.get_active():
@@ -127,16 +134,18 @@ class UDevDiscoverGUI(GConfStore):
         else:
             self.devices_tv.collapse_all()
 
+        self.options['expanded'] = self.expand_toggleaction.get_active()
+
     def reload_action_activate_cb(self, widget):
-        self.device_finder = DeviceFinder(['pci', 'power_supply', 'usb', 'net'
-            'block'], self.options['parent_tree'])
+        self.device_finder.scan_subsystems(DEFAULT_SUBSYSTEMS, 
+            self.options['parent_tree'])
 
         self.rows = self.populate(self.device_finder.get_devices())
 
     def devices_tv_cursor_changed_cb(self, treeview):
         selection = self.devices_tv.get_selection()
         model, selected = selection.get_selected()
-        
+
         if selected:
             row = self.devices_treestore[selected]
             device = self.device_finder.get_devices_tree()[row[PATH_COL]]

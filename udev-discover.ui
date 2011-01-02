@@ -130,7 +130,7 @@
           <object class="GtkToolbar" id="toolbar1">
             <property name="visible">True</property>
             <child>
-              <object class="GtkToggleToolButton" id="toolbutton5">
+              <object class="GtkToggleToolButton" id="expand_toolbtn">
                 <property name="visible">True</property>
                 <property name="related_action">expand_toggleaction</property>
                 <property name="use_action_appearance">True</property>
