@@ -89,7 +89,7 @@ class Device(object):
         return self.device.get_subsystem()
 
     def __repr__(self):
-        return self.device.get_name() or '??'
+        return self.nice_label or '??'
 
     def __eq__(self, dev):
         if dev == None:

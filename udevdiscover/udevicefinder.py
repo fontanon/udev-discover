@@ -35,9 +35,9 @@ class DeviceFinder(gobject.GObject):
     '''
 
     __gsignals__ = {
-        'connected': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+        'added': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT,)),
-        'disconnected': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+        'removed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT,)),
     }
 
@@ -74,24 +74,19 @@ class DeviceFinder(gobject.GObject):
         self.client.connect('uevent', self.event)
         self.parent_tree = parent_tree
 
-    def __explore_parent(self, device, devices_tree, devices_list):
+    def __explore_parent(self, device, devices_tree, devices_list, emit=False):
         path = device.get_sysfs_path()
         parent = device.get_parent()
-        tree = []
 
+        if parent and not devices_tree.has_key(parent.get_sysfs_path()):
+            self.__explore_parent(parent, devices_tree, devices_list, emit)
+            
         dev = self.get_device_object(device)
+        devices_tree[path] = dev
+        devices_list.append(dev)
 
-        if parent:
-            tree.append(self.__explore_parent(parent, devices_tree, devices_list))
-            devices_tree[path] = dev
-        else:
-            devices_tree[path] = dev
-
-        if not dev in devices_list:
-            devices_list.append(dev)
-            tree.append(dev)
-
-        return dev
+        if emit:
+            self.emit('added', dev)
 
     def get_device_object(self, device):
         #FIXME: Devices needs a creation factory pattern
@@ -116,26 +111,32 @@ class DeviceFinder(gobject.GObject):
 
         return {
             'add': self.device_added,
+            'remove': self.device_removed,
 #            'change': self.device_changed,
-#            'remove': self.device_removed,
         }.get(action, lambda x,y: None)(device, device.get_subsystem())
 
     def device_added(self, device, subsystem):
         '''Called when a device has been added to the system'''
 
         dev = self.get_device_object(device)
-        devices_founded = [dev]
 
         if self.parent_tree: 
-            devices_tree.append(self.__explore_parent(device, self.devices_tree,
-                self.devices_list))
+            self.__explore_parent(device, self.devices_tree, self.devices_list, True)
         else:
             self.devices_list.append(dev)
-            self.devices_tree[device.get_sysfs_path()] = dev
+            self.devices_tree[dev.path] = dev
+            self.emit('added', dev)
 
-        for found_device in devices_founded:
-            self.emit('connected', found_device)
+    def device_removed(self, device, subsystem):
+        '''Called when a device has been removed from the system'''
+        
+        dev = self.get_device_object(device)
 
+        if dev in self.devices_list: self.devices_list.remove(dev)
+        if self.devices_tree.has_key(dev.path): del(self.devices_tree[dev.path])
+
+        self.emit('removed', dev)
+        
 gobject.type_register(DeviceFinder)
 
 if __name__ == '__main__':

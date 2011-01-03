@@ -52,6 +52,7 @@ class UDevDiscoverGUI(GConfStore):
 
     def __init__(self):
         GConfStore.__init__(self, GCONF_KEY)
+        self.rows = {}
 
         self.builder = gtk.Builder()
         if not self.builder.add_from_file(UDEVMAN_UI):
@@ -89,43 +90,60 @@ class UDevDiscoverGUI(GConfStore):
         self.device_finder = DeviceFinder()
         self.device_finder.scan_subsystems(DEFAULT_SUBSYSTEMS, 
             self.options['parent_tree'])
-        self.rows = self.populate(self.device_finder.get_devices())
+        self.device_finder.connect('added', self.new_device)
+        self.device_finder.connect('removed', self.removed_device)
+        self.populate(self.device_finder.get_devices())
 
         self.parents_toolbtn.set_active(self.options['parent_tree'])
         self.expand_toggleaction.set_active(self.options['expanded'])
         self.expand_toggleaction_toggled_cb(self.expand_toggleaction)
         self.main_window.show_all()
 
+    def new_device(self, device_finder, device):
+        row_ref = self.add_new_device(device)
+        if self.options['expanded']:
+            self.devices_tv.expand_to_path(row_ref.get_path())
+
+    def removed_device(self, device_finder, device):
+        if self.rows.has_key(device.path):
+            ref_row = self.rows[device.path]
+            treeiter = self.devices_treestore.get_iter(ref_row.get_path())
+            self.devices_treestore.remove(treeiter)
+            del(self.rows[device.path])
+
     def populate(self, devices):
         self.devices_treestore.clear()
-        rows = {}
-
+        self.rows = {}
+        
         for device in devices:
-            if device.parent == None:
+            self.add_new_device(device)
+
+    def add_new_device(self, device):
+        if device.parent == None:
+            treeiter = self.devices_treestore.append(None, [device.path, 
+                device_icon, device.nice_label, device.subsystem])
+        else:
+            if self.rows.has_key(device.parent.path):
+                parent_treeiter = self.devices_treestore.get_iter(
+                    self.rows[device.parent.path].get_path())
+                treeiter = self.devices_treestore.append(parent_treeiter, 
+                    [device.path, device_icon, device.nice_label, 
+                    device.subsystem])
+            else:
                 treeiter = self.devices_treestore.append(None, [device.path, 
                     device_icon, device.nice_label, device.subsystem])
-            else:
-                if rows.has_key(device.parent.path):
-                    parent_treeiter = self.devices_treestore.get_iter(
-                        rows[device.parent.path].get_path())
-                    treeiter = self.devices_treestore.append(parent_treeiter, 
-                        [device.path, device_icon, device.nice_label, 
-                        device.subsystem])
-                else:
-                    treeiter = self.devices_treestore.append(None, [device.path, 
-                        device_icon, device.nice_label, device.subsystem])
+        
+        self.rows[device.path] = gtk.TreeRowReference(self.devices_treestore,
+            self.devices_treestore.get_path(treeiter))
 
-            rows[device.path] = gtk.TreeRowReference(self.devices_treestore,
-                self.devices_treestore.get_path(treeiter))
-
-        return rows
+        return self.rows[device.path]
 
     def showparents_toggleaction_toggled_cb(self, action):
         self.options['parent_tree'] = action.get_active()
         self.device_finder.scan_subsystems(DEFAULT_SUBSYSTEMS, 
             self.options['parent_tree'])
 
-        self.rows = self.populate(self.device_finder.get_devices())
+        self.populate(self.device_finder.get_devices())
         self.expand_toggleaction_toggled_cb(self.expand_toggleaction)
 
     def expand_toggleaction_toggled_cb(self, action):
@@ -140,7 +158,7 @@ class UDevDiscoverGUI(GConfStore):
         self.device_finder.scan_subsystems(DEFAULT_SUBSYSTEMS, 
             self.options['parent_tree'])
 
-        self.rows = self.populate(self.device_finder.get_devices())
+        self.populate(self.device_finder.get_devices())
 
     def devices_tv_cursor_changed_cb(self, treeview):
         selection = self.devices_tv.get_selection()
@@ -155,8 +173,8 @@ class UDevDiscoverGUI(GConfStore):
                 title += '\n<i>%s</i>\n<i>%s</i>' % device.vendor_model_names
             self.devicename_label.set_label(title)
 
-            desc = '\n'.join([': '.join(('<b>'+key.capitalize()+'</b>', val)) \
-                for key, val in device.get_info().items()])
+            desc = '\n'.join([': '.join(('<b>'+key.capitalize()+'</b>', 
+                str(val))) for key, val in device.get_info().items()])
             self.devicedesc_label.set_label(desc)
 
             self.deviceprop_store.clear()
