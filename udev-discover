@@ -57,6 +57,8 @@ class UDevDiscoverGUI(GConfStore):
             'expanded': True,
             'eventslog_vpaned': 350,
             'eventslog_expanded': True,
+            'follownew': True,
+            'followchanged': False,
     }
 
     def __init__(self):
@@ -81,6 +83,9 @@ class UDevDiscoverGUI(GConfStore):
         self.expand_toggleaction = self.builder.get_object('expand_toggleaction')
         self.eventslog_expander = self.builder.get_object('eventslog_expander')
         self.eventslog_textbuffer = self.builder.get_object('eventslog_textbuffer')
+        self.follownew_toggleaction = self.builder.get_object('follownew_toggleaction')
+        self.followchanged_toggleaction = \
+            self.builder.get_object('followchanged_toggleaction')
 
         # About dialog
         self.about_dialog = self.builder.get_object('about_dialog')
@@ -115,20 +120,37 @@ class UDevDiscoverGUI(GConfStore):
             self.options['parent_tree'])
         self.device_finder.connect('added', self.new_device)
         self.device_finder.connect('removed', self.removed_device)
+        self.device_finder.connect('changed', self.changed_device)
         self.populate(self.device_finder.get_devices())
 
         self.parents_toolbtn.set_active(self.options['parent_tree'])
         self.expand_toggleaction.set_active(self.options['expanded'])
         self.expand_toggleaction_toggled_cb(self.expand_toggleaction)
+        self.follownew_toggleaction.set_active(self.options['follownew'])
+        self.followchanged_toggleaction.set_active(self.options['followchanged'])
         self.main_window.show_all()
 
     def new_device(self, device_finder, device):
         row_ref = self.add_new_device(device)
+
         if self.options['expanded']:
             self.devices_tv.expand_to_path(row_ref.get_path())
+
+        if self.options['follownew']:
+            self.devices_tv.set_cursor(row_ref.get_path())
+
         self.logger.info('Device added: %s' % device.nice_label)
 
     def removed_device(self, device_finder, device):
+        if self.rows.has_key(device.path):
+            ref_row = self.rows[device.path]
+            treeiter = self.devices_treestore.get_iter(ref_row.get_path())
+            self.devices_treestore.remove(treeiter)
+            del(self.rows[device.path])
+
+        self.logger.info('Device removed: %s' % device.nice_label)
+
+    def changed_device(self, device_finder, device):
         if self.rows.has_key(device.path):
             ref_row = self.rows[device.path]
             treeiter = self.devices_treestore.get_iter(ref_row.get_path())
@@ -180,6 +202,12 @@ class UDevDiscoverGUI(GConfStore):
 
         self.options['expanded'] = self.expand_toggleaction.get_active()
 
+    def follownew_toggleaction_toggled_cb(self, action):
+        self.options['follownew'] = self.follownew_toggleaction.get_active()
+
+    def followchanged_toggleaction_toggled_cb(self, action):
+        self.options['followchanged'] = self.followchanged_toggleaction.get_active()
+
     def reload_action_activate_cb(self, widget):
         self.device_finder.scan_subsystems(DEFAULT_SUBSYSTEMS, 
             self.options['parent_tree'])
@@ -219,6 +247,8 @@ class UDevDiscoverGUI(GConfStore):
         self.options['devices_hpaned'] = self.devices_hpaned.get_position()
         self.options['eventslog_vpaned'] = self.eventslog_vpaned.get_position()
         self.options['eventslog_expanded'] = self.eventslog_expander.get_expanded()
+        self.options['follownew'] = self.follownew_toggleaction.get_active()
+        self.options['followchanged'] = self.followchanged_toggleaction.get_active()
         self.saveconf()
         sys.exit(0)
 

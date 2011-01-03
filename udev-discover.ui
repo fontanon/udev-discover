@@ -60,6 +60,25 @@
                   <object class="GtkMenu" id="menu2">
                     <property name="visible">True</property>
                     <child>
+                      <object class="GtkCheckMenuItem" id="follownew_menuitem">
+                        <property name="visible">True</property>
+                        <property name="related_action">follownew_toggleaction</property>
+                        <property name="use_action_appearance">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckMenuItem" id="followchanged_menuitem">
+                        <property name="visible">True</property>
+                        <property name="related_action">followchanged_toggleaction</property>
+                        <property name="use_action_appearance">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="menuitem7">
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkCheckMenuItem" id="expand_menuitem">
                         <property name="visible">True</property>
                         <property name="related_action">expand_toggleaction</property>
@@ -73,6 +92,11 @@
                         <property name="related_action">showparents_toggleaction</property>
                         <property name="use_action_appearance">True</property>
                         <property name="use_underline">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="menuitem6">
+                        <property name="visible">True</property>
                       </object>
                     </child>
                     <child>
@@ -127,6 +151,41 @@
         <child>
           <object class="GtkToolbar" id="toolbar1">
             <property name="visible">True</property>
+            <child>
+              <object class="GtkToggleToolButton" id="toolbutton5">
+                <property name="visible">True</property>
+                <property name="related_action">follownew_toggleaction</property>
+                <property name="use_action_appearance">True</property>
+                <property name="label" translatable="yes">toolbutton5</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="toolbutton6">
+                <property name="visible">True</property>
+                <property name="related_action">followchanged_toggleaction</property>
+                <property name="use_action_appearance">True</property>
+                <property name="label" translatable="yes">toolbutton6</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparatorToolItem" id="toolbutton7">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
             <child>
               <object class="GtkToggleToolButton" id="expand_toolbtn">
                 <property name="visible">True</property>
@@ -227,6 +286,7 @@
                         <property name="can_focus">True</property>
                         <property name="model">devices_treestore</property>
                         <property name="search_column">2</property>
+                        <property name="enable_tree_lines">True</property>
                         <signal name="cursor_changed" handler="devices_tv_cursor_changed_cb"/>
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn3">
@@ -522,9 +582,9 @@ Juanje Ojeda &lt;jojeda@emergya.es&gt;</property>
     <signal name="toggled" handler="showparents_toggleaction_toggled_cb"/>
   </object>
   <object class="GtkAction" id="reload_action">
-    <property name="label">Reload</property>
-    <property name="short_label">Reload devices</property>
-    <property name="tooltip">Reload the devices tree</property>
+    <property name="label">Reload devices tree</property>
+    <property name="short_label">Reload</property>
+    <property name="tooltip">Update devices tree by reloading</property>
     <property name="stock_id">gtk-refresh</property>
     <signal name="activate" handler="reload_action_activate_cb"/>
   </object>
@@ -537,4 +597,18 @@ Juanje Ojeda &lt;jojeda@emergya.es&gt;</property>
     <signal name="toggled" handler="expand_toggleaction_toggled_cb"/>
   </object>
   <object class="GtkTextBuffer" id="eventslog_textbuffer"/>
+  <object class="GtkToggleAction" id="follownew_toggleaction">
+    <property name="label">Follow new devices</property>
+    <property name="short_label">Follow new</property>
+    <property name="tooltip">Focus follows new devices</property>
+    <property name="stock_id">gtk-add</property>
+    <signal name="toggled" handler="follownew_toggleaction_toggled_cb"/>
+  </object>
+  <object class="GtkToggleAction" id="followchanged_toggleaction">
+    <property name="label">Follow changing devices</property>
+    <property name="short_label">Follow changes</property>
+    <property name="tooltip">Focus follows changing devices</property>
+    <property name="stock_id">gtk-dialog-warning</property>
+    <signal name="toggled" handler="followchanged_toggleaction_toggled_cb"/>
+  </object>
 </interface>

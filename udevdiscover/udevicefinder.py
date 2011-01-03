@@ -39,6 +39,8 @@ class DeviceFinder(gobject.GObject):
             (gobject.TYPE_PYOBJECT,)),
         'removed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT,)),
+        'changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+            (gobject.TYPE_PYOBJECT,)),
     }
 
     def __init__(self, subsystems=['*'], parent_tree=False):
@@ -112,7 +114,7 @@ class DeviceFinder(gobject.GObject):
         return {
             'add': self.device_added,
             'remove': self.device_removed,
-#            'change': self.device_changed,
+            'change': self.device_changed,
         }.get(action, lambda x,y: None)(device, device.get_subsystem())
 
     def device_added(self, device, subsystem):
@@ -136,6 +138,12 @@ class DeviceFinder(gobject.GObject):
         if self.devices_tree.has_key(dev.path): del(self.devices_tree[dev.path])
 
         self.emit('removed', dev)
+
+    def device_changed(self, device, subsystem):
+        '''Called when a device has been added to the system'''
+
+        dev = self.get_device_object(device)
+        self.emit('changed', dev)
 
 gobject.type_register(DeviceFinder)
 
