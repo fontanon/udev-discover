@@ -103,7 +103,7 @@ class GConfStore(object):
 
 class GConfStoreError(exceptions.Exception):
     pass
-    
+
 class memoized(object):
    """Decorator that caches a function's return value each time it is called.
    If called later with the same arguments, the cached value is returned, and
@@ -129,3 +129,18 @@ class memoized(object):
    def __get__(self, obj, objtype):
       """Support instance methods."""
       return functools.partial(self.__call__, obj)
+
+import logging
+
+class TextBufferHandler(logging.StreamHandler):
+    def __init__(self, textbuffer):
+        logging.StreamHandler.__init__(self)
+        self.textbuffer = textbuffer
+
+    def emit(self, record):
+        logging.StreamHandler.emit(self, record)
+
+        self.textbuffer.insert(self.textbuffer.get_end_iter(), 
+            self.formatter.format(record)+'\n')
+
+        self.textbuffer.place_cursor(self.textbuffer.get_end_iter())

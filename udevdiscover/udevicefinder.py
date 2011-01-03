@@ -129,14 +129,14 @@ class DeviceFinder(gobject.GObject):
 
     def device_removed(self, device, subsystem):
         '''Called when a device has been removed from the system'''
-        
+
         dev = self.get_device_object(device)
 
         if dev in self.devices_list: self.devices_list.remove(dev)
         if self.devices_tree.has_key(dev.path): del(self.devices_tree[dev.path])
 
         self.emit('removed', dev)
-        
+
 gobject.type_register(DeviceFinder)
 
 if __name__ == '__main__':

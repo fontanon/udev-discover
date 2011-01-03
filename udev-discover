@@ -24,15 +24,22 @@
 import sys
 import gtk
 import gobject
+import logging
 
-from udevdiscover.utils import GConfStore
+from udevdiscover.utils import GConfStore, TextBufferHandler
 from udevdiscover.udevicefinder import DeviceFinder
 
 # FIXME: This path needs to be assigned at installing time
 UDEVMAN_UI = 'udev-discover.ui'
 GCONF_KEY = '/apps/udevdiscover'
+
 DEFAULT_SUBSYSTEMS = ['usb', 'pci', 'net', 'power_supply', 'block', 'sound', 
     'input', 'serio', 'platform']
+
+TEXTBUFFER_LOGGER = 'udevdiscover'
+LOG_LEVEL = logging.DEBUG
+LOG_FORMAT = '%(asctime)s %(levelname)s - %(message)s'
+LOG_DATE_FORMAT = '%H:%M:%S'
 
 PATH_COL, ICON_COL, NAME_COL = range(3)
 
@@ -43,11 +50,13 @@ device_icon = theme.load_icon('gtk-dialog-question', 24, 0)
 class UDevDiscoverGUI(GConfStore):
 
     defaults = {
-            'width': 600,
-            'height': 350,
-            'hpaned': 150,
+            'window_width': 600,
+            'window_height': 400,
+            'devices_hpaned': 150,
             'parent_tree': True,
             'expanded': True,
+            'eventslog_vpaned': 350,
+            'eventslog_expanded': True,
     }
 
     def __init__(self):
@@ -61,6 +70,7 @@ class UDevDiscoverGUI(GConfStore):
 
         self.main_window = self.builder.get_object('main_window')
         self.devices_hpaned = self.builder.get_object('devices_hpaned')
+        self.eventslog_vpaned = self.builder.get_object('eventslog_vpaned')
         self.devices_tv = self.builder.get_object('devices_tv')
         self.devices_treestore = self.builder.get_object('devices_treestore')
         self.deviceprop_tv = self.builder.get_object('deviceprop_tv')
@@ -69,6 +79,8 @@ class UDevDiscoverGUI(GConfStore):
         self.devicedesc_label = self.builder.get_object('devicedesc_label')
         self.parents_toolbtn = self.builder.get_object('parents_toolbtn')
         self.expand_toggleaction = self.builder.get_object('expand_toggleaction')
+        self.eventslog_expander = self.builder.get_object('eventslog_expander')
+        self.eventslog_textbuffer = self.builder.get_object('eventslog_textbuffer')
 
         # About dialog
         self.about_dialog = self.builder.get_object('about_dialog')
@@ -76,15 +88,26 @@ class UDevDiscoverGUI(GConfStore):
 
         # Store main window width/height
         def catch_window_size(widget, allocate, options):
-            options['width'] = allocate.width
-            options['height'] = allocate.height
+            options['window_width'] = allocate.width
+            options['window_height'] = allocate.height
 
         self.main_window.connect('size_allocate', catch_window_size, 
                 self.options)
 
         self.loadconf()
-        self.main_window.resize(self.options['width'], self.options['height'])
-        self.devices_hpaned.set_position(self.options['hpaned'])
+        self.main_window.resize(self.options['window_width'], 
+            self.options['window_height'])
+        self.devices_hpaned.set_position(self.options['devices_hpaned'])
+        self.eventslog_vpaned.set_position(self.options['eventslog_vpaned'])
+        self.eventslog_expander.set_expanded(self.options['eventslog_expanded'])
+
+        # Sets up the logger
+        self.logger = logging.getLogger(TEXTBUFFER_LOGGER)
+        self.logger.setLevel(LOG_LEVEL)
+        handler = TextBufferHandler(self.eventslog_textbuffer)
+        handler.setFormatter(logging.Formatter(LOG_FORMAT,
+            datefmt=LOG_DATE_FORMAT))
+        self.logger.addHandler(handler)
 
         # Populate treeview
         self.device_finder = DeviceFinder()
@@ -103,6 +126,7 @@ class UDevDiscoverGUI(GConfStore):
         row_ref = self.add_new_device(device)
         if self.options['expanded']:
             self.devices_tv.expand_to_path(row_ref.get_path())
+        self.logger.info('Device added: %s' % device.nice_label)
 
     def removed_device(self, device_finder, device):
         if self.rows.has_key(device.path):
@@ -110,6 +134,8 @@ class UDevDiscoverGUI(GConfStore):
             treeiter = self.devices_treestore.get_iter(ref_row.get_path())
             self.devices_treestore.remove(treeiter)
             del(self.rows[device.path])
+
+        self.logger.info('Device removed: %s' % device.nice_label)
 
     def populate(self, devices):
         self.devices_treestore.clear()
@@ -190,7 +216,9 @@ class UDevDiscoverGUI(GConfStore):
         pass
 
     def quit_action_activate_cb(self, data=None):
-        self.options['hpaned'] = self.devices_hpaned.get_position()
+        self.options['devices_hpaned'] = self.devices_hpaned.get_position()
+        self.options['eventslog_vpaned'] = self.eventslog_vpaned.get_position()
+        self.options['eventslog_expanded'] = self.eventslog_expander.get_expanded()
         self.saveconf()
         sys.exit(0)
 
