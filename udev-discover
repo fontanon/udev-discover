@@ -159,6 +159,7 @@ class UDevDiscoverGUI(GConfStore):
             self.options['parent_tree'])
 
         self.populate(self.device_finder.get_devices())
+        self.expand_toggleaction_toggled_cb(self.expand_toggleaction)
 
     def devices_tv_cursor_changed_cb(self, treeview):
         selection = self.devices_tv.get_selection()
