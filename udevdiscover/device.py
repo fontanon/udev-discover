@@ -64,7 +64,7 @@ class Device(object):
             'device type': DEVICE_TYPE_STR[self.device.get_device_type()],
             'device number': str(self.device.get_device_number()) or 'n/a',
             'device file': self.device.get_device_file() or 'n/a',
-            'device file symlinks': ', '.join(self.device.get_device_file_symlinks()) or 'n/a',
+            'device file symlinks': '\n'.join(self.device.get_device_file_symlinks()) or 'n/a',
             'number': self.device.get_number() or 'n/a',
         }
 

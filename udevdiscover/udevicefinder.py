@@ -26,6 +26,7 @@ import gobject
 import gudev
 from usb import USBDevice
 from pci import PCIDevice
+from block import BlockDevice
 from device import Device
 
 class DeviceFinder(gobject.GObject):
@@ -97,6 +98,8 @@ class DeviceFinder(gobject.GObject):
             dev = USBDevice(device)
         elif subsys == 'pci':
             dev = PCIDevice(device)
+        elif subsys == 'block':
+            dev = BlockDevice(device)
         else:
             dev = Device(device)
 
