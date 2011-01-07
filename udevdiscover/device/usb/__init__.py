@@ -25,8 +25,8 @@
 import subprocess
 import re
 
-from device import Device
-from utils import memoized
+from udevdiscover.device import Device
+from udevdiscover.utils import memoized
 
 UNKNOWN_NAME = 'Unknown USB Device'
 USB_DB_CMD = '/lib/udev/usb-db'
@@ -136,6 +136,9 @@ usb_class_names = {
     (0xef, 0x02,   -1): (_('Miscellanous Common'), _('Miscellanous Common')),
     (0xef, 0x02, 0x01): (_('Interface Association'), _('Interface Association')),
 }
+
+def get_device_object(device):
+    return USBDevice(device)
 
 @memoized
 def get_usb_short_long_names(usb_class, usb_subclass, usb_protocol):

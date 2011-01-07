@@ -24,10 +24,7 @@
 
 import gobject
 import gudev
-from usb import USBDevice
-from pci import PCIDevice
-from block import BlockDevice
-from device import Device
+import device 
 
 class DeviceFinder(gobject.GObject):
     '''
@@ -65,45 +62,31 @@ class DeviceFinder(gobject.GObject):
         self.devices_list = []
 
         for subsystem in subsystems:
-            for device in self.client.query_by_subsystem(subsystem):
+            for gudevice in self.client.query_by_subsystem(subsystem):
                 if parent_tree: 
-                    self.__explore_parent(device, self.devices_tree, 
+                    self.__explore_parent(gudevice, self.devices_tree, 
                         self.devices_list)
                 else:
-                    self.devices_list.append(self.get_device_object(device))
-                    self.devices_tree[device.get_sysfs_path()] = \
-                        self.get_device_object(device)
+                    self.devices_list.append(device.get_device_object(gudevice))
+                    self.devices_tree[gudevice.get_sysfs_path()] = \
+                        device.get_device_object(gudevice)
 
         self.client.connect('uevent', self.event)
         self.parent_tree = parent_tree
 
-    def __explore_parent(self, device, devices_tree, devices_list, emit=False):
-        path = device.get_sysfs_path()
-        parent = device.get_parent()
+    def __explore_parent(self, gudevice, devices_tree, devices_list, emit=False):
+        path = gudevice.get_sysfs_path()
+        parent = gudevice.get_parent()
 
         if parent and not devices_tree.has_key(parent.get_sysfs_path()):
             self.__explore_parent(parent, devices_tree, devices_list, emit)
             
-        dev = self.get_device_object(device)
+        dev = device.get_device_object(gudevice)
         devices_tree[path] = dev
         devices_list.append(dev)
 
         if emit:
             self.emit('added', dev)
-
-    def get_device_object(self, device):
-        #FIXME: Devices needs a creation factory pattern
-        subsys = device.get_subsystem()
-        if subsys == 'usb':
-            dev = USBDevice(device)
-        elif subsys == 'pci':
-            dev = PCIDevice(device)
-        elif subsys == 'block':
-            dev = BlockDevice(device)
-        else:
-            dev = Device(device)
-
-        return dev
 
     def get_devices_tree(self):
         return self.devices_tree
@@ -111,41 +94,41 @@ class DeviceFinder(gobject.GObject):
     def get_devices(self):
         return self.devices_list
 
-    def event(self, client, action, device):
+    def event(self, client, action, gudevice):
         '''Handle a udev event'''
 
         return {
             'add': self.device_added,
             'remove': self.device_removed,
             'change': self.device_changed,
-        }.get(action, lambda x,y: None)(device, device.get_subsystem())
+        }.get(action, lambda x,y: None)(gudevice, gudevice.get_subsystem())
 
-    def device_added(self, device, subsystem):
+    def device_added(self, gudevice, subsystem):
         '''Called when a device has been added to the system'''
 
-        dev = self.get_device_object(device)
+        dev = device.get_device_object(gudevice)
 
         if self.parent_tree: 
-            self.__explore_parent(device, self.devices_tree, self.devices_list, True)
+            self.__explore_parent(gudevice, self.devices_tree, self.devices_list, True)
         else:
             self.devices_list.append(dev)
             self.devices_tree[dev.path] = dev
             self.emit('added', dev)
 
-    def device_removed(self, device, subsystem):
+    def device_removed(self, gudevice, subsystem):
         '''Called when a device has been removed from the system'''
 
-        dev = self.get_device_object(device)
+        dev = device.get_device_object(gudevice)
 
         if dev in self.devices_list: self.devices_list.remove(dev)
         if self.devices_tree.has_key(dev.path): del(self.devices_tree[dev.path])
 
         self.emit('removed', dev)
 
-    def device_changed(self, device, subsystem):
+    def device_changed(self, gudevice, subsystem):
         '''Called when a device has been added to the system'''
 
-        dev = self.get_device_object(device)
+        dev = device.get_device_object(gudevice)
         self.emit('changed', dev)
 
 gobject.type_register(DeviceFinder)

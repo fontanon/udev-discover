@@ -25,8 +25,8 @@
 import subprocess
 import re
 
-from device import Device
-from utils import memoized
+from udevdiscover.device import Device
+from udevdiscover.utils import memoized
 
 UNKNOWN_NAME = 'Unknown PCI Device'
 PCI_DB_CMD = '/lib/udev/pci-db'
@@ -181,6 +181,9 @@ pci_class_names = {
     (0x11, 0x00,   -1): (_('DPIO Module'), _('DPIO Module Signal Processing Controller')),
     (0x11, 0x01,   -1): (_('Performance Counters'), _('Performance Counters'))
 }
+
+def get_device_object(device):
+    return PCIDevice(device)
 
 @memoized
 def get_pci_short_long_names(pci_class, pci_subclass, pci_protocol):

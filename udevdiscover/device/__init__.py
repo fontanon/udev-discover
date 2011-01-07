@@ -24,16 +24,30 @@
 
 import gudev
 
-UNKNOWN_DEV = 'Unknown Device'
+def get_device_object(device):
+    subsys = device.get_subsystem()
 
-DEVICE_TYPE_STR = {gudev.DEVICE_TYPE_BLOCK: 'block', 
-    gudev.DEVICE_TYPE_CHAR: 'char',
-    gudev.DEVICE_TYPE_NONE: 'n/a'
-}
+    if subsys == 'usb':
+        import usb
+        return usb.get_device_object(device)
+    elif subsys == 'pci':
+        import pci 
+        return pci.get_device_object(device)
+    elif subsys == 'block':
+	import block
+        return block.get_device_object(device)
+    else:
+        return Device(device)
 
 class Device(object):
     '''A simple object representing a device.'''
-    
+
+    UNKNOWN_DEV = 'Unknown Device'
+    DEVICE_TYPE_STR = {gudev.DEVICE_TYPE_BLOCK: 'block', 
+        gudev.DEVICE_TYPE_CHAR: 'char',
+        gudev.DEVICE_TYPE_NONE: 'n/a'
+    }
+
     def __init__(self, device):
         '''Create a new input device
             
@@ -44,7 +58,7 @@ class Device(object):
 
     @property
     def nice_label(self):
-        return self.device.get_name() or UNKNOWN_DEV
+        return self.device.get_name() or self.UNKNOWN_DEV
 
     @property
     def parent(self):
@@ -61,7 +75,7 @@ class Device(object):
             'driver': self.device.get_driver() or 'n/a',
             'action': self.device.get_action() or 'n/a',
             'seqnum': self.device.get_seqnum() or 'n/a',
-            'device type': DEVICE_TYPE_STR[self.device.get_device_type()],
+            'device type': self.DEVICE_TYPE_STR[self.device.get_device_type()],
             'device number': str(self.device.get_device_number()) or 'n/a',
             'device file': self.device.get_device_file() or 'n/a',
             'device file symlinks': '\n'.join(self.device.get_device_file_symlinks()) or 'n/a',
@@ -89,7 +103,7 @@ class Device(object):
         return self.device.get_subsystem()
 
     def __repr__(self):
-        return self.nice_label or '??'
+        return self.nice_label
 
     def __eq__(self, dev):
         if dev == None:

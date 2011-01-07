@@ -24,11 +24,14 @@
 
 import os
 
-from device import Device
+from udevdiscover.device import Device
 
 KB = 1024.0
 MB = KB * 1024.0
 GB = MB * 1024.0
+
+def get_device_object(device):
+    return BlockDevice(device)
 
 def size_for_display(size):
     if size < MB:
@@ -71,7 +74,6 @@ class BlockDevice(Device):
     @property
     def nice_label(self):
         return _('Mass Storage Device')
-
 
     @property
     def volume_size(self):
