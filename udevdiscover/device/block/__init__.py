@@ -4,9 +4,6 @@
 #
 # Copyright (c) 2010 J. Félix Ontañón
 #
-# pci_class_names adapted from gnome-device-manager
-# Copyright (C) 2007 David Zeuthen
-# 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
 # published by the Free Software Foundation
@@ -22,6 +19,8 @@
 # Authors : J. Félix Ontañón <fontanon@emergya.es>
 # 
 
+__all__ = ['KB', 'MB', 'GB', 'BlockDevice', 'VolumeDevice', 'size_for_display']
+
 import os
 
 from udevdiscover.device import Device
@@ -30,10 +29,9 @@ KB = 1024.0
 MB = KB * 1024.0
 GB = MB * 1024.0
 
-def get_device_object(device):
-    return BlockDevice(device)
-
 def size_for_display(size):
+    if not size: return None
+
     if size < MB:
         return "%.1f KB" % (size / KB)
     elif size < GB:
@@ -41,54 +39,35 @@ def size_for_display(size):
     else:
         return "%.1f GB" % (size / GB)
 
-def volume_stats(devfile):
-    def find_mount_point(devfile):
-        for row in file('/proc/mounts'):
-            cols = row.split()
-            if cols[0] == devfile:
-                return cols[1]
+def get_device_object(gudevice):
+    devtype = gudevice.get_property('DEVTYPE')
+    bus = gudevice.get_property('ID_BUS')
 
-        return None
+    if devtype == 'disk':
+        from disk import DiskDevice
+        if bus:
+            return DiskDevice(gudevice)
+        else:
+            return BlockDevice(gudevice)
+            
+    elif devtype == 'partition':
+        from partition import PartitionDevice
+        return PartitionDevice(gudevice)
 
-    mount_point = find_mount_point(devfile)
-    if mount_point and os.path.ismount(mount_point):
-        return os.statvfs(mount_point)
-
+    else:
+        return BlockDevice(gudevice)
+        
 class BlockDevice(Device):
-    def get_info(self):
-        return {
-            'model': self.device.get_property('ID_MODEL') or 
-                 self.device.get_property('ID_MODEL_ENC') or 'n/a',
-            'vendor': self.device.get_property('ID_VENDOR') or 
-                self.device.get_property('ID_VENDOR_ENC') or 'n/a',
-            'device file': self.device.get_device_file() or 'n/a',
-            'serial number': self.device.get_property('ID_SERIAL_SHORT') or 
-                self.device.get_property('ID_SERIAL') or 'n/a',
-            'firmware version': self.device.get_property('ID_REVISION') or 'n/a',
-            'bus': self.device.get_property('ID_BUS') or 'n/a',
-            'type': self.device.get_property('ID_TYPE') or 'n/a',
-            'size': self.volume_size and size_for_display(self.volume_size) or 'n/a',
-            'free': self.volume_free and size_for_display(self.volume_free) or 'n/a',
-        }
+    pass
 
-    @property
-    def nice_label(self):
-        return _('Mass Storage Device')
+class VolumeDevice(Device):
+    BLOCK_SIZE = 512
+    
+    def __init__(self, gudevice):
+        super(VolumeDevice, self).__init__(gudevice)
 
-    @property
-    def volume_size(self):
-        for devfile in [self.device.get_device_file()] + \
-                self.device.get_device_file_symlinks():
-            stats = volume_stats(devfile)
-            if stats: return stats.f_bsize * stats.f_blocks
+        self.size = None
 
-        return None
-
-    @property
-    def volume_free(self):
-        for devfile in [self.device.get_device_file()] + \
-                self.device.get_device_file_symlinks():
-            stats = volume_stats(devfile)
-            if stats: return stats.f_bsize * stats.f_bfree
-
-        return None
+        size_file = os.path.join(self.path, 'size')
+        if os.path.exists(size_file):
+            self.size = int(open(size_file).read()) * self.BLOCK_SIZE

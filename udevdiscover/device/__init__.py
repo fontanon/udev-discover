@@ -34,7 +34,7 @@ def get_device_object(device):
         import pci 
         return pci.get_device_object(device)
     elif subsys == 'block':
-	import block
+        import block
         return block.get_device_object(device)
     else:
         return Device(device)

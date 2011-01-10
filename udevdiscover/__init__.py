@@ -20,6 +20,8 @@
 # 
 ###
 
+from devicefinder import DeviceFinder
+
 import gettext
 import locale
 import __builtin__
