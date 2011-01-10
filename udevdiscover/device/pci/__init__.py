@@ -243,5 +243,9 @@ class PCIDevice(Device):
         return short_name
 
     @property
-    def vendor_model_names(self):
-        return get_pci_vendor_model_names(self.path.split('/sys')[1])
+    def vendor_name(self):
+        return get_pci_vendor_model_names(self.path.split('/sys')[1])[0]
+
+    @property
+    def model_name(self):
+        return get_pci_vendor_model_names(self.path.split('/sys')[1])[1]

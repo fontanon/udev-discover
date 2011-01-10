@@ -190,5 +190,11 @@ class USBDevice(Device):
         return short_name
 
     @property
-    def vendor_model_names(self):
-        return get_usb_vendor_model_names(self.path.split('/sys')[1])
+    def vendor_name(self):
+        return self.device.get_property('ID_VENDOR') or \
+            get_usb_vendor_model_names(self.path.split('/sys')[1])[0]
+
+    @property
+    def model_name(self):
+        return self.device.get_property('ID_MODEL') or \
+            get_usb_vendor_model_names(self.path.split('/sys')[1])[1]

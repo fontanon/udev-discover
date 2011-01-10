@@ -26,8 +26,8 @@ import gtk
 import gobject
 import logging
 
+from udevdiscover import DeviceFinder
 from udevdiscover.utils import GConfStore, TextBufferHandler
-from udevdiscover.udevicefinder import DeviceFinder
 
 # FIXME: This path needs to be assigned at installing time
 UDEVMAN_UI = 'udev-discover.ui'
@@ -224,8 +224,10 @@ class UDevDiscoverGUI(GConfStore):
             device = self.device_finder.get_devices_tree()[row[PATH_COL]]
 
             title = '<b>'+device.nice_label+'</b>'
-            if hasattr(device, 'vendor_model_names'):
-                title += '\n<i>%s</i>\n<i>%s</i>' % device.vendor_model_names
+            if hasattr(device, 'vendor_name'):
+                title += '\n<i>%s</i>' % device.vendor_name
+            if hasattr(device, 'model_name'):
+                title += '\n<i>%s</i>' % device.model_name
             self.devicename_label.set_label(title)
 
             desc = '\n'.join([': '.join(('<b>'+key.capitalize()+'</b>', 
