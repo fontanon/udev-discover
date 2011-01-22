@@ -95,7 +95,6 @@ usb_class_names = {
     (0x09, 0x00, 0x02): (_('Hub'), _('Hub Interface (TT per port)')),
 
     (0x0a,   -1,   -1): (_('CDC Data'), _('CDC Data')),
-    (0x0a, 0x00, 0x30): (_('I.430 ISDN BRI Data'), _('I.430 ISDN BRI Data')),
     (0x0a,   -1, 0x31): (_('HDLC Data'), _('HDLC Data')),
     (0x0a,   -1, 0x32): (_('Transparent Data'), _('Transparent Data')),
     (0x0a,   -1, 0x50): (_('Q.921M Data'), _('Q.921M Data')),
@@ -135,10 +134,24 @@ usb_class_names = {
     (0xef, 0x01, 0x02): (_('Palm Sync'), _('Palm Sync')),
     (0xef, 0x02,   -1): (_('Miscellanous Common'), _('Miscellanous Common')),
     (0xef, 0x02, 0x01): (_('Interface Association'), _('Interface Association')),
+    (0xef, 0x02, 0x02): (_('Wire Adapter Multifunction'), _('Wire Adapter Multifunction Peripheral')),
+    (0xef, 0x03, 0x01): (_('Cable Based Association'), _('Cable Based Association')),
+
+    (0xfe,   -1,   -1): (_('Application Specific'), _('Application Specific')),
+    (0xfe, 0x01,   -1): (_('Device Firmware Update'), _('Device Firmware Update')),
+    (0xfe, 0x02,   -1): (_('IRDA Bridge'), _('IRDA Bridge')),
+    (0xfe, 0x03,   -1): (_('Test and Measurement'), _('Test and Measurement')),
+    (0xfe, 0x03, 0x01): (_('TMC Test and Measurement'), _('TMC Test and Measurement')),
+    (0xfe, 0x03, 0x02): (_('USB488 Test and Measurement'), _('USB488 Test and Measurement')),
 }
 
 def get_device_object(device):
-    return USBDevice(device)
+    devtype = device.get_devtype()
+    
+    if devtype == 'usb_interface':
+        return USBInterface(device)
+    else:
+        return USBDevice(device)
 
 @memoized
 def get_usb_short_long_names(usb_class, usb_subclass, usb_protocol):
@@ -146,7 +159,7 @@ def get_usb_short_long_names(usb_class, usb_subclass, usb_protocol):
 
     klasses = [k for k in usb_class_names.keys() if k[0] == usb_class]
     if not klasses:
-        return UNKNOWN_NAME, UNKNOWN_NAME
+        return None, None
 
     subklasses = [s for s in klasses if s[1] == usb_subclass]
     
@@ -179,13 +192,13 @@ def get_usb_vendor_model_names(sysfs_path):
 class USBDevice(Device):
     @property
     def nice_label(self):
-        if not 'TYPE' in self.device.get_property_keys():
-            return self.device.get_name() or UNKNOWN_DEV
-
         usb_type = map(int, self.device.get_property('TYPE').split('/'))
 
         short_name, long_name = get_usb_short_long_names(usb_type[0], 
             usb_type[1], usb_type[2])
+
+        if not short_name:
+            return 'USB Device'
 
         return short_name
 
@@ -198,3 +211,16 @@ class USBDevice(Device):
     def model_name(self):
         return self.device.get_property('ID_MODEL') or \
             get_usb_vendor_model_names(self.path.split('/sys')[1])[1]
+
+class USBInterface(Device):
+    @property
+    def nice_label(self):
+        usb_type = map(int, self.device.get_property('INTERFACE').split('/'))
+
+        short_name, long_name = get_usb_short_long_names(usb_type[0], 
+            usb_type[1], usb_type[2])
+
+        if not short_name:
+            return 'USB Interface'
+
+        return "%s Interface" % short_name
