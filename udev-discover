@@ -35,7 +35,7 @@ GCONF_KEY = '/apps/udevdiscover'
 
 DEFAULT_SUBSYSTEMS = ['usb', 'pci', 'net', 'power_supply', 'block', 'sound', 
     'input', 'serio', 'platform', 'tty', 'pnp', 'drm', 'video4linux', 'rfkill',
-    'bluetooth']
+    'bluetooth', 'leds']
 
 TEXTBUFFER_LOGGER = 'udevdiscover'
 LOG_LEVEL = logging.DEBUG
@@ -87,6 +87,8 @@ class UDevDiscoverGUI(GConfStore):
         self.follownew_toggleaction = self.builder.get_object('follownew_toggleaction')
         self.followchanged_toggleaction = \
             self.builder.get_object('followchanged_toggleaction')
+        self.summary_scrollwindow = self.builder.get_object('summary_scrollwindow')
+        self.devicepropsum_label = self.builder.get_object('devicepropsum_label')
 
         # About dialog
         self.about_dialog = self.builder.get_object('about_dialog')
@@ -129,7 +131,6 @@ class UDevDiscoverGUI(GConfStore):
         self.expand_toggleaction_toggled_cb(self.expand_toggleaction)
         self.follownew_toggleaction.set_active(self.options['follownew'])
         self.followchanged_toggleaction.set_active(self.options['followchanged'])
-        self.main_window.show_all()
 
     def new_device(self, device_finder, device):
         row_ref = self.add_new_device(device)
@@ -232,8 +233,16 @@ class UDevDiscoverGUI(GConfStore):
             self.devicename_label.set_label(title)
 
             desc = '\n'.join([': '.join(('<b>'+key.capitalize()+'</b>', 
-                str(val))) for key, val in device.get_info().items()])
+                str(val))) for key, val in device.get_info()])
             self.devicedesc_label.set_label(desc)
+
+            if hasattr(device, 'get_summary'):
+                self.summary_scrollwindow.set_visible(True)
+                desc = '\n'.join([': '.join(('<b>'+key.capitalize()+'</b>', 
+                    str(val))) for key, val in device.get_summary()])
+                self.devicepropsum_label.set_label(desc)
+            else:
+                self.summary_scrollwindow.set_visible(False)
 
             self.deviceprop_store.clear()
             for key, val in device.get_props().items():

@@ -26,24 +26,26 @@ import os
 from udevdiscover.device.block import *
 
 class DiskDevice(VolumeDevice):
-    def get_info(self):
-        return {
-            'model': self.device.get_property('ID_MODEL') or 
-                 self.device.get_property('ID_MODEL_ENC') or 'n/a',
-            'vendor': self.device.get_property('ID_VENDOR') or 
-                self.device.get_property('ID_VENDOR_ENC') or 'n/a',
-            'device file': self.device.get_device_file() or 'n/a',
-            'serial number': self.device.get_property('ID_SERIAL_SHORT') or 
-                self.device.get_property('ID_SERIAL') or 'n/a',
-            'firmware version': self.device.get_property('ID_REVISION') or 'n/a',
-            'bus': self.bus or 'n/a',
-            'type': self.device.get_property('ID_TYPE') or 'n/a',
-        }
+    def get_summary(self):
+        return (
+            ('model', self.device.get_property('ID_MODEL') or 
+                 self.device.get_property('ID_MODEL_ENC') or 'n/a'),
+            ('vendor', self.device.get_property('ID_VENDOR') or 
+                self.device.get_property('ID_VENDOR_ENC') or 'n/a'),
+            ('device file', self.device.get_device_file() or 'n/a'),
+            ('serial number', self.device.get_property('ID_SERIAL_SHORT') or 
+                self.device.get_property('ID_SERIAL') or 'n/a'),
+            ('firmware version', self.device.get_property('ID_REVISION') or 'n/a'),
+            ('bus', self.bus or 'n/a'),
+            ('type', self.device.get_property('ID_TYPE') or 'n/a'),
+        )
 
     @property
     def nice_label(self):
-        return _('(%s) %s Mass Storage Drive') % (self.bus.upper(), 
-            size_for_display(self.size))
+        if self.size:
+            return _('%s Mass Storage Drive') % size_for_display(self.size)
+        else:
+            return _('Mass Storage Drive')
     
     @property
     def bus(self):

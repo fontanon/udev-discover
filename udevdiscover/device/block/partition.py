@@ -25,41 +25,35 @@ import os
 
 from udevdiscover.device.block import *
 
+def find_mount_point(devfile):
+    for row in file('/proc/mounts'):
+        cols = row.split()
+        if cols[0] == devfile:
+            return cols[1]
+
+    return None
+
 def volume_stats(devfile):
-    def find_mount_point(devfile):
-        for row in file('/proc/mounts'):
-            cols = row.split()
-            if cols[0] == devfile:
-                return cols[1]
-
-        return None
-
     mount_point = find_mount_point(devfile)
     if mount_point and os.path.ismount(mount_point):
         return os.statvfs(mount_point)
 
 class PartitionDevice(VolumeDevice):
-    def get_info(self):
-        return {
-            'model': self.device.get_property('ID_MODEL') or 
-                 self.device.get_property('ID_MODEL_ENC') or 'n/a',
-            'vendor': self.device.get_property('ID_VENDOR') or 
-                self.device.get_property('ID_VENDOR_ENC') or 'n/a',
-            'device file': self.device.get_device_file() or 'n/a',
-            'serial number': self.device.get_property('ID_SERIAL_SHORT') or 
-                self.device.get_property('ID_SERIAL') or 'n/a',
-            'firmware version': self.device.get_property('ID_REVISION') or 'n/a',
-            'bus': self.device.get_property('ID_BUS') or 'n/a',
-            'type': self.device.get_property('ID_TYPE') or 'n/a',
-            'size': size_for_display(self.size) or 'n/a',
-            'free': self.volume_free and size_for_display(self.volume_free) or 'n/a',
-        }
+    def get_summary(self):
+        return (
+            ('usage', self.device.get_property('ID_FS_USAGE') or 'n/a'),
+            ('format', self.device.get_property('ID_FS_TYPE') or 'n/a'),
+            ('device file', self.device.get_device_file() or 'n/a'),
+            ('mount point', find_mount_point(self.device.get_device_file()) or 'n/a'),
+            ('label', self.device.get_property('ID_FS_LABEL') or 'n/a'),
+            ('size', size_for_display(self.size) or 'n/a'),
+            ('free', self.volume_free and size_for_display(self.volume_free) or 'n/a'),
+        )
 
     @property
     def nice_label(self):
-        size = size_for_display(self.size)
-        if size:
-            return _('%s Volume') % size
+        if self.size:
+            return _('%s Volume') % size_for_display(self.size)
 
         return _('Partition')
 
