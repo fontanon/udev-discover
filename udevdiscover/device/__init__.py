@@ -69,18 +69,21 @@ class Device(object):
             return None
 
     def get_info(self):
-        return {'subsystem': self.device.get_subsystem() or 'n/a',
-            'sysfs_path': self.device.get_sysfs_path() or 'n/a',
-            'devtype': self.device.get_devtype() or 'n/a',
-            'driver': self.device.get_driver() or 'n/a',
-            'action': self.device.get_action() or 'n/a',
-            'seqnum': self.device.get_seqnum() or 'n/a',
-            'device type': self.DEVICE_TYPE_STR[self.device.get_device_type()],
-            'device number': str(self.device.get_device_number()) or 'n/a',
-            'device file': self.device.get_device_file() or 'n/a',
-            'device file symlinks': '\n'.join(self.device.get_device_file_symlinks()) or 'n/a',
-            'number': self.device.get_number() or 'n/a',
-        }
+        return (
+            ('subsystem', self.device.get_subsystem() or 'n/a'),
+            ('devtype', self.device.get_devtype() or 'n/a'),
+            ('name', self.device.get_name() or 'n/a'),
+            ('number', self.device.get_number() or 'n/a'),
+            ('sysfs_path', self.device.get_sysfs_path() or 'n/a'),
+            ('driver', self.device.get_driver() or 'n/a'),
+            ('action', self.device.get_action() or 'n/a'),
+            ('seqnum', self.device.get_seqnum() or 'n/a'),
+            ('device type', self.DEVICE_TYPE_STR[self.device.get_device_type()]),
+            ('device number', str(self.device.get_device_number()) or 'n/a'),
+            ('device file', self.device.get_device_file() or 'n/a'),
+            ('device file symlinks', 
+                '\n'.join(self.device.get_device_file_symlinks()) or 'n/a')
+        )
 
     def get_props(self):
         props = {}
