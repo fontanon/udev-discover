@@ -78,15 +78,16 @@ class DeviceFinder(gobject.GObject):
         path = gudevice.get_sysfs_path()
         parent = gudevice.get_parent()
 
-        if parent and not devices_tree.has_key(parent.get_sysfs_path()):
+        if parent: 
             self.__explore_parent(parent, devices_tree, devices_list, emit)
-            
-        dev = device.get_device_object(gudevice)
-        devices_tree[path] = dev
-        devices_list.append(dev)
 
-        if emit:
-            self.emit('added', dev)
+        if not devices_tree.has_key(path):
+            dev = device.get_device_object(gudevice)
+            devices_tree[path] = dev
+            devices_list.append(dev)
+
+            if emit:
+                self.emit('added', dev)
 
     def get_devices_tree(self):
         return self.devices_tree
