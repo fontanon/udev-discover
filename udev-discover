@@ -35,14 +35,14 @@ GCONF_KEY = '/apps/udevdiscover'
 
 DEFAULT_SUBSYSTEMS = ['usb', 'pci', 'net', 'power_supply', 'block', 'sound', 
     'input', 'serio', 'platform', 'tty', 'pnp', 'drm', 'video4linux', 'rfkill',
-    'bluetooth', 'leds']
+    'bluetooth', 'leds', 'dvb']
 
 TEXTBUFFER_LOGGER = 'udevdiscover'
 LOG_LEVEL = logging.DEBUG
 LOG_FORMAT = '%(asctime)s %(levelname)s - %(message)s'
 LOG_DATE_FORMAT = '%H:%M:%S'
 
-PATH_COL, ICON_COL, NAME_COL = range(3)
+PATH_COL, ICON_COL, NAME_COL, SUBSYSTEM_COL, VISIBLE_COL = range(5)
 
 # Load icons
 theme = gtk.icon_theme_get_default()
@@ -82,6 +82,7 @@ class UDevDiscoverGUI(GConfStore):
         self.devicedesc_label = self.builder.get_object('devicedesc_label')
         self.parents_toolbtn = self.builder.get_object('parents_toolbtn')
         self.expand_toggleaction = self.builder.get_object('expand_toggleaction')
+        self.showparents_toggleaction = self.builder.get_object('showparents_toggleaction')
         self.eventslog_expander = self.builder.get_object('eventslog_expander')
         self.eventslog_textbuffer = self.builder.get_object('eventslog_textbuffer')
         self.follownew_toggleaction = self.builder.get_object('follownew_toggleaction')
@@ -89,6 +90,7 @@ class UDevDiscoverGUI(GConfStore):
             self.builder.get_object('followchanged_toggleaction')
         self.summary_scrollwindow = self.builder.get_object('summary_scrollwindow')
         self.devicepropsum_label = self.builder.get_object('devicepropsum_label')
+        self.search_entry = self.builder.get_object('search_entry')
 
         # About dialog
         self.about_dialog = self.builder.get_object('about_dialog')
@@ -132,6 +134,9 @@ class UDevDiscoverGUI(GConfStore):
         self.follownew_toggleaction.set_active(self.options['follownew'])
         self.followchanged_toggleaction.set_active(self.options['followchanged'])
 
+        self.search_entry.set_property('primary-icon-sensitive',False)
+        self.search_entry.set_property('secondary-icon-sensitive',False)
+
     def new_device(self, device_finder, device):
         row_ref = self.add_new_device(device)
 
@@ -171,17 +176,17 @@ class UDevDiscoverGUI(GConfStore):
     def add_new_device(self, device):
         if device.parent == None:
             treeiter = self.devices_treestore.append(None, [device.path, 
-                device_icon, device.nice_label, device.subsystem])
+                device_icon, device.nice_label, device.subsystem, False])
         else:
             if self.rows.has_key(device.parent.path):
                 parent_treeiter = self.devices_treestore.get_iter(
                     self.rows[device.parent.path].get_path())
                 treeiter = self.devices_treestore.append(parent_treeiter, 
                     [device.path, device_icon, device.nice_label, 
-                    device.subsystem])
+                    device.subsystem, False])
             else:
                 treeiter = self.devices_treestore.append(None, [device.path, 
-                    device_icon, device.nice_label, device.subsystem])
+                    device_icon, device.nice_label, device.subsystem, False])
         
         self.rows[device.path] = gtk.TreeRowReference(self.devices_treestore,
             self.devices_treestore.get_path(treeiter))
@@ -222,7 +227,7 @@ class UDevDiscoverGUI(GConfStore):
         model, selected = selection.get_selected()
 
         if selected:
-            row = self.devices_treestore[selected]
+            row = model[selected]
             device = self.device_finder.get_devices_tree()[row[PATH_COL]]
 
             title = '<b>'+device.nice_label+'</b>'
@@ -248,6 +253,105 @@ class UDevDiscoverGUI(GConfStore):
             for key, val in device.get_props().items():
                 self.deviceprop_store.append([key,
                                               val.decode("string-escape")])
+
+    def search_entry_activate_cb(self, entry):
+        search_text = entry.get_text().lower()
+        if not search_text:
+            return
+
+        def update_visible(treeiter):
+            """ Finds the search string and marks node as visible """
+            treerow = self.devices_treestore[treeiter]
+            device = self.device_finder.get_devices_tree()[treerow[PATH_COL]]
+            visible = False
+
+            # Matching device name, nice_label, vendor and model            
+            if (search_text in device.nice_label.lower()) or \
+                    (search_text in device.device.get_name().lower()) or \
+                    (hasattr(device, 'vendor_name') and device.vendor_name and \
+                        search_text in device.vendor_name.lower()) or \
+                    (hasattr(device, 'model_name') and device.model_name and \
+                        search_text in device.model_name.lower()):
+                visible = True
+
+            # Matching udev device static info
+            for key, val in device.get_info():
+                if search_text in str(val).lower():
+                    visible = True
+
+            # Matching udev device properties
+            for key, val in device.get_props().items():
+                if search_text in str(key).lower() or \
+                        search_text in str(val).lower():
+                    visible = True
+
+            # Matching optional udevdiscover device summary info
+            if hasattr(device, 'get_summary'):
+                for key, val in device.get_summary():
+                    if search_text in str(val).lower():
+                        visible = True
+
+            treerow[VISIBLE_COL] = visible
+            return visible
+
+        visible_iter = []
+        for path in self.rows.keys():
+            iter = self.devices_treestore.get_iter(self.rows[path].get_path())
+            if update_visible(iter):
+                visible_iter.append(iter)
+
+        if visible_iter:
+            def set_branch_visible(itr):
+                """ Sets the whole tree-branch upward as visible """
+                tr = self.devices_treestore[itr]
+                tr[VISIBLE_COL] = True
+                itr_prnt = self.devices_treestore.iter_parent(itr)
+                if itr_prnt:
+                    set_branch_visible(itr_prnt)
+
+            for iter in visible_iter:
+                iter_parent = self.devices_treestore.iter_parent(iter)
+                if iter_parent:
+                    set_branch_visible(iter_parent)
+
+        self.showparents_toggleaction.set_sensitive(False)
+        modelfilter = self.devices_treestore.filter_new()
+        modelfilter.set_visible_column(VISIBLE_COL)
+
+        """
+        # DEBUGGING
+        for i in [v.get_model()[v.get_path()][NAME_COL] for v in self.rows.values() if \
+                v.get_model()[v.get_path()][VISIBLE_COL] == True]:
+            print i
+        print '--------------- ROWS ------------------'        
+        def a(model, path, iter, val):
+            print model[iter][NAME_COL]
+        modelfilter.foreach(a, None)
+        print '--------------- MODELFILTER ------------------'
+        # DEBUGGING
+        """
+
+        self.devices_tv.set_model(modelfilter)
+        self.expand_toggleaction_toggled_cb(self.expand_toggleaction)
+
+    def search_entry_changed_cb(self, entry):
+        if entry.get_text():
+            entry.set_property('primary-icon-sensitive',True)
+            entry.set_property('secondary-icon-sensitive',True)
+        else:
+            self.devices_tv.set_model(self.devices_treestore)
+            self.expand_toggleaction_toggled_cb(self.expand_toggleaction)
+            self.showparents_toggleaction.set_sensitive(True)
+            entry.set_property('primary-icon-sensitive',False)
+            entry.set_property('secondary-icon-sensitive',False)
+
+    def search_entry_icon_release_cb(self, entry, icon_pos, event):
+        if icon_pos == 0:
+            entry.set_text('')
+            self.devices_tv.set_model(self.devices_treestore)
+            self.expand_toggleaction_toggled_cb(self.expand_toggleaction)
+        else:
+            self.search_entry_activate_cb(entry)
 
     def about_action_activate_cb(self, widget):
         self.about_dialog.run()
