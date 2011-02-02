@@ -44,8 +44,11 @@ def get_device_object(gudevice):
     bus = gudevice.get_property('ID_BUS')
 
     if devtype == 'disk':
-        from disk import DiskDevice
-        if bus:
+        if gudevice.get_property('ID_CDROM'):
+            from optical import OpticalDevice
+            return OpticalDevice(gudevice)
+        elif bus:
+            from disk import DiskDevice
             return DiskDevice(gudevice)
         else:
             return BlockDevice(gudevice)
