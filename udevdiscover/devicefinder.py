@@ -127,7 +127,7 @@ class DeviceFinder(gobject.GObject):
         self.emit('removed', dev)
 
     def device_changed(self, gudevice, subsystem):
-        '''Called when a device has been added to the system'''
+        '''Called when a device has been updated'''
 
         dev = device.get_device_object(gudevice)
         self.emit('changed', dev)

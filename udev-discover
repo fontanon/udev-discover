@@ -159,17 +159,26 @@ class UDevDiscoverGUI(GConfStore):
 
     def changed_device(self, device_finder, device):
         if self.rows.has_key(device.path):
+            # Remove from tree first
             ref_row = self.rows[device.path]
             treeiter = self.devices_treestore.get_iter(ref_row.get_path())
             self.devices_treestore.remove(treeiter)
             del(self.rows[device.path])
+            # Add again
+            row_ref = self.add_new_device(device)
 
-        self.logger.info('Device removed: %s' % device.nice_label)
+            if self.options['expanded']:
+                self.devices_tv.expand_to_path(row_ref.get_path())
+
+            if self.options['followchanged']:
+                self.devices_tv.set_cursor(row_ref.get_path())
+
+        self.logger.info('Device changed: %s' % device.nice_label)
 
     def populate(self, devices):
         self.devices_treestore.clear()
         self.rows = {}
-        
+
         for device in devices:
             self.add_new_device(device)
 
