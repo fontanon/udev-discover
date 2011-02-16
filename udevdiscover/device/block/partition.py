@@ -39,6 +39,8 @@ def volume_stats(devfile):
         return os.statvfs(mount_point)
 
 class PartitionDevice(VolumeDevice):
+    DEFAULT_ICON = 'drive-harddisk'
+
     def get_summary(self):
         return (
             ('usage', self.device.get_property('ID_FS_USAGE') or 'n/a'),

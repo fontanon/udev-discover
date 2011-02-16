@@ -26,6 +26,8 @@ import os
 from udevdiscover.device.block import *
 
 class DiskDevice(VolumeDevice):
+    DEFAULT_ICON = 'drive-harddisk'
+    
     def get_summary(self):
         return (
             ('model', self.device.get_property('ID_MODEL') or 

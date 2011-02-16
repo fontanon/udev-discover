@@ -45,6 +45,7 @@ def get_device_object(device):
 class Device(object):
     '''A simple object representing a device.'''
 
+    DEFAULT_ICON = 'gtk-dialog-question'
     UNKNOWN_DEV = 'Unknown Device'
     DEVICE_TYPE_STR = {gudev.DEVICE_TYPE_BLOCK: 'block', 
         gudev.DEVICE_TYPE_CHAR: 'char',
@@ -62,6 +63,10 @@ class Device(object):
     @property
     def nice_label(self):
         return self.device.get_name() or self.UNKNOWN_DEV
+
+    @property
+    def icon(self):
+        return self.DEFAULT_ICON
 
     @property
     def parent(self):

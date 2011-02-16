@@ -80,6 +80,8 @@ media_info_names = {
 }
 
 class OpticalDevice(DiskDevice):
+    DEFAULT_ICON = 'drive-optical'
+
     def get_summary(self):
         return (
             ('model', self.device.get_property('ID_MODEL') or 
@@ -115,6 +117,8 @@ def find_mount_point(devfile):
     return None
 
 class OpticalDiskDevice(OpticalDevice):
+    DEFAULT_ICON = 'drive-optical'
+
     def get_summary(self):
         return (
             ('model', self.device.get_property('ID_MODEL') or 

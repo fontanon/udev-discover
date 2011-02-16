@@ -59,7 +59,7 @@ class UDevDiscoverGUI(GConfStore):
             'eventslog_vpaned': 350,
             'eventslog_expanded': True,
             'follownew': True,
-            'followchanged': False,
+            'followchanged': True,
     }
 
     def __init__(self):
@@ -183,6 +183,7 @@ class UDevDiscoverGUI(GConfStore):
             self.add_new_device(device)
 
     def add_new_device(self, device):
+        device_icon = theme.load_icon(device.icon, 24, 0)
         if device.parent == None:
             treeiter = self.devices_treestore.append(None, [device.path, 
                 device_icon, device.nice_label, device.subsystem, False])
