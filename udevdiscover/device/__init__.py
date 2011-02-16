@@ -39,6 +39,9 @@ def get_device_object(device):
     elif subsys == 'scsi':
         import scsi
         return scsi.get_device_object(device)
+    elif subsys == 'input':
+        import input
+        return input.get_device_object(device)
     else:
         return Device(device)
 
