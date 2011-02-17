@@ -45,6 +45,8 @@ def get_device_object(device):
     elif 'ID_INPUT_TABLET' in property_keys:
         from tablet import TabletDevice
         return TabletDevice(device)
+    elif device.get_name().startswith('event'):
+        return EventDevice(device)
     else:
         return InputDevice(device)
 
@@ -55,4 +57,13 @@ class InputDevice(Device):
 
     @property
     def vendor_name(self):
-        return self.device.get_property('NAME').replace('"','')
+        name = self.device.get_property('NAME')
+        if name:
+            return name.replace('"','')
+        else:
+            return None
+
+class EventDevice(Device):
+    @property
+    def nice_label(self):
+        return _('Event Device')
