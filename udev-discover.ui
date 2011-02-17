@@ -502,7 +502,7 @@ Juanje Ojeda &lt;jojeda@emergya.es&gt;</property>
                           <object class="GtkHBox" id="hbox2">
                             <property name="visible">True</property>
                             <child>
-                              <object class="GtkImage" id="device_icon">
+                              <object class="GtkImage" id="device_image">
                                 <property name="visible">True</property>
                                 <property name="stock">gtk-dialog-question</property>
                                 <property name="icon-size">6</property>

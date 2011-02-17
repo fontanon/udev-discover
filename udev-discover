@@ -80,6 +80,7 @@ class UDevDiscoverGUI(GConfStore):
         self.deviceprop_store = self.builder.get_object('deviceprop_store')
         self.devicename_label = self.builder.get_object('devicename_label')
         self.devicedesc_label = self.builder.get_object('devicedesc_label')
+        self.device_image = self.builder.get_object('device_image')
         self.parents_toolbtn = self.builder.get_object('parents_toolbtn')
         self.expand_toggleaction = self.builder.get_object('expand_toggleaction')
         self.showparents_toggleaction = self.builder.get_object('showparents_toggleaction')
@@ -251,6 +252,8 @@ class UDevDiscoverGUI(GConfStore):
                 str(val))) for key, val in device.get_info()])
             self.devicedesc_label.set_label(desc)
 
+            self.device_image.set_from_icon_name(device.icon, gtk.ICON_SIZE_DIALOG)
+
             if hasattr(device, 'get_summary'):
                 self.summary_scrollwindow.set_visible(True)
                 desc = '\n'.join([': '.join(('<b>'+key.capitalize()+'</b>', 
@@ -261,8 +264,8 @@ class UDevDiscoverGUI(GConfStore):
 
             self.deviceprop_store.clear()
             for key, val in device.get_props().items():
-                self.deviceprop_store.append([key,
-                                              val.decode("string-escape")])
+                self.deviceprop_store.append([key, 
+                    val.decode("string-escape")])
 
     def search_entry_activate_cb(self, entry):
         search_text = entry.get_text().lower()
