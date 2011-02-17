@@ -42,6 +42,9 @@ def get_device_object(device):
     elif subsys == 'input':
         import input
         return input.get_device_object(device)
+    elif subsys == 'net':
+        import net
+        return net.get_device_object(device)
     else:
         return Device(device)
 
