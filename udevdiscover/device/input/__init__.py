@@ -23,7 +23,7 @@ from udevdiscover.device import Device
 
 def get_device_object(device):
     if device.get_name().startswith('input'):
-        return InputDevice(Device)
+        return InputDevice(device)
 
     property_keys = device.get_property_keys()
 
@@ -47,7 +47,6 @@ def get_device_object(device):
         return TabletDevice(device)
     else:
         return InputDevice(device)
-
 
 class InputDevice(Device):
     @property
