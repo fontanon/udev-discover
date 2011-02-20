@@ -35,7 +35,7 @@ GCONF_KEY = '/apps/udevdiscover'
 
 DEFAULT_SUBSYSTEMS = ['usb', 'pci', 'net', 'power_supply', 'block', 'sound', 
     'input', 'serio', 'platform', 'tty', 'pnp', 'drm', 'video4linux', 'rfkill',
-    'bluetooth', 'leds', 'dvb']
+    'bluetooth', 'leds', 'dvb', 'acpi']
 
 TEXTBUFFER_LOGGER = 'udevdiscover'
 LOG_LEVEL = logging.DEBUG
