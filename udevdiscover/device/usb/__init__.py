@@ -192,15 +192,26 @@ def get_usb_vendor_model_names(sysfs_path):
 class USBDevice(Device):
     @property
     def nice_label(self):
-        usb_type = map(int, self.device.get_property('TYPE').split('/'))
+        short_name = None
+        prop_type = self.device.get_property('TYPE')
 
-        short_name, long_name = get_usb_short_long_names(usb_type[0], 
-            usb_type[1], usb_type[2])
+        if prop_type:
+            usb_type = map(int, prop_type.split('/'))
+
+            short_name, long_name = get_usb_short_long_names(usb_type[0], 
+                usb_type[1], usb_type[2])
 
         if not short_name:
             return 'USB Device'
 
         return short_name
+
+    @property
+    def icon(self):
+        if self.device.has_property('ID_MEDIA_PLAYER'):
+            return 'multimedia-player'
+        else:
+            return self.DEFAULT_ICON
 
     @property
     def vendor_name(self):
