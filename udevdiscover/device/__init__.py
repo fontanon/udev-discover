@@ -48,6 +48,9 @@ def get_device_object(device):
     elif subsys == 'power_supply':
         import power_supply
         return power_supply.get_device_object(device)
+    elif subsys == 'tty':
+        import tty
+        return tty.get_device_object(device)
     else:
         return Device(device)
 
