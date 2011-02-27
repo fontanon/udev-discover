@@ -187,17 +187,19 @@ class UDevDiscoverGUI(GConfStore):
         device_icon = theme.load_icon(device.icon, 24, 0)
         if device.parent == None:
             treeiter = self.devices_treestore.append(None, [device.path, 
-                device_icon, device.nice_label, device.subsystem, False])
+                device_icon, device.nice_label, device.subsystem, False, 
+                device.name])
         else:
             if self.rows.has_key(device.parent.path):
                 parent_treeiter = self.devices_treestore.get_iter(
                     self.rows[device.parent.path].get_path())
                 treeiter = self.devices_treestore.append(parent_treeiter, 
                     [device.path, device_icon, device.nice_label, 
-                    device.subsystem, False])
+                    device.subsystem, False, device.name])
             else:
                 treeiter = self.devices_treestore.append(None, [device.path, 
-                    device_icon, device.nice_label, device.subsystem, False])
+                    device_icon, device.nice_label, device.subsystem, False, 
+                    device.name])
         
         self.rows[device.path] = gtk.TreeRowReference(self.devices_treestore,
             self.devices_treestore.get_path(treeiter))

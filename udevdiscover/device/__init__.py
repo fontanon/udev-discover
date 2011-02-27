@@ -77,6 +77,10 @@ class Device(object):
 
     @property
     def nice_label(self):
+        return self.name
+
+    @property
+    def name(self):
         return self.device.get_name() or self.UNKNOWN_DEV
 
     @property
