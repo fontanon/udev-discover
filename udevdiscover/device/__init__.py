@@ -51,6 +51,9 @@ def get_device_object(device):
     elif subsys == 'tty':
         import tty
         return tty.get_device_object(device)
+    elif subsys == 'sound':
+        import sound
+        return sound.get_device_object(device)
     else:
         return Device(device)
 
