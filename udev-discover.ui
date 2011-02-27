@@ -32,8 +32,8 @@
     <property name="transient_for">main_window</property>
     <property name="program_name">udev-discover</property>
     <property name="version">0.1</property>
-    <property name="copyright" translatable="yes">Copyright © 2010 J. Félix Ontañón</property>
-    <property name="comments" translatable="yes">An udev based hardware discoverer</property>
+    <property name="copyright" translatable="yes">Copyright © 2010-2011 J. Félix Ontañón</property>
+    <property name="comments" translatable="yes">An browser tool for udev curious</property>
     <property name="website">http://fontanon.org</property>
     <property name="authors">J. Félix Ontañón &lt;fontanon@emergya.es&gt;
 Juanje Ojeda &lt;jojeda@emergya.es&gt;</property>
