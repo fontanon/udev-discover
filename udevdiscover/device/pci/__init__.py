@@ -222,6 +222,8 @@ def get_pci_vendor_model_names(sysfs_path):
     return vendor_name, model_name
 
 class PCIDevice(Device):
+    DEFAULT_ICON = 'udev-discover-device-pci'
+
     def __get_class_subclass_protocol(self, pci_id):
         pci_protocol = int(pci_id[-2:], 16)
         pci_subclass = int(pci_id[-4:-2], 16)

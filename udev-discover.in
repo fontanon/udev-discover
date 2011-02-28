@@ -30,7 +30,7 @@ from udevdiscover import DeviceFinder
 from udevdiscover.utils import GConfStore, TextBufferHandler
 
 # FIXME: This path needs to be assigned at installing time
-UDEVMAN_UI = 'udev-discover.ui'
+UDEVMAN_UI = '@PREFIX@/share/udev-discover/udev-discover.ui'
 GCONF_KEY = '/apps/udevdiscover'
 
 DEFAULT_SUBSYSTEMS = ['usb', 'pci', 'net', 'power_supply', 'block', 'sound', 

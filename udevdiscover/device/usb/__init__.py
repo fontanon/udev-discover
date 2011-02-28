@@ -190,6 +190,8 @@ def get_usb_vendor_model_names(sysfs_path):
     return vendor_name, model_name
 
 class USBDevice(Device):
+    DEFAULT_ICON = 'udev-discover-device-usb'
+
     @property
     def nice_label(self):
         short_name = None
@@ -224,6 +226,8 @@ class USBDevice(Device):
             get_usb_vendor_model_names(self.path.split('/sys')[1])[1]
 
 class USBInterface(Device):
+    DEFAULT_ICON = 'udev-discover-device-usb'
+
     @property
     def nice_label(self):
         usb_type = map(int, self.device.get_property('INTERFACE').split('/'))
