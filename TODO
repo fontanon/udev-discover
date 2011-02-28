@@ -1,0 +1,14 @@
+* filtering
+ * regex filtering
+ * subsystem filtering
+* empowered events log:
+ * tell what has changed on a device when changed signal is throwed
+ * different verbosity levels
+ * Save log into a file
+* gui
+ * fancier icons
+ * show parents performance improvements
+ * save columns with and order on devices treeview window
+ * mallard help
+ * i18n
+ * a11y
