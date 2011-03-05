@@ -28,12 +28,13 @@ import logging
 
 from udevdiscover import DeviceFinder
 from udevdiscover.utils import GConfStore, TextBufferHandler
+import udevdiscover.device
 
 # FIXME: This path needs to be assigned at installing time
-UDEVMAN_UI = '@PREFIX@/share/udev-discover/udev-discover.ui'
+UDEVDISCOVER_UI = '@PREFIX@/share/udev-discover/udev-discover.ui'
 GCONF_KEY = '/apps/udevdiscover'
 
-DEFAULT_SUBSYSTEMS = ['usb', 'pci', 'net', 'power_supply', 'block', 'sound', 
+DEFAULT_SUBSYSTEMS = ['pci', 'usb', 'net', 'power_supply', 'block', 'sound', 
     'input', 'serio', 'platform', 'tty', 'pnp', 'drm', 'video4linux', 'rfkill',
     'bluetooth', 'leds', 'dvb', 'acpi']
 
@@ -65,12 +66,14 @@ class UDevDiscoverGUI(GConfStore):
     def __init__(self):
         GConfStore.__init__(self, GCONF_KEY)
         self.rows = {}
+        self.is_filtered = False
 
         self.builder = gtk.Builder()
-        if not self.builder.add_from_file(UDEVMAN_UI):
-            raise 'Cant load %s' % UDEVMAN_UI
+        if not self.builder.add_from_file(UDEVDISCOVER_UI):
+            raise 'Cant load %s' % UDEVDISCOVER_UI
         self.builder.connect_signals(self)
 
+        # Widgets
         self.main_window = self.builder.get_object('main_window')
         self.devices_hpaned = self.builder.get_object('devices_hpaned')
         self.eventslog_vpaned = self.builder.get_object('eventslog_vpaned')
@@ -97,7 +100,10 @@ class UDevDiscoverGUI(GConfStore):
         self.about_dialog = self.builder.get_object('about_dialog')
         self.about_dialog.connect('response', lambda d, r: d.hide())
 
-        # Store main window width/height
+        # Load gconf preferences
+        self.loadconf()
+
+        # Track main window width/height
         def catch_window_size(widget, allocate, options):
             options['window_width'] = allocate.width
             options['window_height'] = allocate.height
@@ -105,9 +111,11 @@ class UDevDiscoverGUI(GConfStore):
         self.main_window.connect('size_allocate', catch_window_size, 
                 self.options)
 
-        self.loadconf()
+        # Restore main window width/heigh
         self.main_window.resize(self.options['window_width'], 
             self.options['window_height'])
+
+        # Restore paned window positions
         self.devices_hpaned.set_position(self.options['devices_hpaned'])
         self.eventslog_vpaned.set_position(self.options['eventslog_vpaned'])
         self.eventslog_expander.set_expanded(self.options['eventslog_expanded'])
@@ -142,7 +150,11 @@ class UDevDiscoverGUI(GConfStore):
         row_ref = self.add_new_device(device)
 
         if self.options['expanded']:
-            self.devices_tv.expand_to_path(row_ref.get_path())
+            iter_path = row_ref.get_path()
+            if self.is_filtered:
+                iter_path = self.modelfilter.convert_child_path_to_path(row_ref.get_path())
+
+            self.devices_tv.expand_to_path(iter_path)
 
         if self.options['follownew']:
             self.devices_tv.set_cursor(row_ref.get_path())
@@ -169,7 +181,11 @@ class UDevDiscoverGUI(GConfStore):
             row_ref = self.add_new_device(device)
 
             if self.options['expanded']:
-                self.devices_tv.expand_to_path(row_ref.get_path())
+                iter_path = row_ref.get_path()
+                if self.is_filtered:
+                    iter_path = self.modelfilter.convert_child_path_to_path(row_ref.get_path())
+
+                self.devices_tv.expand_to_path(iter_path)
 
             if self.options['followchanged']:
                 self.devices_tv.set_cursor(row_ref.get_path())
@@ -203,6 +219,18 @@ class UDevDiscoverGUI(GConfStore):
         
         self.rows[device.path] = gtk.TreeRowReference(self.devices_treestore,
             self.devices_treestore.get_path(treeiter))
+
+        search_text = self.search_entry.get_text().lower()
+        if search_text:
+            treerow = self.devices_treestore[treeiter]
+
+            if udevdiscover.device.match_string(device, search_text):
+                treerow[VISIBLE_COL] = True
+                iter_parent = self.devices_treestore.iter_parent(treeiter)
+                if iter_parent:
+                    self.set_branch_visible(iter_parent)
+            else:
+                treerow[VISIBLE_COL] = False
 
         return self.rows[device.path]
 
@@ -274,80 +302,40 @@ class UDevDiscoverGUI(GConfStore):
         if not search_text:
             return
 
-        def update_visible(treeiter):
-            """ Finds the search string and marks node as visible """
-            treerow = self.devices_treestore[treeiter]
-            device = self.device_finder.get_devices_tree()[treerow[PATH_COL]]
-            visible = False
-
-            # Matching device name, nice_label, vendor and model            
-            if (search_text in device.nice_label.lower()) or \
-                    (search_text in device.device.get_name().lower()) or \
-                    (hasattr(device, 'vendor_name') and device.vendor_name and \
-                        search_text in device.vendor_name.lower()) or \
-                    (hasattr(device, 'model_name') and device.model_name and \
-                        search_text in device.model_name.lower()):
-                visible = True
-
-            # Matching udev device static info
-            for key, val in device.get_info():
-                if search_text in str(val).lower():
-                    visible = True
-
-            # Matching udev device properties
-            for key, val in device.get_props().items():
-                if search_text in str(key).lower() or \
-                        search_text in str(val).lower():
-                    visible = True
-
-            # Matching optional udevdiscover device summary info
-            if hasattr(device, 'get_summary'):
-                for key, val in device.get_summary():
-                    if search_text in str(val).lower():
-                        visible = True
-
-            treerow[VISIBLE_COL] = visible
-            return visible
-
         visible_iter = []
         for path in self.rows.keys():
             iter = self.devices_treestore.get_iter(self.rows[path].get_path())
-            if update_visible(iter):
+            treerow = self.devices_treestore[iter]
+            device = self.device_finder.get_devices_tree()[treerow[PATH_COL]]
+
+            if udevdiscover.device.match_string(device, search_text):
+                treerow[VISIBLE_COL] = True
                 visible_iter.append(iter)
+            else:
+                treerow[VISIBLE_COL] = False
 
         if visible_iter:
-            def set_branch_visible(itr):
-                """ Sets the whole tree-branch upward as visible """
-                tr = self.devices_treestore[itr]
-                tr[VISIBLE_COL] = True
-                itr_prnt = self.devices_treestore.iter_parent(itr)
-                if itr_prnt:
-                    set_branch_visible(itr_prnt)
-
             for iter in visible_iter:
                 iter_parent = self.devices_treestore.iter_parent(iter)
                 if iter_parent:
-                    set_branch_visible(iter_parent)
+                    self.set_branch_visible(iter_parent)
 
         self.showparents_toggleaction.set_sensitive(False)
-        modelfilter = self.devices_treestore.filter_new()
-        modelfilter.set_visible_column(VISIBLE_COL)
+        self.modelfilter = self.devices_treestore.filter_new()
+        self.modelfilter.set_visible_column(VISIBLE_COL)
 
-        """
-        # DEBUGGING
-        for i in [v.get_model()[v.get_path()][NAME_COL] for v in self.rows.values() if \
-                v.get_model()[v.get_path()][VISIBLE_COL] == True]:
-            print i
-        print '--------------- ROWS ------------------'        
-        def a(model, path, iter, val):
-            print model[iter][NAME_COL]
-        modelfilter.foreach(a, None)
-        print '--------------- MODELFILTER ------------------'
-        # DEBUGGING
-        """
-
-        self.devices_tv.set_model(modelfilter)
+        self.devices_tv.set_model(self.modelfilter)
         self.expand_toggleaction_toggled_cb(self.expand_toggleaction)
+        self.is_filtered = True
+
+    def set_branch_visible(self, itr):
+        """ Sets the whole tree-branch upward as visible """
+
+        tr = self.devices_treestore[itr]
+        tr[VISIBLE_COL] = True
+        itr_prnt = self.devices_treestore.iter_parent(itr)
+        if itr_prnt:
+            self.set_branch_visible(itr_prnt)
 
     def search_entry_changed_cb(self, entry):
         if entry.get_text():
@@ -359,6 +347,7 @@ class UDevDiscoverGUI(GConfStore):
             self.showparents_toggleaction.set_sensitive(True)
             entry.set_property('primary-icon-sensitive',False)
             entry.set_property('secondary-icon-sensitive',False)
+            self.is_filtered = False
 
     def search_entry_icon_release_cb(self, entry, icon_pos, event):
         if icon_pos == 0:

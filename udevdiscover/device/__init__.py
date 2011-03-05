@@ -24,6 +24,39 @@
 
 import gudev
 
+def match_string(device, search_string):
+    """ Finds the search string around the device """
+
+    match = False
+
+    # Matching device name, nice_label, vendor and model
+    if (search_string in device.nice_label.lower()) or \
+            (search_string in device.device.get_name().lower()) or \
+            (hasattr(device, 'vendor_name') and device.vendor_name and \
+                search_string in device.vendor_name.lower()) or \
+            (hasattr(device, 'model_name') and device.model_name and \
+                search_string in device.model_name.lower()):
+        match = True
+
+    # Matching udev device static info
+    for key, val in device.get_info():
+        if search_string in str(val).lower():
+            match = True
+
+    # Matching udev device properties
+    for key, val in device.get_props().items():
+        if search_string in str(key).lower() or \
+                search_string in str(val).lower():
+            match = True
+
+    # Matching optional udevdiscover device summary info
+    if hasattr(device, 'get_summary'):
+        for key, val in device.get_summary():
+            if search_string in str(val).lower():
+                match = True
+
+    return match
+
 def get_device_object(device):
     subsys = device.get_subsystem()
 
