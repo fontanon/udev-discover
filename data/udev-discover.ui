@@ -120,6 +120,9 @@ Juanje Ojeda &lt;jojeda@emergya.es&gt;</property>
   </object>
   <object class="GtkWindow" id="main_window">
     <property name="visible">True</property>
+    <property name="window_position">center</property>
+    <property name="default_width">600</property>
+    <property name="default_height">400</property>
     <signal name="destroy" handler="quit_action_activate_cb"/>
     <child>
       <object class="GtkVBox" id="vbox1">
