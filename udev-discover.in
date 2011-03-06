@@ -159,7 +159,7 @@ class UDevDiscoverGUI(GConfStore):
         if self.options['follownew']:
             self.devices_tv.set_cursor(row_ref.get_path())
 
-        self.logger.info('Device added: %s' % device.nice_label)
+        self.logger.info(_('Device added: %s') % device.nice_label)
 
     def removed_device(self, device_finder, device):
         if self.rows.has_key(device.path):
@@ -168,15 +168,18 @@ class UDevDiscoverGUI(GConfStore):
             self.devices_treestore.remove(treeiter)
             del(self.rows[device.path])
 
-        self.logger.info('Device removed: %s' % device.nice_label)
+        self.logger.info(_('Device removed: %s') % device.nice_label)
 
     def changed_device(self, device_finder, device):
+        old_device = self.device_finder.get_devices_tree()[device.path]
+
         if self.rows.has_key(device.path):
             # Remove from tree first
             ref_row = self.rows[device.path]
             treeiter = self.devices_treestore.get_iter(ref_row.get_path())
             self.devices_treestore.remove(treeiter)
             del(self.rows[device.path])
+
             # Add again
             row_ref = self.add_new_device(device)
 
@@ -190,7 +193,12 @@ class UDevDiscoverGUI(GConfStore):
             if self.options['followchanged']:
                 self.devices_tv.set_cursor(row_ref.get_path())
 
-        self.logger.info('Device changed: %s' % device.nice_label)
+        self.logger.info(_('Device changed: %s') % device.nice_label)
+
+        # Log device updated info and propierties
+        for i in udevdiscover.device.find_differences(old_device, device):
+            if i[0] == 'changed': self.logger.debug('%s %s, %s: %s -> %s' % i)
+            else: self.logger.debug('%s %s, %s: %s' % i)
 
     def populate(self, devices):
         self.devices_treestore.clear()

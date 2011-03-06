@@ -57,6 +57,41 @@ def match_string(device, search_string):
 
     return match
 
+def find_differences(dev_a, dev_b):
+    # Matching device info differences
+    dev_a_info = {}
+    dev_a_info.update(dev_a.get_info())
+    dev_a_info_keys = set(dev_a_info.keys())
+    dev_b_info = {}
+    dev_b_info.update(dev_b.get_info())
+    dev_b_info_keys = set(dev_b_info.keys())
+
+    for key in dev_a_info_keys.intersection(dev_b_info_keys):
+        if dev_a_info[key] != dev_b_info[key]:
+            yield ('changed', 'info', key, dev_a_info[key], dev_b_info[key])
+
+    for key in dev_a_info_keys - dev_b_info_keys:
+        yield ('losed', 'info', key, dev_a_info[key])
+
+    for key in dev_b_info_keys - dev_a_info_keys:
+        yield ('new', 'info', key, dev_b_info[key])
+
+    # Matching device properties differences
+    dev_a_props = dev_a.get_props()
+    dev_b_props = dev_b.get_props()
+    dev_a_props_keys = set(dev_a_props.keys())
+    dev_b_props_keys = set(dev_b_props.keys())
+
+    for key in dev_a_props_keys.intersection(dev_b_props_keys):
+        if dev_a_props[key] != dev_b_props[key]:
+            yield ('changed', 'property', key, dev_a_props[key], dev_b_props[key])
+
+    for key in dev_a_props_keys - dev_b_props_keys:
+        yield ('losed', 'property', key, dev_a_props[key])
+
+    for key in dev_b_props_keys - dev_a_props_keys:
+        yield ('new', 'property', key, dev_b_props[key])
+
 def get_device_object(device):
     subsys = device.get_subsystem()
 
@@ -154,7 +189,7 @@ class Device(object):
             props[device_key] = self.device.get_property(device_key)
 
         return props
-    
+
     @property
     def path(self):
         '''Get the sysfs_path for this device
