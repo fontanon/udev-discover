@@ -52,21 +52,12 @@ setup(
         
         keywords = ['python', 'udev', 'gnome'],
 
-        packages = ['udevdiscover', 'udevdiscover.device', 'udevdiscover.device.block',
-            'udevdiscover.device.input', 'udevdiscover.device.net', 'udevdiscover.device.pci', 
-            'udevdiscover.device.power_supply', 'udevdiscover.device.scsi', 
-            'udevdiscover.device.sound', 'udevdiscover.device.tty', 'udevdiscover.device.usb'],
+        packages = ['udevdiscover', 'udevdiscover.device', 
+            'udevdiscover.device.block', 'udevdiscover.device.input'], 
         package_dir =  {'udevdiscover': 'udevdiscover', 
             'udevdiscover.device': 'udevdiscover/device',
             'udevdiscover.device.block': 'udevdiscover/device/block',
             'udevdiscover.device.input': 'udevdiscover/device/input',
-            'udevdiscover.device.net': 'udevdiscover/device/net',
-            'udevdiscover.device.pci': 'udevdiscover/device/pci',
-            'udevdiscover.device.power_supply': 'udevdiscover/device/power_supply',
-            'udevdiscover.device.scsi': 'udevdiscover/device/scsi',
-            'udevdiscover.device.sound': 'udevdiscover/device/sound',
-            'udevdiscover.device.tty': 'udevdiscover/device/tty',
-            'udevdiscover.device.usb': 'udevdiscover/device/usb',
             },
 
         scripts = ['udev-discover'],
