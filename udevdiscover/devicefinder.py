@@ -28,8 +28,8 @@ import device
 
 class DeviceFinder(gobject.GObject):
     '''
-    An object that will find and monitor Wiimote devices on your 
-    machine and emit signals when are connected / disconnected
+    An object that will find and monitor devices on your 
+    machine and emit signals when are added / removed / changed
     '''
 
     __gsignals__ = {
