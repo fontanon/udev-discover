@@ -22,23 +22,23 @@
 # Authors : J. Félix Ontañón <fontanon@emergya.es>
 # 
 
-import gobject
+from gi.repository import GObject
 import gudev
 import device 
 
-class DeviceFinder(gobject.GObject):
+class DeviceFinder(GObject.GObject):
     '''
     An object that will find and monitor devices on your 
     machine and emit signals when are added / removed / changed
     '''
 
     __gsignals__ = {
-        'added': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            (gobject.TYPE_PYOBJECT,)),
-        'removed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            (gobject.TYPE_PYOBJECT,)),
-        'changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            (gobject.TYPE_PYOBJECT,)),
+        'added': (GObject.SignalFlags.RUN_LAST, None, 
+            (GObject.TYPE_PYOBJECT,)),
+        'removed': (GObject.SignalFlags.RUN_LAST, None, 
+            (GObject.TYPE_PYOBJECT,)),
+        'changed': (GObject.SignalFlags.RUN_LAST, None, 
+            (GObject.TYPE_PYOBJECT,)),
     }
 
     def __init__(self, subsystems=['*'], parent_tree=False):
@@ -132,10 +132,10 @@ class DeviceFinder(gobject.GObject):
         dev = device.get_device_object(gudevice)
         self.emit('changed', dev)
 
-gobject.type_register(DeviceFinder)
+GObject.type_register(DeviceFinder)
 
 if __name__ == '__main__':
-    import gobject
+    from gi.repository import GObject
 
     def found(finder, device):
         print device.path + ': ' + device.nice_label
@@ -150,5 +150,5 @@ if __name__ == '__main__':
     import pprint
     pprint.pprint(finder.devices_tree)
 
-    loop = gobject.MainLoop()
+    loop = GObject.MainLoop()
     loop.run()

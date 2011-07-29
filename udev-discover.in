@@ -22,8 +22,8 @@
 ###
 
 import sys
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GObject
 import logging
 
 from udevdiscover import DeviceFinder
@@ -46,7 +46,7 @@ LOG_DATE_FORMAT = '%H:%M:%S'
 PATH_COL, ICON_COL, NAME_COL, SUBSYSTEM_COL, VISIBLE_COL = range(5)
 
 # Load icons
-theme = gtk.icon_theme_get_default()
+theme = Gtk.IconTheme.get_default()
 device_icon = theme.load_icon('gtk-dialog-question', 24, 0)
 
 class UDevDiscoverGUI(GConfStore):
@@ -68,7 +68,7 @@ class UDevDiscoverGUI(GConfStore):
         self.rows = {}
         self.is_filtered = False
 
-        self.builder = gtk.Builder()
+        self.builder = Gtk.Builder()
         if not self.builder.add_from_file(UDEVDISCOVER_UI):
             raise 'Cant load %s' % UDEVDISCOVER_UI
         self.builder.connect_signals(self)
@@ -105,8 +105,8 @@ class UDevDiscoverGUI(GConfStore):
 
         # Track main window width/height
         def catch_window_size(widget, allocate, options):
-            options['window_width'] = allocate.width
-            options['window_height'] = allocate.height
+            options['window_width'] = widget.get_allocated_width()
+            options['window_height'] = widget.get_allocated_height()
 
         self.main_window.connect('size_allocate', catch_window_size, 
                 self.options)
@@ -157,7 +157,7 @@ class UDevDiscoverGUI(GConfStore):
             self.devices_tv.expand_to_path(iter_path)
 
         if self.options['follownew']:
-            self.devices_tv.set_cursor(row_ref.get_path())
+            self.devices_tv.set_cursor(row_ref.get_path(), None, False)
 
         self.logger.info(_('Device added: %s') % device.nice_label)
 
@@ -225,7 +225,7 @@ class UDevDiscoverGUI(GConfStore):
                     device_icon, device.nice_label, device.subsystem, False, 
                     device.name])
         
-        self.rows[device.path] = gtk.TreeRowReference(self.devices_treestore,
+        self.rows[device.path] = Gtk.TreeRowReference.new(self.devices_treestore,
             self.devices_treestore.get_path(treeiter))
 
         search_text = self.search_entry.get_text().lower()
@@ -290,7 +290,7 @@ class UDevDiscoverGUI(GConfStore):
                 str(val))) for key, val in device.get_info()])
             self.devicedesc_label.set_label(desc)
 
-            self.device_image.set_from_icon_name(device.icon, gtk.ICON_SIZE_DIALOG)
+            self.device_image.set_from_icon_name(device.icon, Gtk.IconSize.DIALOG)
 
             if hasattr(device, 'get_summary'):
                 self.summary_scrollwindow.set_visible(True)
@@ -329,7 +329,7 @@ class UDevDiscoverGUI(GConfStore):
                     self.set_branch_visible(iter_parent)
 
         self.showparents_toggleaction.set_sensitive(False)
-        self.modelfilter = self.devices_treestore.filter_new()
+        self.modelfilter = self.devices_treestore.filter_new(None)
         self.modelfilter.set_visible_column(VISIBLE_COL)
 
         self.devices_tv.set_model(self.modelfilter)
@@ -382,4 +382,4 @@ class UDevDiscoverGUI(GConfStore):
 
 if __name__ == '__main__':
     UDevDiscoverGUI()
-    gobject.MainLoop().run()
+    GObject.MainLoop().run()
