@@ -105,8 +105,9 @@ class UDevDiscoverGUI(GConfStore):
 
         # Track main window width/height
         def catch_window_size(widget, allocate, options):
-            options['window_width'] = widget.get_allocated_width()
-            options['window_height'] = widget.get_allocated_height()
+            window_alloc = widget.get_allocation()
+            options['window_width'] = window_alloc.width
+            options['window_height'] = window_alloc.height
 
         self.main_window.connect('size_allocate', catch_window_size, 
                 self.options)
