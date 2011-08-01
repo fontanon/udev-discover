@@ -41,7 +41,7 @@ class DeviceFinder(gobject.GObject):
             (gobject.TYPE_PYOBJECT,)),
     }
 
-    def __init__(self, subsystems=['*'], parent_tree=False):
+    def __init__(self, subsystems=[], parent_tree=False):
         '''
         Create a new DeviceFinder and attach to the udev system to 
         listen for events.
@@ -50,12 +50,13 @@ class DeviceFinder(gobject.GObject):
 
         self.client = gudev.Client(subsystems)
         self.subsystems = subsystems
+        self.parent_tree = parent_tree
         self.devices_tree = {}
         self.devices_list = []
 
         self.client.connect('uevent', self.event)
 
-    def scan_subsystems(self, subsystems=['*'], parent_tree=False):
+    def scan_subsystems(self, subsystems=[], parent_tree=False):
         self.client = gudev.Client(subsystems)
         self.subsystems = subsystems
         self.devices_tree = {}
@@ -71,7 +72,7 @@ class DeviceFinder(gobject.GObject):
                     self.devices_tree[gudevice.get_sysfs_path()] = \
                         device.get_device_object(gudevice)
 
-        self.client.connect('uevent', self.event)
+        #self.client.connect('uevent', self.event)
         self.parent_tree = parent_tree
 
     def __explore_parent(self, gudevice, devices_tree, devices_list, emit=False):
@@ -135,20 +136,22 @@ class DeviceFinder(gobject.GObject):
 gobject.type_register(DeviceFinder)
 
 if __name__ == '__main__':
+    import pprint
     import gobject
 
     def found(finder, device):
-        print device.path + ': ' + device.nice_label
+        print 'Added', device.path + ': ' + device.nice_label
 
     def lost(finder, device):
-        print device.path + ': ' + device.nice_label
+        print 'Removed', device.path + ': ' + device.nice_label
+
+    def changes(finder, device):
+        print 'Changed', device.path + ': ' + device.nice_label
 
     finder = DeviceFinder()
-    finder.connect('connected', found)
-    finder.connect('disconnected', lost)
-
-    import pprint
-    pprint.pprint(finder.devices_tree)
+    finder.connect('added', found)
+    finder.connect('removed', lost)
+    finder.connect('changed', changes)
 
     loop = gobject.MainLoop()
     loop.run()
