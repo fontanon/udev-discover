@@ -22,7 +22,7 @@
 
 import exceptions
 import types
-import gconf
+from gi.repository import GConf
 
 class GConfKeysDict(dict):
     VALID_KEY_TYPES = (bool, str, int, float, list, tuple, set)
@@ -49,17 +49,17 @@ class GConfStore(object):
             return None
 
         self.__app_key = key
-        self.__client = gconf.client_get_default()
+        self.__client = GConf.Client.get_default()
         
         self.options = GConfKeysDict()
         self.options.update(self.defaults)
 
     def loadconf(self, only_defaults=False): 
-        casts = {gconf.VALUE_BOOL:   gconf.Value.get_bool,
-            gconf.VALUE_INT:    gconf.Value.get_int,
-            gconf.VALUE_FLOAT:  gconf.Value.get_float,
-            gconf.VALUE_STRING: gconf.Value.get_string,
-            gconf.VALUE_LIST:   gconf.Value.get_list}
+        casts = {GConf.ValueType.BOOL:   GConf.Value.get_bool,
+            GConf.ValueType.INT:    GConf.Value.get_int,
+            GConf.ValueType.FLOAT:  GConf.Value.get_float,
+            GConf.ValueType.STRING: GConf.Value.get_string,
+            GConf.ValueType.LIST:   GConf.Value.get_list}
 
         if only_defaults:
             #FIXME: Why appears this message in stderr?
@@ -76,27 +76,27 @@ class GConfStore(object):
             gval = self.__client.get(entry.key)
             if gval == None: continue
             
-            if gval.type == gconf.VALUE_LIST:
+            if gval.type == GConf.ValueType.LIST:
                 string_list = [item.get_string() for item in gval.get_list()]
                 self.options[entry.key.split('/')[-1]] = string_list
             else:
                 self.options[entry.key.split('/')[-1]] = casts[gval.type](gval)
  
     def saveconf(self):
-        casts = {types.BooleanType: gconf.Client.set_bool,
-            types.IntType:     gconf.Client.set_int,
-            types.FloatType:   gconf.Client.set_float,
-            types.StringType:  gconf.Client.set_string,
-            types.ListType:    gconf.Client.set_list,
-            types.TupleType:   gconf.Client.set_list,
-            set:               gconf.Client.set_list}
+        casts = {types.BooleanType: GConf.Client.set_bool,
+            types.IntType:     GConf.Client.set_int,
+            types.FloatType:   GConf.Client.set_float,
+            types.StringType:  GConf.Client.set_string,
+            types.ListType:    GConf.Client.set_list,
+            types.TupleType:   GConf.Client.set_list,
+            set:               GConf.Client.set_list}
 
         #TODO: To clear the gconf dir before save, is it convenient?
         for name, value in self.options.items():
             if type(value) in (list, tuple, set):
                 string_value = [str(item) for item in value]
                 casts[type(value)](self.__client, self.__app_key + '/' + name,
-                    gconf.VALUE_STRING, string_value)
+                    GConf.ValueType.STRING, string_value)
             else:
                 casts[type(value)](self.__client, self.__app_key + '/' + name, 
                     value)
