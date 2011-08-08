@@ -7,30 +7,6 @@
     <property name="stock_id">gtk-about</property>
     <signal name="activate" handler="about_action_activate_cb" swapped="no"/>
   </object>
-  <object class="GtkListStore" id="deviceprop_store">
-    <columns>
-      <!-- column-name Key -->
-      <column type="gchararray"/>
-      <!-- column-name Value -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkTreeStore" id="devices_treestore">
-    <columns>
-      <!-- column-name sysfs_path -->
-      <column type="gchararray"/>
-      <!-- column-name icon -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-      <!-- column-name subsystem -->
-      <column type="gchararray"/>
-      <!-- column-name visible -->
-      <column type="gboolean"/>
-      <!-- column-name devicename -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <object class="GtkToggleAction" id="expand_toggleaction">
     <property name="label">Expand devices tree</property>
     <property name="short_label">Expand</property>
@@ -770,7 +746,10 @@ the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 &lt;http://www.gnu.org/philosophy/why-not-lgpl.html&gt;.</property>
     <property name="authors">J. Félix Ontañón &lt;fontanon@emergya.es&gt;
-Juanje Ojeda &lt;jojeda@emergya.es&gt;</property>
+
+Contributors:
+Juanje Ojeda &lt;jojeda@emergya.es&gt;
+Javier Hernandez &lt;jhernandez@emergya.es&gt;</property>
     <property name="logo">udev-discover.svg</property>
     <property name="logo_icon_name">udev-discover</property>
     <property name="wrap_license">True</property>
@@ -796,6 +775,30 @@ Juanje Ojeda &lt;jojeda@emergya.es&gt;</property>
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkListStore" id="deviceprop_store">
+    <columns>
+      <!-- column-name Key -->
+      <column type="gchararray"/>
+      <!-- column-name Value -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="devices_treestore">
+    <columns>
+      <!-- column-name sysfs_path -->
+      <column type="gchararray"/>
+      <!-- column-name icon -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+      <!-- column-name subsystem -->
+      <column type="gchararray"/>
+      <!-- column-name visible -->
+      <column type="gboolean"/>
+      <!-- column-name devicename -->
+      <column type="gchararray"/>
+    </columns>
   </object>
   <object class="GtkTextBuffer" id="eventslog_textbuffer"/>
   <object class="GtkWindow" id="main_window">
