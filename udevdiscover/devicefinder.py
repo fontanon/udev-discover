@@ -41,7 +41,7 @@ class DeviceFinder(GObject.GObject):
             (GObject.TYPE_PYOBJECT,)),
     }
 
-    def __init__(self, subsystems=[], parent_tree=False):
+    def __init__(self, subsystems='', parent_tree=False):
         '''
         Create a new DeviceFinder and attach to the udev system to 
         listen for events.
@@ -56,12 +56,13 @@ class DeviceFinder(GObject.GObject):
 
         self.client.connect('uevent', self.event)
 
-    def scan_subsystems(self, subsystems=[], parent_tree=False):
+    def scan_subsystems(self, subsystems='', parent_tree=False):
         self.client = gudev.Client(subsystems)
         self.subsystems = subsystems
         self.devices_tree = {}
         self.devices_list = []
 
+        if subsystems == '': subsystems = ['*']
         for subsystem in subsystems:
             for gudevice in self.client.query_by_subsystem(subsystem):
                 if parent_tree: 
@@ -152,6 +153,9 @@ if __name__ == '__main__':
     finder.connect('added', found)
     finder.connect('removed', lost)
     finder.connect('changed', changes)
+
+    finder.scan_subsystems()
+    pprint.pprint(finder.devices_list)
 
     loop = GObject.MainLoop()
     loop.run()
