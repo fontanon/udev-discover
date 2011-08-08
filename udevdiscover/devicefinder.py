@@ -72,7 +72,7 @@ class DeviceFinder(GObject.GObject):
                     self.devices_tree[gudevice.get_sysfs_path()] = \
                         device.get_device_object(gudevice)
 
-        #self.client.connect('uevent', self.event)
+        self.client.connect('uevent', self.event)
         self.parent_tree = parent_tree
 
     def __explore_parent(self, gudevice, devices_tree, devices_list, emit=False):

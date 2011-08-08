@@ -192,7 +192,7 @@ class UDevDiscoverGUI(GConfStore):
                 self.devices_tv.expand_to_path(iter_path)
 
             if self.options['followchanged']:
-                self.devices_tv.set_cursor(row_ref.get_path())
+                self.devices_tv.set_cursor(row_ref.get_path(), None, False)
 
         self.logger.info(_('Device changed: %s') % device.nice_label)
 
