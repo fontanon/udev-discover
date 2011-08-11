@@ -51,8 +51,14 @@ ICON_SUBSYS_COL, NAME_SUBSYS_COL = range(2)
 theme = Gtk.IconTheme.get_default()
 device_icon = theme.load_icon('gtk-dialog-question', 24, 0)
 
-class SubsystemChoserDialog(object):
+class SubsystemChoserDialog(GConfStore):
+    defaults = {
+            'dialog_width': 600,
+            'dialog_height': 400,
+    }
+
     def __init__(self, preset=COMMON_SUBSYS_PRESET, chosen_subsystems=[]):
+        GConfStore.__init__(self, GCONF_KEY)
         self.preset = preset
         self.chosen_subsystems = chosen_subsystems
         self.subsystems = get_subsystems()
@@ -85,6 +91,22 @@ class SubsystemChoserDialog(object):
                 (self.all_radiobutton, ALL_SUBSYS_PRESET), \
                 (self.custom_radiobutton, CUSTOM_SUBSYS_PRESET):
             widget.connect('toggled', self.preset_toggled_cb, def_preset)
+
+        # Load gconf preferences
+        self.loadconf()
+
+        # Track main window width/height
+        def catch_window_size(widget, allocate, options):
+            window_alloc = widget.get_allocation()
+            options['dialog_width'] = window_alloc.width
+            options['dialog_height'] = window_alloc.height
+
+        self.subsys_dialog.connect('size_allocate', catch_window_size, 
+                self.options)
+
+        # Restore main window width/heigh
+        self.subsys_dialog.resize(self.options['dialog_width'], 
+            self.options['dialog_height'])
 
         if self.preset == COMMON_SUBSYS_PRESET:
             self.common_radiobutton.set_active(True)
@@ -172,6 +194,7 @@ class SubsystemChoserDialog(object):
         return self.subsys_dialog.run()
 
     def destroy(self):
+        self.saveconf()
         self.subsys_dialog.hide()
 
 
@@ -389,8 +412,8 @@ class UDevDiscoverGUI(GConfStore):
                 self.options['custom_subsystem_preset'] = \
                     ' '.join(self.subsys_dialog.get_chosen_subsystems())
 
+            self.reload_action_activate_cb()
         self.subsys_dialog.destroy()
-        self.reload_action_activate_cb()
 
     def showparents_toggleaction_toggled_cb(self, action):
         self.options['parent_tree'] = action.get_active()
