@@ -22,7 +22,7 @@
 ###
 
 import sys
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 from gi.repository import GObject
 import logging
 
@@ -121,27 +121,46 @@ class SubsystemChoserDialog(object):
 
         self.preset = preset
 
-    def preset_toggled_cb(self, widget, preset):
-        if not widget.get_active(): return
-        self.populate_preset(preset)
-
-    def addsubsys_clicked_cb(self, widget):
+    def addsubsys_item_activated(self):
         selection = self.allsubsys_treeview.get_selection()
         model, selected = selection.get_selected()
 
         if selected is not None:
             icon, name = model[selected]
+            next = model[selected].get_next()
             self.chosensubsys_liststore.append([icon, name])
             model.remove(selected)
+            if next:
+                self.allsubsys_treeview.set_cursor(next.path, None, False)
 
-    def removesubsys_clicked_cb(self, widget):
+    def chosensubsys_item_activated(self, widget=None):
         selection = self.chosensubsys_treeview.get_selection()
         model, selected = selection.get_selected()
 
         if selected is not None:
             icon, name = model[selected]
             self.allsubsys_liststore.append([icon, name])
+            next = model[selected].get_next()
             model.remove(selected)
+            if next:
+                self.chosensubsys_treeview.set_cursor(next.path, None, False)
+
+    def preset_toggled_cb(self, widget, preset):
+        if not widget.get_active(): return
+        self.populate_preset(preset)
+
+    def allsubsys_treeview_row_activated_cb(self, widget, path, view_column):
+        self.addsubsys_item_activated()
+
+    def chosensubsys_treeview_key_release_event_cb(self, widget, event):
+        if event.keyval == Gdk.keyval_from_name("Delete"):
+            self.chosensubsys_item_activated()
+
+    def addsubsys_button_clicked_cb(self, widget):
+        self.addsubsys_item_activated()
+
+    def removesubsys_button_clicked_cb(self, widget):
+        self.chosensubsys_item_activated()
 
     def get_current_preset(self):
         return self.preset
