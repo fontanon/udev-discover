@@ -375,7 +375,8 @@ class UDevDiscoverGUI(GConfStore):
 
     def showparents_toggleaction_toggled_cb(self, action):
         self.options['parent_tree'] = action.get_active()
-        self.device_finder.scan_subsystems(DEFAULT_SUBSYSTEMS, 
+        self.device_finder.scan_subsystems(
+            self.subsys_dialog.get_chosen_subsystems(), 
             self.options['parent_tree'])
 
         self.populate(self.device_finder.get_devices())
