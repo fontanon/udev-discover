@@ -26,6 +26,17 @@ from gi.repository import GObject
 import gudev
 import device 
 
+def get_subsystems():
+    client = gudev.Client('')
+    subsys = []
+
+    for device in client.query_by_subsystem('*'):
+        device_subsystem = device.get_subsystem()
+        if not device_subsystem in subsys:
+            subsys.append(device_subsystem)
+
+    return subsys
+
 class DeviceFinder(GObject.GObject):
     '''
     An object that will find and monitor devices on your 
@@ -150,6 +161,8 @@ if __name__ == '__main__':
         print 'Changed', device.path + ': ' + device.nice_label
 
     finder = DeviceFinder()
+    pprint.pprint(finder.get_subsystems())
+
     finder.connect('added', found)
     finder.connect('removed', lost)
     finder.connect('changed', changes)

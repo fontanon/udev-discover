@@ -20,7 +20,7 @@
 # 
 ###
 
-from devicefinder import DeviceFinder
+from devicefinder import DeviceFinder, get_subsystems
 
 import gettext
 import locale

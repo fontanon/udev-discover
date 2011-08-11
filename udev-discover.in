@@ -26,7 +26,7 @@ from gi.repository import Gtk
 from gi.repository import GObject
 import logging
 
-from udevdiscover import DeviceFinder
+from udevdiscover import DeviceFinder, get_subsystems
 from udevdiscover.utils import GConfStore, TextBufferHandler
 import udevdiscover.device
 
@@ -35,8 +35,8 @@ UDEVDISCOVER_UI = '@PREFIX@/share/udev-discover/udev-discover.ui'
 GCONF_KEY = '/apps/udevdiscover'
 
 DEFAULT_SUBSYSTEMS = ['pci', 'usb', 'net', 'power_supply', 'block', 'sound', 
-    'input', 'serio', 'platform', 'tty', 'pnp', 'drm', 'video4linux', 'rfkill',
-    'bluetooth', 'leds', 'dvb', 'acpi']
+    'input', 'serio', 'platform', 'drm', 'video4linux', 'rfkill', 'bluetooth',
+    'leds', 'dvb']
 
 TEXTBUFFER_LOGGER = 'udevdiscover'
 LOG_LEVEL = logging.DEBUG
@@ -44,13 +44,119 @@ LOG_FORMAT = '%(asctime)s %(levelname)s - %(message)s'
 LOG_DATE_FORMAT = '%H:%M:%S'
 
 PATH_COL, ICON_COL, NAME_COL, SUBSYSTEM_COL, VISIBLE_COL = range(5)
+COMMON_SUBSYS_PRESET, ALL_SUBSYS_PRESET, CUSTOM_SUBSYS_PRESET = range(3)
+ICON_SUBSYS_COL, NAME_SUBSYS_COL = range(2)
 
 # Load icons
 theme = Gtk.IconTheme.get_default()
 device_icon = theme.load_icon('gtk-dialog-question', 24, 0)
 
-class UDevDiscoverGUI(GConfStore):
+class SubsystemChoserDialog(object):
+    def __init__(self, preset=COMMON_SUBSYS_PRESET, chosen_subsystems=[]):
+        self.preset = preset
+        self.chosen_subsystems = chosen_subsystems
+        self.subsystems = get_subsystems()
 
+        self.builder = Gtk.Builder()
+        if not self.builder.add_objects_from_file(UDEVDISCOVER_UI,
+                ['subsys_dialog', 'allsubsys_liststore', 'chosensubsys_liststore',
+                'preset_radioaction', 'all_radioaction', 'custom_radioaction']):
+            raise 'Cant load %s' % UDEVDISCOVER_UI
+        self.builder.connect_signals(self)
+
+        # Widgets
+        self.subsys_dialog = self.builder.get_object('subsys_dialog')
+        self.common_radiobutton = self.builder.get_object('common_radiobutton')
+        self.all_radiobutton = self.builder.get_object('all_radiobutton')
+        self.custom_radiobutton = self.builder.get_object('custom_radiobutton')
+        self.addsubsys_button = self.builder.get_object('addsubsys_button')
+        self.removesubsys_button = self.builder.get_object('removesubsys_button')
+        self.custompreset_box = self.builder.get_object('custompreset_box')
+        self.allsubsys_liststore = self.builder.get_object('allsubsys_liststore')
+        self.chosensubsys_liststore = \
+            self.builder.get_object('chosensubsys_liststore')
+        self.allsubsys_treeview = self.builder.get_object('allsubsys_treeview')
+        self.chosensubsys_treeview = \
+            self.builder.get_object('chosensubsys_treeview')
+
+        # Signals
+        self.subsys_dialog.connect('response', lambda d, r: d.hide())
+        for widget, def_preset in (self.common_radiobutton, COMMON_SUBSYS_PRESET), \
+                (self.all_radiobutton, ALL_SUBSYS_PRESET), \
+                (self.custom_radiobutton, CUSTOM_SUBSYS_PRESET):
+            widget.connect('toggled', self.preset_toggled_cb, def_preset)
+
+        if self.preset == COMMON_SUBSYS_PRESET:
+            self.common_radiobutton.set_active(True)
+            self.populate_preset()
+        elif self.preset == ALL_SUBSYS_PRESET:
+            self.all_radiobutton.set_active(True)
+        else:
+            self.custom_radiobutton.set_active(True)
+
+    def populate_preset(self, preset=COMMON_SUBSYS_PRESET):
+        def populate(all_set, chosen_set):
+            self.allsubsys_liststore.clear()
+            self.chosensubsys_liststore.clear()
+
+            for subsys in all_set:
+                self.allsubsys_liststore.append([None, subsys])
+
+            for subsys in chosen_set:
+                self.chosensubsys_liststore.append([None, subsys])
+
+        if preset == COMMON_SUBSYS_PRESET:
+            self.custompreset_box.set_sensitive(False)
+            default = set(DEFAULT_SUBSYSTEMS)
+            populate(set(self.subsystems) - default, default)
+
+        elif preset == ALL_SUBSYS_PRESET:
+            self.custompreset_box.set_sensitive(False)
+            populate([], self.subsystems)
+
+        elif preset == CUSTOM_SUBSYS_PRESET:
+            self.custompreset_box.set_sensitive(True)
+            chosen = set(self.chosen_subsystems)
+            populate(set(self.subsystems) - chosen, chosen)
+
+        self.preset = preset
+
+    def preset_toggled_cb(self, widget, preset):
+        if not widget.get_active(): return
+        self.populate_preset(preset)
+
+    def addsubsys_clicked_cb(self, widget):
+        selection = self.allsubsys_treeview.get_selection()
+        model, selected = selection.get_selected()
+
+        if selected is not None:
+            icon, name = model[selected]
+            self.chosensubsys_liststore.append([icon, name])
+            model.remove(selected)
+
+    def removesubsys_clicked_cb(self, widget):
+        selection = self.chosensubsys_treeview.get_selection()
+        model, selected = selection.get_selected()
+
+        if selected is not None:
+            icon, name = model[selected]
+            self.allsubsys_liststore.append([icon, name])
+            model.remove(selected)
+
+    def get_current_preset(self):
+        return self.preset
+
+    def get_chosen_subsystems(self):
+        return [subsys[1] for subsys in self.chosensubsys_liststore]
+
+    def run(self):
+        return self.subsys_dialog.run()
+
+    def destroy(self):
+        self.subsys_dialog.hide()
+
+
+class UDevDiscoverGUI(GConfStore):
     defaults = {
             'window_width': 600,
             'window_height': 400,
@@ -61,6 +167,8 @@ class UDevDiscoverGUI(GConfStore):
             'eventslog_expanded': True,
             'follownew': True,
             'followchanged': True,
+            'subsystem_preset': COMMON_SUBSYS_PRESET,
+            'custom_subsystem_preset': DEFAULT_SUBSYSTEMS
     }
 
     def __init__(self):
@@ -95,10 +203,7 @@ class UDevDiscoverGUI(GConfStore):
         self.summary_scrollwindow = self.builder.get_object('summary_scrollwindow')
         self.devicepropsum_label = self.builder.get_object('devicepropsum_label')
         self.search_entry = self.builder.get_object('search_entry')
-
-        # About dialog
-        self.about_dialog = self.builder.get_object('about_dialog')
-        self.about_dialog.connect('response', lambda d, r: d.hide())
+        self.common_radiobutton = self.builder.get_object('common_radiobutton')
 
         # Load gconf preferences
         self.loadconf()
@@ -121,6 +226,15 @@ class UDevDiscoverGUI(GConfStore):
         self.eventslog_vpaned.set_position(self.options['eventslog_vpaned'])
         self.eventslog_expander.set_expanded(self.options['eventslog_expanded'])
 
+        # Subsystem chooser dialog
+        self.subsys_dialog = SubsystemChoserDialog(
+            self.options['subsystem_preset'],
+            self.options['custom_subsystem_preset'].split(' '))
+
+        # About dialog
+        self.about_dialog = self.builder.get_object('about_dialog')
+        self.about_dialog.connect('response', lambda d, r: d.hide())
+
         # Sets up the logger
         self.logger = logging.getLogger(TEXTBUFFER_LOGGER)
         self.logger.setLevel(LOG_LEVEL)
@@ -131,7 +245,8 @@ class UDevDiscoverGUI(GConfStore):
 
         # Populate treeview
         self.device_finder = DeviceFinder()
-        self.device_finder.scan_subsystems(DEFAULT_SUBSYSTEMS, 
+        self.device_finder.scan_subsystems(
+            self.subsys_dialog.get_chosen_subsystems(),
             self.options['parent_tree'])
         self.device_finder.connect('added', self.new_device)
         self.device_finder.connect('removed', self.removed_device)
@@ -225,7 +340,7 @@ class UDevDiscoverGUI(GConfStore):
                 treeiter = self.devices_treestore.append(None, [device.path, 
                     device_icon, device.nice_label, device.subsystem, False, 
                     device.name])
-        
+
         self.rows[device.path] = Gtk.TreeRowReference.new(self.devices_treestore,
             self.devices_treestore.get_path(treeiter))
 
@@ -242,6 +357,21 @@ class UDevDiscoverGUI(GConfStore):
                 treerow[VISIBLE_COL] = False
 
         return self.rows[device.path]
+
+    def preferences_action_activated_cb(self, widget):
+        if self.subsys_dialog.run() == Gtk.ResponseType.ACCEPT:
+            selected = [r for r in self.common_radiobutton.get_group() \
+                if r.get_active()][0]
+
+            chosen_preset = self.subsys_dialog.get_current_preset()
+            self.options['subsystem_preset'] = chosen_preset
+
+            if chosen_preset == CUSTOM_SUBSYS_PRESET:
+                self.options['custom_subsystem_preset'] = \
+                    ' '.join(self.subsys_dialog.get_chosen_subsystems())
+
+        self.subsys_dialog.destroy()
+        self.reload_action_activate_cb()
 
     def showparents_toggleaction_toggled_cb(self, action):
         self.options['parent_tree'] = action.get_active()
@@ -265,8 +395,9 @@ class UDevDiscoverGUI(GConfStore):
     def followchanged_toggleaction_toggled_cb(self, action):
         self.options['followchanged'] = self.followchanged_toggleaction.get_active()
 
-    def reload_action_activate_cb(self, widget):
-        self.device_finder.scan_subsystems(DEFAULT_SUBSYSTEMS, 
+    def reload_action_activate_cb(self, widget=None):
+        self.device_finder.scan_subsystems(
+            self.subsys_dialog.get_chosen_subsystems(),
             self.options['parent_tree'])
 
         self.populate(self.device_finder.get_devices())
