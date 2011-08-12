@@ -44,7 +44,7 @@ LOG_FORMAT = '%(asctime)s %(levelname)s - %(message)s'
 LOG_DATE_FORMAT = '%H:%M:%S'
 
 PATH_COL, ICON_COL, NAME_COL, SUBSYSTEM_COL, VISIBLE_COL = range(5)
-COMMON_SUBSYS_PRESET, ALL_SUBSYS_PRESET, CUSTOM_SUBSYS_PRESET = range(3)
+DEFAULT_SUBSYS_PRESET, ALL_SUBSYS_PRESET, CUSTOM_SUBSYS_PRESET = range(3)
 ICON_SUBSYS_COL, NAME_SUBSYS_COL = range(2)
 
 # Load icons
@@ -57,7 +57,7 @@ class SubsystemChoserDialog(GConfStore):
             'dialog_height': 400,
     }
 
-    def __init__(self, preset=COMMON_SUBSYS_PRESET, chosen_subsystems=[]):
+    def __init__(self, preset=DEFAULT_SUBSYS_PRESET, chosen_subsystems=[]):
         GConfStore.__init__(self, GCONF_KEY)
         self.preset = preset
         self.chosen_subsystems = chosen_subsystems
@@ -72,7 +72,7 @@ class SubsystemChoserDialog(GConfStore):
 
         # Widgets
         self.subsys_dialog = self.builder.get_object('subsys_dialog')
-        self.common_radiobutton = self.builder.get_object('common_radiobutton')
+        self.default_radiobutton = self.builder.get_object('default_radiobutton')
         self.all_radiobutton = self.builder.get_object('all_radiobutton')
         self.custom_radiobutton = self.builder.get_object('custom_radiobutton')
         self.addsubsys_button = self.builder.get_object('addsubsys_button')
@@ -89,7 +89,7 @@ class SubsystemChoserDialog(GConfStore):
 
         # Signals
         self.subsys_dialog.connect('response', lambda d, r: d.hide())
-        for widget, def_preset in (self.common_radiobutton, COMMON_SUBSYS_PRESET), \
+        for widget, def_preset in (self.default_radiobutton, DEFAULT_SUBSYS_PRESET), \
                 (self.all_radiobutton, ALL_SUBSYS_PRESET), \
                 (self.custom_radiobutton, CUSTOM_SUBSYS_PRESET):
             widget.connect('toggled', self.preset_toggled_cb, def_preset)
@@ -110,15 +110,15 @@ class SubsystemChoserDialog(GConfStore):
         self.subsys_dialog.resize(self.options['dialog_width'], 
             self.options['dialog_height'])
 
-        if self.preset == COMMON_SUBSYS_PRESET:
-            self.common_radiobutton.set_active(True)
+        if self.preset == DEFAULT_SUBSYS_PRESET:
+            self.default_radiobutton.set_active(True)
             self.populate_preset()
         elif self.preset == ALL_SUBSYS_PRESET:
             self.all_radiobutton.set_active(True)
         else:
             self.custom_radiobutton.set_active(True)
 
-    def populate_preset(self, preset=COMMON_SUBSYS_PRESET):
+    def populate_preset(self, preset=DEFAULT_SUBSYS_PRESET):
         def populate(all_set, chosen_set):
             self.allsubsys_liststore.clear()
             self.chosensubsys_liststore.clear()
@@ -134,7 +134,7 @@ class SubsystemChoserDialog(GConfStore):
                     self.allsubsys_treeview, self.chosensubsys_treeview:
                 widget.set_sensitive(allow)
 
-        if preset == COMMON_SUBSYS_PRESET:
+        if preset == DEFAULT_SUBSYS_PRESET:
             subsystem_allow_edit(False)
             default = set(DEFAULT_SUBSYSTEMS)
             populate(set(self.subsystems) - default, default)
@@ -209,7 +209,7 @@ class UDevDiscoverGUI(GConfStore):
             'eventslog_expanded': True,
             'follownew': True,
             'followchanged': True,
-            'subsystem_preset': COMMON_SUBSYS_PRESET,
+            'subsystem_preset': DEFAULT_SUBSYS_PRESET,
             'custom_subsystem_preset': DEFAULT_SUBSYSTEMS
     }
 
@@ -251,7 +251,7 @@ class UDevDiscoverGUI(GConfStore):
         self.summary_scrollwindow = self.builder.get_object('summary_scrollwindow')
         self.devicepropsum_label = self.builder.get_object('devicepropsum_label')
         self.search_entry = self.builder.get_object('search_entry')
-        self.common_radiobutton = self.builder.get_object('common_radiobutton')
+        self.default_radiobutton = self.builder.get_object('default_radiobutton')
 
         # Load gconf preferences
         self.loadconf()
