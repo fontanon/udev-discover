@@ -85,6 +85,9 @@ class SubsystemChoserDialog(GConfStore):
         self.chosensubsys_treeview = \
             self.builder.get_object('chosensubsys_treeview')
 
+        self.allsubsys_treeview.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
+        self.chosensubsys_treeview.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
+
         # Signals
         self.subsys_dialog.connect('response', lambda d, r: d.hide())
         for widget, def_preset in (self.common_radiobutton, COMMON_SUBSYS_PRESET), \
@@ -143,46 +146,39 @@ class SubsystemChoserDialog(GConfStore):
 
         self.preset = preset
 
-    def addsubsys_item_activated(self):
-        selection = self.allsubsys_treeview.get_selection()
-        model, selected = selection.get_selected()
-
-        if selected is not None:
-            icon, name = model[selected]
-            next = model[selected].get_next()
-            self.chosensubsys_liststore.append([icon, name])
-            model.remove(selected)
-            if next:
-                self.allsubsys_treeview.set_cursor(next.path, None, False)
-
-    def chosensubsys_item_activated(self, widget=None):
-        selection = self.chosensubsys_treeview.get_selection()
-        model, selected = selection.get_selected()
-
-        if selected is not None:
-            icon, name = model[selected]
-            self.allsubsys_liststore.append([icon, name])
-            next = model[selected].get_next()
-            model.remove(selected)
-            if next:
-                self.chosensubsys_treeview.set_cursor(next.path, None, False)
-
     def preset_toggled_cb(self, widget, preset):
         if not widget.get_active(): return
         self.populate_preset(preset)
 
+    def subsyslist_item_activated(self, orig_treeview, dest_treeview):
+        selection = orig_treeview.get_selection()
+        model, selected_rows = selection.get_selected_rows()
+
+        items = [(Gtk.TreeRowReference.new(model, selected), model[selected]) \
+            for selected in selected_rows]
+
+        if items: next = items[-1][1].get_next()
+
+        for row_ref, (icon, name) in items:
+            dest_treeview.get_model().append([icon, name])
+            model.remove(model.get_iter(row_ref.get_path()))
+
+        if next: orig_treeview.set_cursor(next.path, None, False)
+
     def allsubsys_treeview_row_activated_cb(self, widget, path, view_column):
-        self.addsubsys_item_activated()
+        self.subsyslist_item_activated(widget, self.chosensubsys_treeview)
 
     def chosensubsys_treeview_key_release_event_cb(self, widget, event):
         if event.keyval == Gdk.keyval_from_name("Delete"):
-            self.chosensubsys_item_activated()
+            self.subsyslist_item_activated(widget, self.allsubsys_treeview)
 
     def addsubsys_button_clicked_cb(self, widget):
-        self.addsubsys_item_activated()
+        self.subsyslist_item_activated(self.allsubsys_treeview,
+            self.chosensubsys_treeview)
 
     def removesubsys_button_clicked_cb(self, widget):
-        self.chosensubsys_item_activated()
+        self.subsyslist_item_activated(self.chosensubsys_treeview, 
+            self.allsubsys_treeview)
 
     def get_current_preset(self):
         return self.preset
