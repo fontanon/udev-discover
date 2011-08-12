@@ -219,7 +219,13 @@ class UDevDiscoverGUI(GConfStore):
         self.is_filtered = False
 
         self.builder = Gtk.Builder()
-        if not self.builder.add_from_file(UDEVDISCOVER_UI):
+        if not self.builder.add_objects_from_file(UDEVDISCOVER_UI,
+                ['about_action', 'expand_toggleaction',
+                'followchanged_toggleaction', 'follownew_toggleaction',
+                'help_action', 'preferences_action', 'quit_action',
+                'reload_action', 'showparents_toggleaction', 'about_dialog',
+                'deviceprop_store', 'devices_treestore', 'eventslog_textbuffer',
+                'main_window']):
             raise 'Cant load %s' % UDEVDISCOVER_UI
         self.builder.connect_signals(self)
 
@@ -402,9 +408,6 @@ class UDevDiscoverGUI(GConfStore):
 
     def preferences_action_activated_cb(self, widget):
         if self.subsys_dialog.run() == Gtk.ResponseType.ACCEPT:
-            selected = [r for r in self.common_radiobutton.get_group() \
-                if r.get_active()][0]
-
             chosen_preset = self.subsys_dialog.get_current_preset()
             self.options['subsystem_preset'] = chosen_preset
 
