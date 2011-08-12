@@ -7,69 +7,6 @@
     <property name="stock_id">gtk-about</property>
     <signal name="activate" handler="about_action_activate_cb" swapped="no"/>
   </object>
-  <object class="GtkListStore" id="allsubsys_liststore">
-    <columns>
-      <!-- column-name icon -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="chosensubsys_liststore">
-    <columns>
-      <!-- column-name icon -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="deviceprop_store">
-    <columns>
-      <!-- column-name Key -->
-      <column type="gchararray"/>
-      <!-- column-name Value -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkTreeStore" id="devices_treestore">
-    <columns>
-      <!-- column-name sysfs_path -->
-      <column type="gchararray"/>
-      <!-- column-name icon -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-      <!-- column-name subsystem -->
-      <column type="gchararray"/>
-      <!-- column-name visible -->
-      <column type="gboolean"/>
-      <!-- column-name devicename -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkTextBuffer" id="eventslog_textbuffer"/>
-  <object class="GtkToggleAction" id="expand_toggleaction">
-    <property name="label">Expand devices tree</property>
-    <property name="short_label">Expand</property>
-    <property name="tooltip">Expand devices tree</property>
-    <property name="icon_name">format-indent-more</property>
-    <property name="active">True</property>
-    <signal name="toggled" handler="expand_toggleaction_toggled_cb" swapped="no"/>
-  </object>
-  <object class="GtkToggleAction" id="followchanged_toggleaction">
-    <property name="label">Follow changing devices</property>
-    <property name="short_label">Follow changes</property>
-    <property name="tooltip">Focus follows changing devices</property>
-    <property name="stock_id">gtk-dialog-warning</property>
-    <signal name="toggled" handler="followchanged_toggleaction_toggled_cb" swapped="no"/>
-  </object>
-  <object class="GtkToggleAction" id="follownew_toggleaction">
-    <property name="label">Follow new devices</property>
-    <property name="short_label">Follow new</property>
-    <property name="tooltip">Focus follows new devices</property>
-    <property name="stock_id">gtk-add</property>
-    <signal name="toggled" handler="follownew_toggleaction_toggled_cb" swapped="no"/>
-  </object>
   <object class="GtkAction" id="help_action">
     <property name="label">Help</property>
     <property name="short_label">Help</property>
@@ -823,6 +760,69 @@ Javier Hernandez &lt;jhernandez@emergya.es&gt;</property>
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkListStore" id="allsubsys_liststore">
+    <columns>
+      <!-- column-name icon -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="chosensubsys_liststore">
+    <columns>
+      <!-- column-name icon -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="deviceprop_store">
+    <columns>
+      <!-- column-name Key -->
+      <column type="gchararray"/>
+      <!-- column-name Value -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="devices_treestore">
+    <columns>
+      <!-- column-name sysfs_path -->
+      <column type="gchararray"/>
+      <!-- column-name icon -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+      <!-- column-name subsystem -->
+      <column type="gchararray"/>
+      <!-- column-name visible -->
+      <column type="gboolean"/>
+      <!-- column-name devicename -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTextBuffer" id="eventslog_textbuffer"/>
+  <object class="GtkToggleAction" id="expand_toggleaction">
+    <property name="label">Expand devices tree</property>
+    <property name="short_label">Expand</property>
+    <property name="tooltip">Expand devices tree</property>
+    <property name="icon_name">format-indent-more</property>
+    <property name="active">True</property>
+    <signal name="toggled" handler="expand_toggleaction_toggled_cb" swapped="no"/>
+  </object>
+  <object class="GtkToggleAction" id="followchanged_toggleaction">
+    <property name="label">Follow changing devices</property>
+    <property name="short_label">Follow changes</property>
+    <property name="tooltip">Focus follows changing devices</property>
+    <property name="stock_id">gtk-dialog-warning</property>
+    <signal name="toggled" handler="followchanged_toggleaction_toggled_cb" swapped="no"/>
+  </object>
+  <object class="GtkToggleAction" id="follownew_toggleaction">
+    <property name="label">Follow new devices</property>
+    <property name="short_label">Follow new</property>
+    <property name="tooltip">Focus follows new devices</property>
+    <property name="stock_id">gtk-add</property>
+    <signal name="toggled" handler="follownew_toggleaction_toggled_cb" swapped="no"/>
   </object>
   <object class="GtkWindow" id="main_window">
     <property name="visible">True</property>
@@ -1710,7 +1710,6 @@ Javier Hernandez &lt;jhernandez@emergya.es&gt;</property>
             <child>
               <object class="GtkBox" id="custompreset_box">
                 <property name="visible">True</property>
-                <property name="sensitive">False</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">6</property>
                 <child>
@@ -1723,6 +1722,7 @@ Javier Hernandez &lt;jhernandez@emergya.es&gt;</property>
                     <child>
                       <object class="GtkTreeView" id="allsubsys_treeview">
                         <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="model">allsubsys_liststore</property>
                         <property name="search_column">1</property>
@@ -1769,6 +1769,7 @@ Javier Hernandez &lt;jhernandez@emergya.es&gt;</property>
                       <object class="GtkButton" id="addsubsys_button">
                         <property name="label">gtk-add</property>
                         <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_action_appearance">False</property>
@@ -1786,6 +1787,7 @@ Javier Hernandez &lt;jhernandez@emergya.es&gt;</property>
                       <object class="GtkButton" id="removesubsys_button">
                         <property name="label">gtk-delete</property>
                         <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_action_appearance">False</property>
@@ -1817,6 +1819,7 @@ Javier Hernandez &lt;jhernandez@emergya.es&gt;</property>
                     <child>
                       <object class="GtkTreeView" id="chosensubsys_treeview">
                         <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="model">chosensubsys_liststore</property>
                         <property name="reorderable">True</property>

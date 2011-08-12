@@ -77,7 +77,6 @@ class SubsystemChoserDialog(GConfStore):
         self.custom_radiobutton = self.builder.get_object('custom_radiobutton')
         self.addsubsys_button = self.builder.get_object('addsubsys_button')
         self.removesubsys_button = self.builder.get_object('removesubsys_button')
-        self.custompreset_box = self.builder.get_object('custompreset_box')
         self.allsubsys_liststore = self.builder.get_object('allsubsys_liststore')
         self.chosensubsys_liststore = \
             self.builder.get_object('chosensubsys_liststore')
@@ -130,17 +129,22 @@ class SubsystemChoserDialog(GConfStore):
             for subsys in chosen_set:
                 self.chosensubsys_liststore.append([None, subsys])
 
+        def subsystem_allow_edit(allow=True):
+            for widget in self.addsubsys_button, self.removesubsys_button, \
+                    self.allsubsys_treeview, self.chosensubsys_treeview:
+                widget.set_sensitive(allow)
+
         if preset == COMMON_SUBSYS_PRESET:
-            self.custompreset_box.set_sensitive(False)
+            subsystem_allow_edit(False)
             default = set(DEFAULT_SUBSYSTEMS)
             populate(set(self.subsystems) - default, default)
 
         elif preset == ALL_SUBSYS_PRESET:
-            self.custompreset_box.set_sensitive(False)
+            subsystem_allow_edit(False)
             populate([], self.subsystems)
 
         elif preset == CUSTOM_SUBSYS_PRESET:
-            self.custompreset_box.set_sensitive(True)
+            subsystem_allow_edit()
             chosen = set(self.chosen_subsystems)
             populate(set(self.subsystems) - chosen, chosen)
 
