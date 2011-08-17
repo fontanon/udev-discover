@@ -7,11 +7,12 @@ for udev testers, coders, hackers and consumers.
 Dependencies:
 -------------
 
-* python >= 2.5
-* python-gconf
+* python >= 2.7
 * python-gobject
 * python-gudev
-* python-gtk
+* gir1.2-gtk-3.0
+* gir1.2-gconf-2.0
+* gir1.2-gdkpixbuf-2.0
 
 Install udev-discover:
 ----------------------
