@@ -1,0 +1,3 @@
+version=3
+http://launchpad.net/udev-discover/+download \
+    (?:.*/)?udev-discover-([\d\.]+)\.tar\.gz

@@ -1,0 +1,20 @@
+Source: udev-discover
+Section: gnome
+Priority: optional
+Maintainer: J. Félix Ontañón <fontanon@emergya.es>
+Build-Depends: cdbs (>= 0.4.49), debhelper (>= 7), python-support (>= 0.5.3),
+ python-dev (>= 2.3.5-11), gettext
+Standards-Version: 3.9.1
+Homepage: http://fontanon.org/udevdiscover
+
+Package: udev-discover
+Architecture: any
+Depends: ${misc:Depends}, ${python:Depends}, python-gconf, python-gudev,
+ python-gobject, gir1.2-gtk-3.0, gir1.2-gconf-2.0, gir1.2-gdkpixbuf-2.0
+XB-Python-Version: ${python:Versions}
+Description: Sysfs browsing tool focused on helping udev users and developers
+ A helping tool for udev testers, coders, hackers and consumers.
+    * Browsing the sysfs tree via udev
+    * Reports udev device info and udev properties
+    * Filter and search devices
+    * Monitorize udev device events

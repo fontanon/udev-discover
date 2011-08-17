@@ -1,0 +1,26 @@
+#!/usr/bin/make -f
+
+DEB_PYTHON_SYSTEM=pysupport
+
+# Debhelper must be included before python-distutils to use
+# dh_python / dh_pycentral / dh_pysupport
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/python-distutils.mk
+
+# i18n rules
+PREFIX = /usr
+DATADIR = $(PREFIX)/share
+LOCALEDIR = $(DATADIR)/locale
+PO = $(shell find ./po -name *.po -print | sed -e 's!.po!!g' -e 's!./!!g')
+
+clean::
+	rm -rf mo
+	rm -rf build
+	rm -f udev-discover
+
+install/udev-discover::
+	for lang in $(PO); do mkdir -p mo/$$lang/LC_MESSAGES; msgfmt po/$$lang.po -o mo/$$lang/LC_MESSAGES/udevdiscover.mo; dh_install mo/$$lang/LC_MESSAGES/udevdiscover.mo $(DESTDIR)$(LOCALEDIR)/$$lang/LC_MESSAGES/; done
+	mkdir -p debian/udev-discover/usr/share/gconf
+	mv debian/udev-discover/etc/gconf/schemas debian/udev-discover/usr/share/gconf/
+	rmdir debian/udev-discover/etc/gconf
+	rmdir debian/udev-discover/etc
