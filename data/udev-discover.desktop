@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Udev Discover
+GenericName=Sysfs tree browser
+Comment=Sysfs tree browsing tool focused on helping udev users and developers
+Comment[es]=Explorador del árbol sysfs orientado a ayudar a usuarios y desarrolladores udev
+Exec=udev-discover
+Icon=udev-discover
+Terminal=false
+Type=Application
+Categories=Utility;HardwareSettings;

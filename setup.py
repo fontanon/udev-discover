@@ -118,6 +118,7 @@ setup(
             ('share/udev-discover', ['data/udev-discover.svg']),
             ('share/pixmaps', ['data/udev-discover.svg']),
             ('/etc/gconf/schemas', ['data/udev-discover.schemas']),
+            ('share/applications', ['data/udev-discover.desktop']),
 
             # You may need to call gtk-update-icon-cache -f -t $(datadir)/icons/hicolor
             # after installing icons
