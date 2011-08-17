@@ -28,14 +28,14 @@ import __builtin__
 __builtin__._ = gettext.gettext
 
 # i18n
-gettext.install('udev-discover', '/usr/share/locale', unicode=1)
+gettext.install('udevdiscover', '/usr/share/locale', unicode=1)
 
-gettext.bindtextdomain('udev-discover', '/usr/share/locale')
+gettext.bindtextdomain('udevdiscover', '/usr/share/locale')
 if hasattr(gettext, 'bind_textdomain_codeset'):
-    gettext.bind_textdomain_codeset('udev-discover','UTF-8')
-gettext.textdomain('udev-discover')
+    gettext.bind_textdomain_codeset('udevdiscover','UTF-8')
+gettext.textdomain('udevdiscover')
 
-locale.bindtextdomain('udev-discover', '/usr/share/locale')
+locale.bindtextdomain('udevdiscover', '/usr/share/locale')
 if hasattr(locale, 'bind_textdomain_codeset'):
-    locale.bind_textdomain_codeset('udev-discover','UTF-8')
-locale.textdomain('udev-discover')
+    locale.bind_textdomain_codeset('udevdiscover','UTF-8')
+locale.textdomain('udevdiscover')

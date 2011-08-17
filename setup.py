@@ -2,8 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import sys, os, platform
-from distutils.core import setup
 import glob
+import subprocess
+
+from distutils.core import setup
+from distutils.command.build import build
+from distutils.command.install_data import install_data
+from distutils.log import warn, info, error, fatal
+from distutils.dep_util import newer
 
 # Get current Python version
 python_version = platform.python_version_tuple()
@@ -32,6 +38,49 @@ for filename in ['udev-discover']:
     outfile.write(data)
     outfile.close()
 
+PO_DIR = 'po'
+MO_DIR = os.path.join('build', 'mo')
+
+class BuildData(build):
+    def run (self):
+        build.run (self)
+
+        for po in glob.glob (os.path.join (PO_DIR, '*.po')):
+            lang = os.path.basename(po[:-3])
+            mo = os.path.join(MO_DIR, lang, 'udevdiscover.mo')
+
+            directory = os.path.dirname(mo)
+            if not os.path.exists(directory):
+                info('creating %s' % directory)
+                os.makedirs(directory)
+
+            if newer(po, mo):
+                info('compiling %s -> %s' % (po, mo))
+                try:
+                    rc = subprocess.call(['msgfmt', '-o', mo, po])
+                    if rc != 0:
+                        raise Warning, "msgfmt returned %d" % rc
+                except Exception, e:
+                    error("Building gettext files failed.  Try setup.py \
+                        --without-gettext [build|install]")
+                    error("Error: %s" % str(e))
+                    sys.exit(1)
+
+class InstallData(install_data):
+    def run (self):
+        self.data_files.extend (self._find_mo_files ())
+        install_data.run (self)
+
+    def _find_mo_files (self):
+        data_files = []
+
+        for mo in glob.glob (os.path.join (MO_DIR, '*', 'udevdiscover.mo')):
+            lang = os.path.basename(os.path.dirname(mo))
+            dest = os.path.join('share', 'locale', lang, 'LC_MESSAGES')
+            data_files.append((dest, [mo]))
+
+        return data_files
+
 setup(
         name='udev-discover',
         version='0.1',
@@ -47,9 +96,9 @@ setup(
             'License :: OSI Approved :: GNU General Public License (GPL)',
             'Operating System :: POSIX',
             'Programming Language :: Python',
-	        'Topic :: Utilities'
+            'Topic :: Utilities'
         ],
-        
+
         keywords = ['python', 'udev', 'gnome'],
 
         packages = ['udevdiscover', 'udevdiscover.device', 
@@ -61,7 +110,9 @@ setup(
             },
 
         scripts = ['udev-discover'],
-        
+
+        cmdclass={'build': BuildData, 'install_data': InstallData},
+
         data_files = [
             ('share/udev-discover', ['data/udev-discover.ui']),
             ('share/udev-discover', ['data/udev-discover.svg']),
