@@ -1,0 +1,194 @@
+<gconfschemafile>
+    <schemalist>
+
+        <schema>
+            <key>/schemas/apps/udevdiscover/custom_subsystem_preset</key>
+            <applyto>/apps/udevdiscover/custom_subsystem_preset</applyto>
+            <owner>udevdiscover</owner>
+            <type>string</type>
+            <default></default>
+            <locale name="C">
+                <short>Subsystems user selection</short>
+                <long>Whitespace-separated list of subsystems whose devices 
+                should be displayed.
+                </long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/apps/udevdiscover/devices_hpaned</key>
+            <applyto>/apps/udevdiscover/devices_hpaned</applyto>
+            <owner>udevdiscover</owner>
+            <type>int</type>
+            <default>0</default>
+            <locale name="C">
+                <short>Device info/properties horizontal panel position</short>
+                <long>Sets the separation from devices tree view and 
+                devices info/properties notebook in pixels.
+                </long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/apps/udevdiscover/dialog_height</key>
+            <applyto>/apps/udevdiscover/dialog_height</applyto>
+            <owner>udevdiscover</owner>
+            <type>int</type>
+            <default>372</default>
+            <locale name="C">
+                <short>Subsystem chooser dialog window height</short>
+                <long>Sets the height of the subsystem chooser dialog in pixels.
+                </long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/apps/udevdiscover/dialog_width</key>
+            <applyto>/apps/udevdiscover/dialog_width</applyto>
+            <owner>udevdiscover</owner>
+            <type>int</type>
+            <default>509</default>
+            <locale name="C">
+                <short>Subsystem chooser dialog window width</short>
+                <long>Sets the width of the subsystem chooser dialog in pixels.
+                </long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/apps/udevdiscover/eventslog_expanded</key>
+            <applyto>/apps/udevdiscover/eventslog_expanded</applyto>
+            <owner>udevdiscover</owner>
+            <type>bool</type>
+            <default>True</default>
+            <locale name="C">
+                <short>Show the udev events log</short>
+                <long>Whether to show the udev events log.</long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/apps/udevdiscover/eventslog_vpaned</key>
+            <applyto>/apps/udevdiscover/eventslog_vpaned</applyto>
+            <owner>udevdiscover</owner>
+            <type>int</type>
+            <default>456</default>
+            <locale name="C">
+                <short>Udev events log vertical panel position</short>
+                <long>Sets the separation from devices view and events log 
+                in pixels.
+                </long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/apps/udevdiscover/eventslog_vpaned</key>
+            <applyto>/apps/udevdiscover/eventslog_vpaned</applyto>
+            <owner>udevdiscover</owner>
+            <type>int</type>
+            <default>456</default>
+            <locale name="C">
+                <short>Udev events log vertical panel position</short>
+                <long>Sets the separation from devices view and events log 
+                in pixels.
+                </long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/apps/udevdiscover/expanded</key>
+            <applyto>/apps/udevdiscover/expanded</applyto>
+            <owner>udevdiscover</owner>
+            <type>bool</type>
+            <default>True</default>
+            <locale name="C">
+                <short>Expand/Collapse the devices tree</short>
+                <long>Whether to expand or collapse the devices tree.
+                </long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/apps/udevdiscover/followchanged</key>
+            <applyto>/apps/udevdiscover/followchanged</applyto>
+            <owner>udevdiscover</owner>
+            <type>bool</type>
+            <default>True</default>
+            <locale name="C">
+                <short>Whether the focus should follow changing devices</short>
+                <long>Properties on some devices could be changed. 
+                This indicates to focus the last device with properties updated.
+                </long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/apps/udevdiscover/follownew</key>
+            <applyto>/apps/udevdiscover/follownew</applyto>
+            <owner>udevdiscover</owner>
+            <type>bool</type>
+            <default>True</default>
+            <locale name="C">
+                <short>Whether the focus should follow new devices</short>
+                <long>This indicates to focus the last device added to the tree.
+                </long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/apps/udevdiscover/parent_tree</key>
+            <applyto>/apps/udevdiscover/parent_tree</applyto>
+            <owner>udevdiscover</owner>
+            <type>bool</type>
+            <default>True</default>
+            <locale name="C">
+                <short>Whether to display the devices parent nodes upwards</short>
+                <long>This indicates to build up and display parent nodes 
+                recursively even if their subsystems are not allowed to be 
+                displayed.
+                </long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/apps/udevdiscover/subsystem_preset</key>
+            <applyto>/apps/udevdiscover/subsystem_preset</applyto>
+            <owner>udevdiscover</owner>
+            <type>int</type>
+            <default>0</default>
+            <locale name="C">
+                <short>Subsystem preset whose devices should be displayed</short>
+                <long>Whether to display devices from the default, all or 
+                custom subsystems preset.
+                </long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/apps/udevdiscover/window_height</key>
+            <applyto>/apps/udevdiscover/window_height</applyto>
+            <owner>udevdiscover</owner>
+            <type>int</type>
+            <default>525</default>
+            <locale name="C">
+                <short>Main window height</short>
+                <long>Sets the height of the main window in pixels.
+                </long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/apps/udevdiscover/window_width</key>
+            <applyto>/apps/udevdiscover/window_width</applyto>
+            <owner>udevdiscover</owner>
+            <type>int</type>
+            <default>825</default>
+            <locale name="C">
+                <short>Main window width</short>
+                <long>Sets the width of the main window in pixels.
+                </long>
+            </locale>
+        </schema>
+
+    </schemalist>
+</gconfschemafile>
