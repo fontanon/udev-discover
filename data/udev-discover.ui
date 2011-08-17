@@ -2,15 +2,77 @@
 <interface>
   <requires lib="gtk+" version="2.24"/>
   <object class="GtkAction" id="about_action">
-    <property name="label">About</property>
-    <property name="short_label">About</property>
+    <property name="label" translatable="yes">About</property>
+    <property name="short_label" translatable="yes">About</property>
     <property name="stock_id">gtk-about</property>
     <signal name="activate" handler="about_action_activate_cb" swapped="no"/>
   </object>
+  <object class="GtkListStore" id="allsubsys_liststore">
+    <columns>
+      <!-- column-name icon -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="chosensubsys_liststore">
+    <columns>
+      <!-- column-name icon -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="deviceprop_store">
+    <columns>
+      <!-- column-name Key -->
+      <column type="gchararray"/>
+      <!-- column-name Value -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="devices_treestore">
+    <columns>
+      <!-- column-name sysfs_path -->
+      <column type="gchararray"/>
+      <!-- column-name icon -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+      <!-- column-name subsystem -->
+      <column type="gchararray"/>
+      <!-- column-name visible -->
+      <column type="gboolean"/>
+      <!-- column-name devicename -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkToggleAction" id="expand_toggleaction">
+    <property name="label" translatable="yes">Expand devices tree</property>
+    <property name="short_label" translatable="yes">Expand</property>
+    <property name="tooltip" translatable="yes">Expand devices tree</property>
+    <property name="icon_name">format-indent-more</property>
+    <property name="active">True</property>
+    <signal name="toggled" handler="expand_toggleaction_toggled_cb" swapped="no"/>
+  </object>
+  <object class="GtkToggleAction" id="followchanged_toggleaction">
+    <property name="label" translatable="yes">Follow changing devices</property>
+    <property name="short_label" translatable="yes">Follow changes</property>
+    <property name="tooltip" translatable="yes">Focus follows changing devices</property>
+    <property name="stock_id">gtk-dialog-warning</property>
+    <signal name="toggled" handler="followchanged_toggleaction_toggled_cb" swapped="no"/>
+  </object>
+  <object class="GtkToggleAction" id="follownew_toggleaction">
+    <property name="label" translatable="yes">Follow new devices</property>
+    <property name="short_label" translatable="yes">Follow new</property>
+    <property name="tooltip" translatable="yes">Focus follows new devices</property>
+    <property name="stock_id">gtk-add</property>
+    <signal name="toggled" handler="follownew_toggleaction_toggled_cb" swapped="no"/>
+  </object>
   <object class="GtkAction" id="help_action">
-    <property name="label">Help</property>
-    <property name="short_label">Help</property>
-    <property name="tooltip">Get help</property>
+    <property name="label" translatable="yes">Help</property>
+    <property name="short_label" translatable="yes">Help</property>
+    <property name="tooltip" translatable="yes">Get help</property>
     <property name="stock_id">gtk-help</property>
     <signal name="activate" handler="help_action_activate_cb" swapped="no"/>
   </object>
@@ -22,23 +84,23 @@
     <signal name="activate" handler="preferences_action_activated_cb" swapped="no"/>
   </object>
   <object class="GtkAction" id="quit_action">
-    <property name="label">Quit</property>
-    <property name="short_label">Quit</property>
-    <property name="tooltip">Quit the application</property>
+    <property name="label" translatable="yes">Quit</property>
+    <property name="short_label" translatable="yes">Quit</property>
+    <property name="tooltip" translatable="yes">Quit the application</property>
     <property name="stock_id">gtk-quit</property>
     <signal name="activate" handler="quit_action_activate_cb" swapped="no"/>
   </object>
   <object class="GtkAction" id="reload_action">
-    <property name="label">Reload devices tree</property>
-    <property name="short_label">Reload</property>
-    <property name="tooltip">Update devices tree by reloading</property>
+    <property name="label" translatable="yes">Reload devices tree</property>
+    <property name="short_label" translatable="yes">Reload</property>
+    <property name="tooltip" translatable="yes">Update devices tree by reloading</property>
     <property name="stock_id">gtk-refresh</property>
     <signal name="activate" handler="reload_action_activate_cb" swapped="no"/>
   </object>
   <object class="GtkToggleAction" id="showparents_toggleaction">
-    <property name="label">Show parent tree</property>
-    <property name="short_label">Parent tree</property>
-    <property name="tooltip">Recursive displaying of devices parent</property>
+    <property name="label" translatable="yes">Show parent tree</property>
+    <property name="short_label" translatable="yes">Parent tree</property>
+    <property name="tooltip" translatable="yes">Recursive displaying of devices parent</property>
     <property name="stock_id">gtk-sort-ascending</property>
     <property name="active">True</property>
     <signal name="toggled" handler="showparents_toggleaction_toggled_cb" swapped="no"/>
@@ -761,69 +823,7 @@ Javier Hernandez &lt;jhernandez@emergya.es&gt;</property>
       </object>
     </child>
   </object>
-  <object class="GtkListStore" id="allsubsys_liststore">
-    <columns>
-      <!-- column-name icon -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="chosensubsys_liststore">
-    <columns>
-      <!-- column-name icon -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="deviceprop_store">
-    <columns>
-      <!-- column-name Key -->
-      <column type="gchararray"/>
-      <!-- column-name Value -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkTreeStore" id="devices_treestore">
-    <columns>
-      <!-- column-name sysfs_path -->
-      <column type="gchararray"/>
-      <!-- column-name icon -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-      <!-- column-name subsystem -->
-      <column type="gchararray"/>
-      <!-- column-name visible -->
-      <column type="gboolean"/>
-      <!-- column-name devicename -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <object class="GtkTextBuffer" id="eventslog_textbuffer"/>
-  <object class="GtkToggleAction" id="expand_toggleaction">
-    <property name="label">Expand devices tree</property>
-    <property name="short_label">Expand</property>
-    <property name="tooltip">Expand devices tree</property>
-    <property name="icon_name">format-indent-more</property>
-    <property name="active">True</property>
-    <signal name="toggled" handler="expand_toggleaction_toggled_cb" swapped="no"/>
-  </object>
-  <object class="GtkToggleAction" id="followchanged_toggleaction">
-    <property name="label">Follow changing devices</property>
-    <property name="short_label">Follow changes</property>
-    <property name="tooltip">Focus follows changing devices</property>
-    <property name="stock_id">gtk-dialog-warning</property>
-    <signal name="toggled" handler="followchanged_toggleaction_toggled_cb" swapped="no"/>
-  </object>
-  <object class="GtkToggleAction" id="follownew_toggleaction">
-    <property name="label">Follow new devices</property>
-    <property name="short_label">Follow new</property>
-    <property name="tooltip">Focus follows new devices</property>
-    <property name="stock_id">gtk-add</property>
-    <signal name="toggled" handler="follownew_toggleaction_toggled_cb" swapped="no"/>
-  </object>
   <object class="GtkWindow" id="main_window">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -1203,7 +1203,7 @@ Javier Hernandez &lt;jhernandez@emergya.es&gt;</property>
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn3">
                             <property name="resizable">True</property>
-                            <property name="title">Device</property>
+                            <property name="title" translatable="yes">Device</property>
                             <property name="expand">True</property>
                             <property name="clickable">True</property>
                             <property name="reorderable">True</property>
@@ -1226,7 +1226,7 @@ Javier Hernandez &lt;jhernandez@emergya.es&gt;</property>
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn4">
                             <property name="resizable">True</property>
-                            <property name="title">Subsystem</property>
+                            <property name="title" translatable="yes">Subsystem</property>
                             <property name="expand">True</property>
                             <property name="clickable">True</property>
                             <property name="reorderable">True</property>
@@ -1243,7 +1243,7 @@ Javier Hernandez &lt;jhernandez@emergya.es&gt;</property>
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn5">
                             <property name="resizable">True</property>
-                            <property name="title">Name</property>
+                            <property name="title" translatable="yes">Name</property>
                             <property name="expand">True</property>
                             <property name="clickable">True</property>
                             <property name="reorderable">True</property>
@@ -1453,7 +1453,7 @@ Javier Hernandez &lt;jhernandez@emergya.es&gt;</property>
                             <child>
                               <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                                 <property name="resizable">True</property>
-                                <property name="title">Key</property>
+                                <property name="title" translatable="yes">Key</property>
                                 <property name="clickable">True</property>
                                 <property name="reorderable">True</property>
                                 <property name="sort_indicator">True</property>
@@ -1469,7 +1469,7 @@ Javier Hernandez &lt;jhernandez@emergya.es&gt;</property>
                             <child>
                               <object class="GtkTreeViewColumn" id="treeviewcolumn2">
                                 <property name="sizing">autosize</property>
-                                <property name="title">Value</property>
+                                <property name="title" translatable="yes">Value</property>
                                 <property name="clickable">True</property>
                                 <property name="reorderable">True</property>
                                 <property name="sort_indicator">True</property>
