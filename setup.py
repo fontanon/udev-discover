@@ -83,14 +83,14 @@ class InstallData(install_data):
 
 setup(
         name='udev-discover',
-        version='0.1',
+        version='0.2',
         description='A GUI tool for exploring the present devices on the system',
         author='J. Félix Ontañón',
         author_email='fontanon@emergya.es',
         url='http://gitorious.org/udev-discover/udev-discover',
 
         classifiers=[
-            'Development Status :: 0.1 - Alpha',
+            'Development Status :: 0.2 - Beta',
             'Environment :: Desktop Environment',
             'Intended Audience :: System Administrators',
             'License :: OSI Approved :: GNU General Public License (GPL)',

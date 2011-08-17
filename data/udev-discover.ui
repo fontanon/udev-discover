@@ -7,73 +7,12 @@
     <property name="stock_id">gtk-about</property>
     <signal name="activate" handler="about_action_activate_cb" swapped="no"/>
   </object>
-  <object class="GtkListStore" id="allsubsys_liststore">
-    <columns>
-      <!-- column-name icon -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="chosensubsys_liststore">
-    <columns>
-      <!-- column-name icon -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="deviceprop_store">
-    <columns>
-      <!-- column-name Key -->
-      <column type="gchararray"/>
-      <!-- column-name Value -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkTreeStore" id="devices_treestore">
-    <columns>
-      <!-- column-name sysfs_path -->
-      <column type="gchararray"/>
-      <!-- column-name icon -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-      <!-- column-name subsystem -->
-      <column type="gchararray"/>
-      <!-- column-name visible -->
-      <column type="gboolean"/>
-      <!-- column-name devicename -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkToggleAction" id="expand_toggleaction">
-    <property name="label" translatable="yes">Expand devices tree</property>
-    <property name="short_label" translatable="yes">Expand</property>
-    <property name="tooltip" translatable="yes">Expand devices tree</property>
-    <property name="icon_name">format-indent-more</property>
-    <property name="active">True</property>
-    <signal name="toggled" handler="expand_toggleaction_toggled_cb" swapped="no"/>
-  </object>
-  <object class="GtkToggleAction" id="followchanged_toggleaction">
-    <property name="label" translatable="yes">Follow changing devices</property>
-    <property name="short_label" translatable="yes">Follow changes</property>
-    <property name="tooltip" translatable="yes">Focus follows changing devices</property>
-    <property name="stock_id">gtk-dialog-warning</property>
-    <signal name="toggled" handler="followchanged_toggleaction_toggled_cb" swapped="no"/>
-  </object>
-  <object class="GtkToggleAction" id="follownew_toggleaction">
-    <property name="label" translatable="yes">Follow new devices</property>
-    <property name="short_label" translatable="yes">Follow new</property>
-    <property name="tooltip" translatable="yes">Focus follows new devices</property>
-    <property name="stock_id">gtk-add</property>
-    <signal name="toggled" handler="follownew_toggleaction_toggled_cb" swapped="no"/>
-  </object>
   <object class="GtkAction" id="help_action">
     <property name="label" translatable="yes">Help</property>
     <property name="short_label" translatable="yes">Help</property>
     <property name="tooltip" translatable="yes">Get help</property>
     <property name="stock_id">gtk-help</property>
+    <property name="visible">False</property>
     <signal name="activate" handler="help_action_activate_cb" swapped="no"/>
   </object>
   <object class="GtkAction" id="preferences_action">
@@ -113,7 +52,7 @@
     <property name="type_hint">normal</property>
     <property name="transient_for">main_window</property>
     <property name="program_name">udev-discover</property>
-    <property name="version">0.1</property>
+    <property name="version">0.2</property>
     <property name="copyright" translatable="yes">Copyright © 2010-2011 J. Félix Ontañón</property>
     <property name="comments" translatable="yes">An browser tool for udev curious</property>
     <property name="website">http://fontanon.org/udevdiscover</property>
@@ -823,7 +762,69 @@ Javier Hernandez &lt;jhernandez@emergya.es&gt;</property>
       </object>
     </child>
   </object>
+  <object class="GtkListStore" id="allsubsys_liststore">
+    <columns>
+      <!-- column-name icon -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="chosensubsys_liststore">
+    <columns>
+      <!-- column-name icon -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="deviceprop_store">
+    <columns>
+      <!-- column-name Key -->
+      <column type="gchararray"/>
+      <!-- column-name Value -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="devices_treestore">
+    <columns>
+      <!-- column-name sysfs_path -->
+      <column type="gchararray"/>
+      <!-- column-name icon -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+      <!-- column-name subsystem -->
+      <column type="gchararray"/>
+      <!-- column-name visible -->
+      <column type="gboolean"/>
+      <!-- column-name devicename -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkTextBuffer" id="eventslog_textbuffer"/>
+  <object class="GtkToggleAction" id="expand_toggleaction">
+    <property name="label" translatable="yes">Expand devices tree</property>
+    <property name="short_label" translatable="yes">Expand</property>
+    <property name="tooltip" translatable="yes">Expand devices tree</property>
+    <property name="icon_name">format-indent-more</property>
+    <property name="active">True</property>
+    <signal name="toggled" handler="expand_toggleaction_toggled_cb" swapped="no"/>
+  </object>
+  <object class="GtkToggleAction" id="followchanged_toggleaction">
+    <property name="label" translatable="yes">Follow changing devices</property>
+    <property name="short_label" translatable="yes">Follow changes</property>
+    <property name="tooltip" translatable="yes">Focus follows changing devices</property>
+    <property name="stock_id">gtk-dialog-warning</property>
+    <signal name="toggled" handler="followchanged_toggleaction_toggled_cb" swapped="no"/>
+  </object>
+  <object class="GtkToggleAction" id="follownew_toggleaction">
+    <property name="label" translatable="yes">Follow new devices</property>
+    <property name="short_label" translatable="yes">Follow new</property>
+    <property name="tooltip" translatable="yes">Focus follows new devices</property>
+    <property name="stock_id">gtk-add</property>
+    <signal name="toggled" handler="follownew_toggleaction_toggled_cb" swapped="no"/>
+  </object>
   <object class="GtkWindow" id="main_window">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
