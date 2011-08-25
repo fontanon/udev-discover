@@ -210,7 +210,7 @@ class UDevDiscoverGUI(GConfStore):
             'follownew': True,
             'followchanged': True,
             'subsystem_preset': DEFAULT_SUBSYS_PRESET,
-            'custom_subsystem_preset': DEFAULT_SUBSYSTEMS
+            'custom_subsystem_preset': ' '.join(DEFAULT_SUBSYSTEMS)
     }
 
     def __init__(self):
