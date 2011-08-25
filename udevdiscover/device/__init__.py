@@ -131,7 +131,7 @@ def get_device_object(device):
 class Device(object):
     '''A simple object representing a device.'''
 
-    DEFAULT_ICON = 'gtk-dialog-question'
+    DEFAULT_ICON = 'dialog-question'
     UNKNOWN_DEV = 'Unknown Device'
     DEVICE_TYPE_STR = {gudev.DEVICE_TYPE_BLOCK: 'block', 
         gudev.DEVICE_TYPE_CHAR: 'char',

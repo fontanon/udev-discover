@@ -1282,7 +1282,7 @@ Javier Hernandez &lt;jhernandez@emergya.es&gt;</property>
                               <object class="GtkImage" id="device_image">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="stock">gtk-dialog-question</property>
+                                <property name="stock">dialog-question</property>
                                 <property name="icon-size">6</property>
                               </object>
                               <packing>

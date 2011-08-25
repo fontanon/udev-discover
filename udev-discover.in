@@ -49,7 +49,7 @@ ICON_SUBSYS_COL, NAME_SUBSYS_COL = range(2)
 
 # Load icons
 theme = Gtk.IconTheme.get_default()
-device_icon = theme.load_icon('gtk-dialog-question', 24, 0)
+device_icon = theme.load_icon('dialog-question', 24, 0)
 
 class SubsystemChoserDialog(GConfStore):
     defaults = {
