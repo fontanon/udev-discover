@@ -205,7 +205,10 @@ def get_pci_short_long_names(pci_class, pci_subclass, pci_protocol):
     else:
         key.append(pci_protocol)
 
-    return pci_class_names[tuple(key)]
+    if pci_class_names.has_key(tuple(key)):
+        return pci_class_names[tuple(key)]
+    else:
+        return pci_class_names[(pci_class, -1, -1)]
 
 @memoized
 def get_pci_vendor_model_names(sysfs_path):

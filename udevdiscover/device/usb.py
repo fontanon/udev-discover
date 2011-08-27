@@ -162,7 +162,7 @@ def get_usb_short_long_names(usb_class, usb_subclass, usb_protocol):
         return None, None
 
     subklasses = [s for s in klasses if s[1] == usb_subclass]
-    
+
     if not subklasses:
         key.append(-1)
     else:
@@ -173,7 +173,10 @@ def get_usb_short_long_names(usb_class, usb_subclass, usb_protocol):
     else:
         key.append(usb_protocol)
 
-    return usb_class_names[tuple(key)]
+    if usb_class_names.has_key(tuple(key)):
+        return usb_class_names[tuple(key)]
+    else:
+        return usb_class_names[(usb_class, -1, -1)]
 
 @memoized
 def get_usb_vendor_model_names(sysfs_path):
