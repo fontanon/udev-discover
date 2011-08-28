@@ -128,5 +128,6 @@ setup(
             ('share/icons/hicolor/24x24/devices', glob.glob('data/icons/24x24/devices/*')),
             ('share/icons/hicolor/48x48/devices', glob.glob('data/icons/48x48/devices/*')),
             ('share/icons/hicolor/scalable/devices', glob.glob('data/icons/scalable/devices/*')),
+            ('share/icons/hicolor/scalable/apps', ['data/udev-discover.svg']),
         ],
 )
