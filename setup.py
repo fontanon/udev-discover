@@ -11,38 +11,39 @@ from distutils.command.install_data import install_data
 from distutils.log import warn, info, error, fatal
 from distutils.dep_util import newer
 
-# Get current Python version
-python_version = platform.python_version_tuple()
-
-# Setup the default install prefix
-prefix = sys.prefix
-
-# Check our python is version 2.6 or higher
-if python_version[0] >= 2 and python_version[1] >= 6:
-    ## Set file location prefix accordingly
-    prefix = '/usr/local'
-
-# Get the install prefix if one is specified from the command line
-for arg in sys.argv:
-    if arg.startswith('--prefix='):
-        prefix = arg[9:]
-        prefix = os.path.expandvars(prefix)
-
-# Gen .in files with @PREFIX@ replaced
-for filename in ['udev-discover']:
-    infile = open(filename + '.in', 'r')
-    data = infile.read().replace('@PREFIX@', prefix)
-    infile.close()
-
-    outfile = open(filename, 'w')
-    outfile.write(data)
-    outfile.close()
-
 PO_DIR = 'po'
 MO_DIR = os.path.join('build', 'mo')
 
 class BuildData(build):
+
+    user_options = [
+        ('prefix=', None, "installation prefix"),
+        ]
+
+    def initialize_options(self):
+        build.initialize_options(self)
+        self.prefix = None
+
+    def finalize_options(self):
+        build.finalize_options(self)
+        if not self.prefix:
+            install = self.distribution.get_command_obj('install', False)
+            if install:
+                self.prefix = install.prefix
+            else:
+                self.prefix = sys.prefix
+
     def run (self):
+        # Gen .in files with @PREFIX@ replaced
+        for filename in ['udev-discover']:
+            infile = open(filename + '.in', 'r')
+            data = infile.read().replace('@PREFIX@', self.prefix)
+            infile.close()
+
+            outfile = open(filename, 'w')
+            outfile.write(data)
+            outfile.close()
+
         build.run (self)
 
         for po in glob.glob (os.path.join (PO_DIR, '*.po')):
