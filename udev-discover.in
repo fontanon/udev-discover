@@ -458,10 +458,10 @@ class UDevDiscoverGUI(GConfStore):
             device = self.device_finder.get_devices_tree()[row[PATH_COL]]
 
             title = '<b>'+device.nice_label+'</b>'
-            if hasattr(device, 'vendor_name'):
-                title += '\n<i>%s</i>' % device.vendor_name
-            if hasattr(device, 'model_name'):
-                title += '\n<i>%s</i>' % device.model_name
+            if hasattr(device, 'vendor_name') and device.vendor_name:
+                title += '\n<i>%s</i>' % device.vendor_name.decode('UTF-8')
+            if hasattr(device, 'model_name') and device.model_name:
+                title += '\n<i>%s</i>' % device.model_name.decode('UTF-8')
             self.devicename_label.set_label(title)
 
             desc = '\n'.join([': '.join(('<b>'+key.capitalize()+'</b>', 
