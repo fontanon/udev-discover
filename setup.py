@@ -7,12 +7,46 @@ import subprocess
 
 from distutils.core import setup
 from distutils.command.build import build
+from distutils.command.build_scripts import build_scripts
 from distutils.command.install_data import install_data
 from distutils.log import warn, info, error, fatal
 from distutils.dep_util import newer
 
 PO_DIR = 'po'
 MO_DIR = os.path.join('build', 'mo')
+
+def replace_prefix(prefix):
+    # Gen .in files with @PREFIX@ replaced
+    for filename in ['udev-discover']:
+        infile = open(filename + '.in', 'r')
+        data = infile.read().replace('@PREFIX@', prefix)
+        infile.close()
+
+        outfile = open(filename, 'w')
+        outfile.write(data)
+        outfile.close()
+
+def compile_po():
+    for po in glob.glob (os.path.join (PO_DIR, '*.po')):
+        lang = os.path.basename(po[:-3])
+        mo = os.path.join(MO_DIR, lang, 'udevdiscover.mo')
+
+        directory = os.path.dirname(mo)
+        if not os.path.exists(directory):
+            info('creating %s' % directory)
+            os.makedirs(directory)
+
+        if newer(po, mo):
+            info('compiling %s -> %s' % (po, mo))
+            try:
+                rc = subprocess.call(['msgfmt', '-o', mo, po])
+                if rc != 0:
+                    raise Warning, "msgfmt returned %d" % rc
+            except Exception, e:
+                error("Building gettext files failed.  Try setup.py \
+                    --without-gettext [build|install]")
+                error("Error: %s" % str(e))
+                sys.exit(1)
 
 class BuildData(build):
 
@@ -34,38 +68,32 @@ class BuildData(build):
                 self.prefix = sys.prefix
 
     def run (self):
-        # Gen .in files with @PREFIX@ replaced
-        for filename in ['udev-discover']:
-            infile = open(filename + '.in', 'r')
-            data = infile.read().replace('@PREFIX@', self.prefix)
-            infile.close()
-
-            outfile = open(filename, 'w')
-            outfile.write(data)
-            outfile.close()
-
+        replace_prefix(self.prefix)
         build.run (self)
+        compile_po()
 
-        for po in glob.glob (os.path.join (PO_DIR, '*.po')):
-            lang = os.path.basename(po[:-3])
-            mo = os.path.join(MO_DIR, lang, 'udevdiscover.mo')
+class BuildScript(build_scripts):
+    user_options = [
+        ('prefix=', None, "installation prefix"),
+        ]
 
-            directory = os.path.dirname(mo)
-            if not os.path.exists(directory):
-                info('creating %s' % directory)
-                os.makedirs(directory)
+    def initialize_options(self):
+        build_scripts.initialize_options(self)
+        self.prefix = None
 
-            if newer(po, mo):
-                info('compiling %s -> %s' % (po, mo))
-                try:
-                    rc = subprocess.call(['msgfmt', '-o', mo, po])
-                    if rc != 0:
-                        raise Warning, "msgfmt returned %d" % rc
-                except Exception, e:
-                    error("Building gettext files failed.  Try setup.py \
-                        --without-gettext [build|install]")
-                    error("Error: %s" % str(e))
-                    sys.exit(1)
+    def finalize_options(self):
+        build_scripts.finalize_options(self)
+        if not self.prefix:
+            install = self.distribution.get_command_obj('install', False)
+            if install:
+                self.prefix = install.prefix
+            else:
+                self.prefix = sys.prefix
+
+    def run(self):
+        replace_prefix(self.prefix)
+        build_scripts.run (self)
+        compile_po()
 
 class InstallData(install_data):
     def run (self):
@@ -112,7 +140,7 @@ setup(
 
         scripts = ['udev-discover'],
 
-        cmdclass={'build': BuildData, 'install_data': InstallData},
+        cmdclass={'build':BuildData, 'build_scripts':BuildScript, 'install_data':InstallData},
 
         data_files = [
             ('share/udev-discover', ['data/udev-discover.ui']),
