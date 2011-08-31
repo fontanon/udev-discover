@@ -49,10 +49,8 @@ def compile_po():
                 sys.exit(1)
 
 class BuildData(build):
-
-    user_options = [
-        ('prefix=', None, "installation prefix"),
-        ]
+    user_options = build.user_options
+    user_options.extend([('prefix=', None, "installation prefix")])
 
     def initialize_options(self):
         build.initialize_options(self)
@@ -73,9 +71,8 @@ class BuildData(build):
         compile_po()
 
 class BuildScript(build_scripts):
-    user_options = [
-        ('prefix=', None, "installation prefix"),
-        ]
+    user_options = build_scripts.user_options
+    user_options.extend([('prefix=', None, "installation prefix")])
 
     def initialize_options(self):
         build_scripts.initialize_options(self)
