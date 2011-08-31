@@ -1,3 +1,9 @@
+udev-discover (0.2.1-1) unstable; urgency=low
+
+  * New upstream version
+
+ -- J. Félix Ontañón <fontanon@emergya.es>  Wed, 31 Aug 2011 20:43:44 +0200
+
 udev-discover (0.2-1) unstable; urgency=low
 
   * Initial release
