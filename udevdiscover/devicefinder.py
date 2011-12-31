@@ -57,7 +57,7 @@ class DeviceFinder(GObject.GObject):
         Create a new DeviceFinder and attach to the udev system to 
         listen for events.
         '''
-        self.__gobject_init__()
+        GObject.GObject.__init__(self)
 
         self.client = gudev.Client(subsystems)
         self.subsystems = subsystems
