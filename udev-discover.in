@@ -202,10 +202,10 @@ class UDevDiscoverGUI(GConfStore):
     defaults = {
             'window_width': 600,
             'window_height': 400,
-            'devices_hpaned': 150,
+            'devices_hpaned': 300,
             'parent_tree': True,
             'expanded': True,
-            'eventslog_vpaned': 350,
+            'eventslog_vpaned': 300,
             'eventslog_expanded': True,
             'follownew': True,
             'followchanged': True,
@@ -269,11 +269,6 @@ class UDevDiscoverGUI(GConfStore):
         self.main_window.resize(self.options['window_width'], 
             self.options['window_height'])
 
-        # Restore paned window positions
-        self.devices_hpaned.set_position(self.options['devices_hpaned'])
-        self.eventslog_vpaned.set_position(self.options['eventslog_vpaned'])
-        self.eventslog_expander.set_expanded(self.options['eventslog_expanded'])
-
         # Subsystem chooser dialog
         self.subsys_dialog = SubsystemChoserDialog(
             self.options['subsystem_preset'],
@@ -309,6 +304,11 @@ class UDevDiscoverGUI(GConfStore):
 
         self.search_entry.set_property('primary-icon-sensitive',False)
         self.search_entry.set_property('secondary-icon-sensitive',False)
+
+        # Restore paned window positions
+        self.devices_hpaned.set_position(self.options['devices_hpaned'])
+        self.eventslog_vpaned.set_position(self.options['eventslog_vpaned'])
+        self.eventslog_expander.set_expanded(self.options['eventslog_expanded'])
 
     def new_device(self, device_finder, device):
         row_ref = self.add_new_device(device)

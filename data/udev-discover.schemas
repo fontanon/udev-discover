@@ -20,7 +20,7 @@
             <applyto>/apps/udevdiscover/devices_hpaned</applyto>
             <owner>udevdiscover</owner>
             <type>int</type>
-            <default>0</default>
+            <default>300</default>
             <locale name="C">
                 <short>Device info/properties horizontal panel position</short>
                 <long>Sets the separation from devices tree view and 
@@ -72,7 +72,7 @@
             <applyto>/apps/udevdiscover/eventslog_vpaned</applyto>
             <owner>udevdiscover</owner>
             <type>int</type>
-            <default>456</default>
+            <default>300</default>
             <locale name="C">
                 <short>Udev events log vertical panel position</short>
                 <long>Sets the separation from devices view and events log 
