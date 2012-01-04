@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: J. Félix Ontañón <fontanon@emergya.es>
 Build-Depends: cdbs (>= 0.4.49), debhelper (>= 7), python-support (>= 0.5.3),
  python-dev (>= 2.3.5-11), gettext
-Standards-Version: 3.9.1
+Standards-Version: 3.9.2
 Homepage: http://fontanon.org/udevdiscover
 
 Package: udev-discover
