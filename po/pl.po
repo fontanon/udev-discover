@@ -1,0 +1,1510 @@
+# Polish translation for udev-discover
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the udev-discover package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: udev-discover\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2011-08-17 17:32+0200\n"
+"PO-Revision-Date: 2011-11-20 13:24+0000\n"
+"Last-Translator: eloaders <eloaders@yahoo.com>\n"
+"Language-Team: Polish <pl@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2012-01-04 12:24+0000\n"
+"X-Generator: Launchpad (build 14616)\n"
+
+#: ../udevdiscover/device/block/disk.py:48
+#, python-format
+msgid "%s Mass Storage Drive"
+msgstr ""
+
+#: ../udevdiscover/device/block/disk.py:50
+msgid "Mass Storage Drive"
+msgstr "Napęd pamięci masowej"
+
+#: ../udevdiscover/device/block/optical.py:99
+msgid "Optical Drive"
+msgstr "Napęd optyczny"
+
+#: ../udevdiscover/device/block/optical.py:141
+msgid "Optical Drive (media)"
+msgstr ""
+
+#: ../udevdiscover/device/block/partition.py:58
+#, python-format
+msgid "%s Volume"
+msgstr "%s Głośność"
+
+#: ../udevdiscover/device/block/partition.py:60
+msgid "Partition"
+msgstr "Partycja"
+
+#: ../udevdiscover/device/drm.py:32
+msgid "Direct Rendering Manager Device"
+msgstr ""
+
+#: ../udevdiscover/device/input/__init__.py:56
+msgid "Input Device"
+msgstr "Urządzenie wejściowe"
+
+#: ../udevdiscover/device/input/__init__.py:69
+msgid "Event Device"
+msgstr ""
+
+#: ../udevdiscover/device/input/joystick.py:30
+msgid "Joystick Event"
+msgstr ""
+
+#: ../udevdiscover/device/input/joystick.py:32
+msgid "Joystick Device"
+msgstr ""
+
+#: ../udevdiscover/device/input/keyboard.py:30
+msgid "Keyboard Event"
+msgstr ""
+
+#: ../udevdiscover/device/input/keyboard.py:32
+msgid "Keyboard Device"
+msgstr ""
+
+#: ../udevdiscover/device/input/mouse.py:30
+msgid "Mouse Event"
+msgstr ""
+
+#: ../udevdiscover/device/input/mouse.py:32
+msgid "Mouse Device"
+msgstr ""
+
+#: ../udevdiscover/device/input/tablet.py:30
+msgid "Tablet Event"
+msgstr ""
+
+#: ../udevdiscover/device/input/tablet.py:32
+msgid "Tablet Device"
+msgstr ""
+
+#: ../udevdiscover/device/input/touchpad.py:30
+msgid "Touchpad Event"
+msgstr ""
+
+#: ../udevdiscover/device/input/touchpad.py:32
+msgid "Touchpad Device"
+msgstr ""
+
+#: ../udevdiscover/device/input/touchscreen.py:30
+msgid "Touchscreen Event"
+msgstr ""
+
+#: ../udevdiscover/device/input/touchscreen.py:32
+msgid "Touchscreen Device"
+msgstr ""
+
+#: ../udevdiscover/device/net.py:72
+msgid "Wireless Network Device"
+msgstr "Bezprzewodowe urządzenie sieciowe"
+
+#: ../udevdiscover/device/net.py:74
+msgid "Network Device"
+msgstr "Urządzenie Sieciowe"
+
+#: ../udevdiscover/device/pci.py:38
+msgid "Storage Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:38
+msgid "Mass Storage Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:39
+msgid "SCSI Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:39
+msgid "SCSI Storage Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:40
+msgid "IDE Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:40
+msgid "IDE Storage Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:41
+msgid "Floppy Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:41
+msgid "Floppy Disk Storage Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:42
+msgid "IPI Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:42
+msgid "IPI Bus Storage Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:43
+msgid "RAID Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:43
+msgid "Raid Bus Storage Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:44
+msgid "ATA Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:44
+msgid "ATA Storage Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:45
+msgid "SATA Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:45
+msgid "SATA Storage Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:46
+msgid "AHCI Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:46
+msgid "SATA ACHI 1.0 Storage Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:47
+msgid "Serial SCSI Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:47
+msgid "Serial SCSI Storage Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:49
+msgid "Network Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:50
+msgid "Ethernet Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:50
+msgid "Ethernet Network Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:51
+msgid "Token Ring Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:51
+msgid "Token Ring Network Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:52
+msgid "FDDI Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:52
+msgid "FDDI Network Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:53
+msgid "ATM Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:53
+msgid "ATM Network Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:54
+msgid "ISDN Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:54
+msgid "ISDN Network Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:56
+msgid "Display Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:57
+msgid "VGA Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:58
+msgid "XGA Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:59
+msgid "3D Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:61
+msgid "Multimedia Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:62
+msgid "Video Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:63
+msgid "Audio Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:64
+msgid "Telephony Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:65
+msgid "Audio Device"
+msgstr "Urządzenie dźwiękowe"
+
+#: ../udevdiscover/device/pci.py:67
+msgid "Memory Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:68
+msgid "RAM Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:68
+msgid "RAM Memory Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:69
+msgid "FLASH Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:69
+msgid "FLASH Memory Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:71
+msgid "Bridge"
+msgstr "Mostek"
+
+#: ../udevdiscover/device/pci.py:72
+msgid "Host Bridge"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:73
+msgid "ISA Bridge"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:74
+msgid "EISA Bridge"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:75
+msgid "MicroChannel Bridge"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:76 ../udevdiscover/device/pci.py:77
+#: ../udevdiscover/device/pci.py:78
+msgid "PCI Bridge"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:77
+msgid "PCI Bridge (Normal decode)"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:78
+msgid "PCI Bridge (Subtractive decode)"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:79
+msgid "PCMCIA Bridge"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:80
+msgid "NuBus Bridge"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:81
+msgid "CardBus Bridge"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:82
+msgid "RACEway Bridge"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:83
+msgid "Semitrans. PCI-to-PCI Bridge"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:83
+msgid "Semitransparent PCI-to-PCI Bridge"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:84
+msgid "InfiniBand to PCI Host Bridge"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:86
+msgid "Communications Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:87
+msgid "Serial Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:88
+msgid "8250 Serial Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:88
+msgid "8540 Serial Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:89
+msgid "16450 Serial Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:90
+msgid "16550 Serial Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:91
+msgid "16650 Serial Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:92
+msgid "16750 Serial Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:93
+msgid "16850 Serial Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:94
+msgid "16950 Serial Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:95
+msgid "Parallel Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:96
+msgid "SPP Parallel Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:97
+msgid "Bidir Parallel Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:97
+msgid "Bidirectional Parallel Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:98
+msgid "ECP Parallel Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:99
+msgid "IEEE 1284 Parallel Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:100
+msgid "IEEE 1284 Target Parallel Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:101
+msgid "Multiport Serial Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:102 ../udevdiscover/device/usb.py:45
+#: ../udevdiscover/device/usb.py:52
+msgid "Modem"
+msgstr "Modemy"
+
+#: ../udevdiscover/device/pci.py:103
+msgid "Generic Modem"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:104
+msgid "Hayes/16450 Modem"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:104
+msgid "Hayes/16450 Compatiable Modem"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:105
+msgid "Hayes/16550 Modem"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:105
+msgid "Hayes/16550 Compatiable Modem"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:106
+msgid "Hayes/16650 Modem"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:106
+msgid "Hayes/16650 Compatiable Modem"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:107
+msgid "Hayes/16750 Modem"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:107
+msgid "Hayes/16750 Compatiable Modem"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:109
+msgid "System Peripheral"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:109
+msgid "Generic System Peripheral"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:110
+msgid "PIC"
+msgstr "PIC"
+
+#: ../udevdiscover/device/pci.py:110
+msgid "PIC System Peripheral"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:111
+msgid "8259 PIC"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:111
+msgid "8259 PIC System Peripheral"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:112
+msgid "ISA PIC"
+msgstr "ISA PIC"
+
+#: ../udevdiscover/device/pci.py:112
+msgid "ISA PIC System Peripheral"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:113
+msgid "EISA PIC"
+msgstr "EISA PIC"
+
+#: ../udevdiscover/device/pci.py:113
+msgid "EISA PIC System Peripheral"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:114
+msgid "IO-APIC"
+msgstr "IO-APIC"
+
+#: ../udevdiscover/device/pci.py:114
+msgid "IO-APIC System Peripheral"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:115
+msgid "IO(X)-APIC"
+msgstr "IO(X)-APIC"
+
+#: ../udevdiscover/device/pci.py:115
+msgid "IO(X)-APIC System Peripheral"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:116 ../udevdiscover/device/pci.py:117
+msgid "DMA Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:117
+msgid "8237 DMA Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:118
+msgid "ISA DMA Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:119
+msgid "EISA DMA Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:120
+msgid "Timer Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:121
+msgid "8254 Timer Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:122
+msgid "ISA Timer Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:123
+msgid "EISA Timer Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:124
+msgid "Real-Time Clock"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:125
+msgid "Generic Real-Time Clock"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:126
+msgid "ISA Real-Time Clock"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:127
+msgid "PCI Hot-plug Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:129
+msgid "Input Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:129
+msgid "Input Device Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:130
+msgid "Keyboard Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:131
+msgid "Digitizer Pen Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:132
+msgid "Mouse Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:133
+msgid "Scanner Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:134 ../udevdiscover/device/pci.py:135
+#: ../udevdiscover/device/pci.py:136
+msgid "Gameport Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:135
+msgid "Generic Gameport Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:136
+msgid "Extended Gameport Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:138 ../udevdiscover/device/pci.py:139
+msgid "Docking Station"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:139
+msgid "Generic Docking Station"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:141
+msgid "Processor"
+msgstr "Procesor"
+
+#: ../udevdiscover/device/pci.py:142
+msgid "386 Processor"
+msgstr "386 Procesor"
+
+#: ../udevdiscover/device/pci.py:143
+msgid "486 Processor"
+msgstr "486 Procesor"
+
+#: ../udevdiscover/device/pci.py:144
+msgid "Pentium Processor"
+msgstr "Pentium Procesor"
+
+#: ../udevdiscover/device/pci.py:145
+msgid "Alpha Processor"
+msgstr "Alpha Procesor"
+
+#: ../udevdiscover/device/pci.py:146
+msgid "Power PC Processor"
+msgstr "Power PC Procesor"
+
+#: ../udevdiscover/device/pci.py:147
+msgid "MIPS Processor"
+msgstr "MIPS Procesor"
+
+#: ../udevdiscover/device/pci.py:148
+msgid "Co-processor"
+msgstr "Koprocesor"
+
+#: ../udevdiscover/device/pci.py:150
+msgid "Serial Bus Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:151
+msgid "IEEE 1394 Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:152
+msgid "IEEE 1394 OHCI Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:153
+msgid "ACCESS Bus Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:154
+msgid "SSA Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:155
+msgid "USB Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:156
+msgid "USB UHCI Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:157
+msgid "USB OHCI Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:158
+msgid "USB EHCI Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:159
+msgid "Fibre Channel Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:160
+msgid "SMBus Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:161
+msgid "InfiniBand Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:163
+msgid "Wireless Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:164
+msgid "IRDA Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:164
+msgid "IRDA Wireless Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:165
+msgid "Consumer IR Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:165
+msgid "Consumer IR Wireless Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:166
+msgid "RF Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:166
+msgid "RF Wireless Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:168
+msgid "Intelligent Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:169
+msgid "I20 Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:169
+msgid "I20 Intelligent Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:171
+msgid "Satellite Comm. Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:171
+msgid "Satellite Communications Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:172
+msgid "Satellite TV Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:172
+msgid "Satellite TV Communications Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:173
+msgid "Satellite Audio Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:173
+msgid "Satellite Audio Communications Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:174
+msgid "Satellite Voice Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:174
+msgid "Satellite Voice Communications Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:175
+msgid "Satellite Data Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:175
+msgid "Satellite Data Communications Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:177
+msgid "Encryption Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:178
+msgid "Network Encryption Device"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:178
+msgid "Network and Computing Encryption Device"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:180
+msgid "Signal Processing Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:181
+msgid "DPIO Module"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:181
+msgid "DPIO Module Signal Processing Controller"
+msgstr ""
+
+#: ../udevdiscover/device/pci.py:182
+msgid "Performance Counters"
+msgstr ""
+
+#: ../udevdiscover/device/power_supply.py:39
+msgid "Power supply device"
+msgstr ""
+
+#: ../udevdiscover/device/power_supply.py:46
+msgid "A/C Adapter"
+msgstr "Zasilacz sieciowy"
+
+#: ../udevdiscover/device/power_supply.py:53
+msgid "Battery"
+msgstr "Baterie"
+
+#: ../udevdiscover/device/scsi.py:37
+msgid "SCSI Device"
+msgstr ""
+
+#: ../udevdiscover/device/scsi.py:42
+msgid "SCSI Host"
+msgstr ""
+
+#: ../udevdiscover/device/scsi.py:47
+msgid "SCSI Target"
+msgstr ""
+
+#: ../udevdiscover/device/sound.py:40
+#, python-format
+msgid "%s Sound Card"
+msgstr ""
+
+#: ../udevdiscover/device/sound.py:43
+msgid "Sound Card"
+msgstr "Karta dźwiękowa"
+
+#: ../udevdiscover/device/sound.py:61
+msgid "Sound Timer"
+msgstr ""
+
+#: ../udevdiscover/device/sound.py:62 ../udevdiscover/device/sound.py:63
+msgid "Sound Sequencer"
+msgstr ""
+
+#: ../udevdiscover/device/sound.py:93
+msgid "Control Sound Device"
+msgstr ""
+
+#: ../udevdiscover/device/sound.py:94
+msgid "Capture Sound Device"
+msgstr ""
+
+#: ../udevdiscover/device/sound.py:95
+msgid "Playback Sound Device"
+msgstr ""
+
+#: ../udevdiscover/device/sound.py:96
+msgid "HW Specific Sound Device"
+msgstr ""
+
+#: ../udevdiscover/device/sound.py:97
+msgid "MIDI Sound Device"
+msgstr ""
+
+#: ../udevdiscover/device/sound.py:98
+msgid "Unknown Sound Device"
+msgstr ""
+
+#: ../udevdiscover/device/tty.py:48
+#, python-format
+msgid "%s Serial Port"
+msgstr ""
+
+#: ../udevdiscover/device/tty.py:50
+msgid "USB Serial Port"
+msgstr ""
+
+#: ../udevdiscover/device/tty.py:52
+msgid "Modem Serial Port"
+msgstr ""
+
+#: ../udevdiscover/device/tty.py:54
+msgid "Virtual Serial Port"
+msgstr ""
+
+#: ../udevdiscover/device/tty.py:56
+msgid "Serial Port"
+msgstr "Port szeregowy"
+
+#: ../udevdiscover/device/usb.py:38
+msgid "Audio"
+msgstr "Dźwięk"
+
+#: ../udevdiscover/device/usb.py:39
+msgid "Audio Control"
+msgstr "Kontrola dźwięku"
+
+#: ../udevdiscover/device/usb.py:40
+msgid "Audio Streaming"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:41
+msgid "Audio MIDI Streaming"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:43
+msgid "Communications"
+msgstr "Komunikacja"
+
+#: ../udevdiscover/device/usb.py:44
+msgid "Direct Line"
+msgstr "Linia bezpośrednia"
+
+#: ../udevdiscover/device/usb.py:44
+msgid "Direct Line Communications"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:45
+msgid "Modem Communications"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:46
+msgid "Modem (AT v.25ter)"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:46
+msgid "Modem (AT v.25ter) Communications"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:47 ../udevdiscover/device/usb.py:48
+msgid "Modem (PCCA101)"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:47
+msgid "Modem (PCCA101) Communications"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:48
+msgid "Modem (PCCA101 + wakeup) Communications"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:49
+msgid "Modem (GSM)"
+msgstr "Modem (GSM)"
+
+#: ../udevdiscover/device/usb.py:49
+msgid "Modem (GSM) Communications"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:50
+msgid "Modem (3G)"
+msgstr "Modem (3G)"
+
+#: ../udevdiscover/device/usb.py:50
+msgid "Modem (3G) Communications"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:51
+msgid "Modem (CDMA)"
+msgstr "Modem (CDMA)"
+
+#: ../udevdiscover/device/usb.py:51
+msgid "Modem (CDMA) Communications"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:52
+msgid "Modem (Defined by command set descriptor) Communications"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:53
+msgid "Modem (Vendor Specific)"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:53
+msgid "Modem (Vendor Specific) Communications"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:54
+msgid "Telephone"
+msgstr "Telefon"
+
+#: ../udevdiscover/device/usb.py:54
+msgid "Telephone Communications"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:55
+msgid "Multi-Channel"
+msgstr "Wielokanałowy"
+
+#: ../udevdiscover/device/usb.py:55
+msgid "Multi-Channel Communications"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:56
+msgid "CAPI Control"
+msgstr "Sterowanie CAPI"
+
+#: ../udevdiscover/device/usb.py:57
+msgid "Ethernet Networking"
+msgstr "Sieć Ethernet"
+
+#: ../udevdiscover/device/usb.py:58
+msgid "ATM Networking"
+msgstr "Sieć ATM"
+
+#: ../udevdiscover/device/usb.py:59
+msgid "Wireless Handset Control"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:60
+msgid "Device Management"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:61
+msgid "Mobile Direct Line"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:62
+msgid "OBEX"
+msgstr "OBEX"
+
+#: ../udevdiscover/device/usb.py:63 ../udevdiscover/device/usb.py:64
+msgid "Ethernet Emulation"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:64
+msgid "Ethernet Emulation (EEM)"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:66 ../udevdiscover/device/usb.py:67
+#: ../udevdiscover/device/usb.py:70
+msgid "HID Device"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:68 ../udevdiscover/device/usb.py:71
+msgid "Keyboard HID Device"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:69 ../udevdiscover/device/usb.py:72
+msgid "Mouse HID Device"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:69
+msgid "Mouse HID Device "
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:70
+msgid "HID Device Interface (Boot)"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:71
+msgid "Keyboard HID Device Interface (Boot)"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:72
+msgid "Mouse HID Device Interface (Boot)"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:74
+msgid "Imaging Device"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:75
+msgid "Still Image Capture"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:76
+msgid "PTP Imaging Device"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:78 ../udevdiscover/device/usb.py:79
+#: ../udevdiscover/device/usb.py:80 ../udevdiscover/device/usb.py:81
+#: ../udevdiscover/device/usb.py:82
+msgid "Printer"
+msgstr "Drukarka"
+
+#: ../udevdiscover/device/usb.py:78
+msgid "Printing"
+msgstr "Drukarki"
+
+#: ../udevdiscover/device/usb.py:79
+msgid "Printing Interface (Unidirectional)"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:80
+msgid "Printing Interface (Bidirectional)"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:81
+msgid "Printing Interface (IEEE 1284.4 Compatible Bidirectional)"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:82
+msgid "Printing Interface (Vendor Specific)"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:84 ../udevdiscover/device/usb.py:85
+#: ../udevdiscover/device/usb.py:86 ../udevdiscover/device/usb.py:87
+#: ../udevdiscover/device/usb.py:88 ../udevdiscover/device/usb.py:89
+#: ../udevdiscover/device/usb.py:90
+msgid "USB Mass Storage"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:85
+msgid "USB Mass Storage (Flash)"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:86
+msgid "USB Mass Storage (SFF-8020i, MMC-2 (ATAPI))"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:87
+msgid "USB Mass Storage (QIC-157)"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:88
+msgid "USB Mass Storage (Floppy (UFI))"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:89
+msgid "USB Mass Storage (SFF-8070i)"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:90
+msgid "USB Mass Storage (SCSI)"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:92 ../udevdiscover/device/usb.py:93
+#: ../udevdiscover/device/usb.py:94 ../udevdiscover/device/usb.py:95
+msgid "Hub"
+msgstr "Hub"
+
+#: ../udevdiscover/device/usb.py:94
+msgid "Hub Interface (Single TT)"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:95
+msgid "Hub Interface (TT per port)"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:97
+msgid "CDC Data"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:98
+msgid "HDLC Data"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:99
+msgid "Transparent Data"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:100
+msgid "Q.921M Data"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:101
+msgid "Q.921 Data"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:102
+msgid "Q.921TM Data"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:103
+msgid "V.42bis Data"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:104
+msgid "Q.932 EuroISDN Data"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:105
+msgid "V.120 V.24 rate ISDN Data"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:106
+msgid "CAPI 2.0 Data"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:107
+msgid "Host Based Data Driver"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:107
+msgid "Host Based Driver Data"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:108
+msgid "CDC PUF Data"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:109
+msgid "Vendor Specific Data"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:111
+msgid "Chip / Smart Card"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:113
+msgid "Content Security"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:115
+msgid "Video"
+msgstr "Obraz"
+
+#: ../udevdiscover/device/usb.py:116
+msgid "Video Control"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:117
+msgid "Video Streaming"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:118
+msgid "Video Interface Collection"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:120
+msgid "Diagnostics"
+msgstr "Diagnostyka"
+
+#: ../udevdiscover/device/usb.py:122
+msgid "Wireless Adapter"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:123
+msgid "Wireless Radio"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:124
+msgid "Bluetooth Adapter"
+msgstr "Adapter Bluetooth"
+
+#: ../udevdiscover/device/usb.py:125
+msgid "Ultra Wideband Radio Control"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:126
+msgid "RNDIS"
+msgstr "RNDIS"
+
+#: ../udevdiscover/device/usb.py:127 ../udevdiscover/device/usb.py:128
+#: ../udevdiscover/device/usb.py:129 ../udevdiscover/device/usb.py:130
+msgid "Wireless USB Wire Adapter"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:128
+msgid "Host Wire Adapter Control/Data Streaming"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:129
+msgid "Device Wire Adapter Control/Data Streaming"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:130
+msgid "Device Wire Adapter Isochronous Streaming"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:132
+msgid "Miscellanous"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:133
+msgid "MS ActiveSync"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:134
+msgid "Palm Sync"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:135
+msgid "Miscellanous Common"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:136
+msgid "Interface Association"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:137
+msgid "Wire Adapter Multifunction"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:137
+msgid "Wire Adapter Multifunction Peripheral"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:138
+msgid "Cable Based Association"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:140
+msgid "Application Specific"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:141
+msgid "Device Firmware Update"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:142
+msgid "IRDA Bridge"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:143
+msgid "Test and Measurement"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:144
+msgid "TMC Test and Measurement"
+msgstr ""
+
+#: ../udevdiscover/device/usb.py:145
+msgid "USB488 Test and Measurement"
+msgstr ""
+
+#: ../udev-discover.in:326
+#, python-format
+msgid "Device added: %s"
+msgstr ""
+
+#: ../udev-discover.in:335
+#, python-format
+msgid "Device removed: %s"
+msgstr ""
+
+#: ../udev-discover.in:360
+#, python-format
+msgid "Device changed: %s"
+msgstr ""
+
+#: ../data/udev-discover.ui:5 ../data/udev-discover.ui:6
+msgid "About"
+msgstr ""
+
+#: ../data/udev-discover.ui:51 ../data/udev-discover.ui:53
+msgid "Expand devices tree"
+msgstr ""
+
+#: ../data/udev-discover.ui:52 ../data/udev-discover.ui:1041
+msgid "Expand"
+msgstr ""
+
+#: ../data/udev-discover.ui:59
+msgid "Follow changing devices"
+msgstr ""
+
+#: ../data/udev-discover.ui:60 ../data/udev-discover.ui:1017
+msgid "Follow changes"
+msgstr ""
+
+#: ../data/udev-discover.ui:61
+msgid "Focus follows changing devices"
+msgstr ""
+
+#: ../data/udev-discover.ui:66
+msgid "Follow new devices"
+msgstr ""
+
+#: ../data/udev-discover.ui:67 ../data/udev-discover.ui:1003
+msgid "Follow new"
+msgstr ""
+
+#: ../data/udev-discover.ui:68
+msgid "Focus follows new devices"
+msgstr ""
+
+#: ../data/udev-discover.ui:73 ../data/udev-discover.ui:74
+#: ../data/udev-discover.ui:1095
+msgid "Help"
+msgstr ""
+
+#: ../data/udev-discover.ui:75
+msgid "Get help"
+msgstr ""
+
+#: ../data/udev-discover.ui:80 ../data/udev-discover.ui:81
+msgid "Discovering preferences"
+msgstr ""
+
+#: ../data/udev-discover.ui:82
+msgid "Choose the subsystems whose devices you want to display"
+msgstr ""
+
+#: ../data/udev-discover.ui:87 ../data/udev-discover.ui:88
+#: ../data/udev-discover.ui:1109
+msgid "Quit"
+msgstr ""
+
+#: ../data/udev-discover.ui:89
+msgid "Quit the application"
+msgstr ""
+
+#: ../data/udev-discover.ui:94
+msgid "Reload devices tree"
+msgstr ""
+
+#: ../data/udev-discover.ui:95 ../data/udev-discover.ui:1071
+msgid "Reload"
+msgstr ""
+
+#: ../data/udev-discover.ui:96
+msgid "Update devices tree by reloading"
+msgstr ""
+
+#: ../data/udev-discover.ui:101
+msgid "Show parent tree"
+msgstr ""
+
+#: ../data/udev-discover.ui:102 ../data/udev-discover.ui:1056
+msgid "Parent tree"
+msgstr ""
+
+#: ../data/udev-discover.ui:103
+msgid "Recursive displaying of devices parent"
+msgstr ""
+
+#: ../data/udev-discover.ui:117
+msgid "Copyright © 2010-2011 J. Félix Ontañón"
+msgstr ""
+
+#: ../data/udev-discover.ui:118
+msgid "An browser tool for udev curious"
+msgstr ""
+
+#: ../data/udev-discover.ui:120
+msgid "http://fontanon.org/udevdiscover"
+msgstr ""
+
+#: ../data/udev-discover.ui:849
+msgid "_Discover"
+msgstr ""
+
+#: ../data/udev-discover.ui:889
+msgid "_Options"
+msgstr ""
+
+#: ../data/udev-discover.ui:955
+msgid "_Help"
+msgstr ""
+
+#: ../data/udev-discover.ui:1155
+msgid "Filter:"
+msgstr ""
+
+#: ../data/udev-discover.ui:1206 ../data/udev-discover.ui:1434
+msgid "Device"
+msgstr ""
+
+#: ../data/udev-discover.ui:1229
+msgid "Subsystem"
+msgstr ""
+
+#: ../data/udev-discover.ui:1246
+msgid "Name"
+msgstr ""
+
+#: ../data/udev-discover.ui:1356
+msgid "<b>Summary:</b>"
+msgstr ""
+
+#: ../data/udev-discover.ui:1407
+msgid "<b>Device info:</b>"
+msgstr ""
+
+#: ../data/udev-discover.ui:1456
+msgid "Key"
+msgstr ""
+
+#: ../data/udev-discover.ui:1472
+msgid "Value"
+msgstr ""
+
+#: ../data/udev-discover.ui:1496
+msgid "Properties"
+msgstr ""
+
+#: ../data/udev-discover.ui:1546
+msgid "Events:"
+msgstr ""
+
+#: ../data/udev-discover.ui:1569
+msgid "Udev Discover preferences"
+msgstr ""
+
+#: ../data/udev-discover.ui:1636
+msgid "Choose the subsystems whose devices you want to display:"
+msgstr ""
+
+#: ../data/udev-discover.ui:1651
+msgid "Default subsystems preset"
+msgstr ""
+
+#: ../data/udev-discover.ui:1669
+msgid "All subsystems preset"
+msgstr ""
+
+#: ../data/udev-discover.ui:1687
+msgid "Custom subsystem preset"
+msgstr ""
+
+#: ../data/udev-discover.ui:1735
+msgid "All subsystems"
+msgstr ""
+
+#: ../data/udev-discover.ui:1833
+msgid "Chosen subsystems"
+msgstr ""
