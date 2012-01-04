@@ -59,8 +59,8 @@ class GConfStore(object):
             GConf.ValueType.INT:    GConf.Value.get_int,
             GConf.ValueType.FLOAT:  GConf.Value.get_float,
             GConf.ValueType.STRING: GConf.Value.get_string}
-            # This will be disabled until get_list method is implemented
-            # GConf.ValueType.LIST:   GConf.Value.get_list}
+        # This will be disabled until get_list method is implemented
+        # GConf.ValueType.LIST:   GConf.Value.get_list}
 
         if only_defaults:
             #FIXME: Why appears this message in stderr?
@@ -89,11 +89,11 @@ class GConfStore(object):
             types.FloatType:   GConf.Client.set_float,
             types.StringType:  GConf.Client.set_string}
             # This will be disabled until set_list method is implemented
-            """
-            types.ListType:    GConf.Client.set_list,
-            types.TupleType:   GConf.Client.set_list,
-            set:               GConf.Client.set_list}
-            """
+        """
+        types.ListType:    GConf.Client.set_list,
+        types.TupleType:   GConf.Client.set_list,
+        set:               GConf.Client.set_list}
+        """
 
         #TODO: To clear the gconf dir before save, is it convenient?
         for name, value in self.options.items():
