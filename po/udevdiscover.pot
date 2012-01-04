@@ -8,13 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-04 13:18+0100\n"
+"POT-Creation-Date: 2012-01-04 13:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../udevdiscover/device/block/disk.py:48
@@ -1335,176 +1335,172 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: ../data/udev-discover.ui:11 ../data/udev-discover.ui:12
-#: ../data/udev-discover.ui:1099
-msgid "Help"
-msgstr ""
-
-#: ../data/udev-discover.ui:13
-msgid "Get help"
-msgstr ""
-
-#: ../data/udev-discover.ui:19 ../data/udev-discover.ui:20
-msgid "Discovering preferences"
-msgstr ""
-
-#: ../data/udev-discover.ui:21
-msgid "Choose the subsystems whose devices you want to display"
-msgstr ""
-
-#: ../data/udev-discover.ui:26 ../data/udev-discover.ui:27
-#: ../data/udev-discover.ui:1113
-msgid "Quit"
-msgstr ""
-
-#: ../data/udev-discover.ui:28
-msgid "Quit the application"
-msgstr ""
-
-#: ../data/udev-discover.ui:33
-msgid "Reload devices tree"
-msgstr ""
-
-#: ../data/udev-discover.ui:34 ../data/udev-discover.ui:1075
-msgid "Reload"
-msgstr ""
-
-#: ../data/udev-discover.ui:35
-msgid "Update devices tree by reloading"
-msgstr ""
-
-#: ../data/udev-discover.ui:40
-msgid "Show parent tree"
-msgstr ""
-
-#: ../data/udev-discover.ui:41 ../data/udev-discover.ui:1060
-msgid "Parent tree"
-msgstr ""
-
-#: ../data/udev-discover.ui:42
-msgid "Recursive displaying of devices parent"
-msgstr ""
-
-#: ../data/udev-discover.ui:57
-msgid "Copyright © 2010-2011 J. Félix Ontañón"
-msgstr ""
-
-#: ../data/udev-discover.ui:58
-msgid "An browser tool for udev curious"
-msgstr ""
-
-#: ../data/udev-discover.ui:60
-msgid "http://fontanon.org/udevdiscover"
-msgstr ""
-
-#: ../data/udev-discover.ui:810 ../data/udev-discover.ui:812
+#: ../data/udev-discover.ui:43 ../data/udev-discover.ui:45
 msgid "Expand devices tree"
 msgstr ""
 
-#: ../data/udev-discover.ui:811 ../data/udev-discover.ui:1045
+#: ../data/udev-discover.ui:44 ../data/udev-discover.ui:1046
 msgid "Expand"
 msgstr ""
 
-#: ../data/udev-discover.ui:818
+#: ../data/udev-discover.ui:51
 msgid "Follow changing devices"
 msgstr ""
 
-#: ../data/udev-discover.ui:819 ../data/udev-discover.ui:1021
+#: ../data/udev-discover.ui:52 ../data/udev-discover.ui:1022
 msgid "Follow changes"
 msgstr ""
 
-#: ../data/udev-discover.ui:820
+#: ../data/udev-discover.ui:53
 msgid "Focus follows changing devices"
 msgstr ""
 
-#: ../data/udev-discover.ui:825
+#: ../data/udev-discover.ui:58
 msgid "Follow new devices"
 msgstr ""
 
-#: ../data/udev-discover.ui:826 ../data/udev-discover.ui:1007
+#: ../data/udev-discover.ui:59 ../data/udev-discover.ui:1008
 msgid "Follow new"
 msgstr ""
 
-#: ../data/udev-discover.ui:827
+#: ../data/udev-discover.ui:60
 msgid "Focus follows new devices"
 msgstr ""
 
-#: ../data/udev-discover.ui:853
+#: ../data/udev-discover.ui:65 ../data/udev-discover.ui:66
+#: ../data/udev-discover.ui:1100
+msgid "Help"
+msgstr ""
+
+#: ../data/udev-discover.ui:67
+msgid "Get help"
+msgstr ""
+
+#: ../data/udev-discover.ui:73 ../data/udev-discover.ui:74
+msgid "Discovering preferences"
+msgstr ""
+
+#: ../data/udev-discover.ui:75
+msgid "Choose the subsystems whose devices you want to display"
+msgstr ""
+
+#: ../data/udev-discover.ui:80 ../data/udev-discover.ui:81
+#: ../data/udev-discover.ui:1114
+msgid "Quit"
+msgstr ""
+
+#: ../data/udev-discover.ui:82
+msgid "Quit the application"
+msgstr ""
+
+#: ../data/udev-discover.ui:87
+msgid "Reload devices tree"
+msgstr ""
+
+#: ../data/udev-discover.ui:88 ../data/udev-discover.ui:1076
+msgid "Reload"
+msgstr ""
+
+#: ../data/udev-discover.ui:89
+msgid "Update devices tree by reloading"
+msgstr ""
+
+#: ../data/udev-discover.ui:94
+msgid "Show parent tree"
+msgstr ""
+
+#: ../data/udev-discover.ui:95 ../data/udev-discover.ui:1061
+msgid "Parent tree"
+msgstr ""
+
+#: ../data/udev-discover.ui:96
+msgid "Recursive displaying of devices parent"
+msgstr ""
+
+#: ../data/udev-discover.ui:112
+msgid "An browser tool for udev curious"
+msgstr ""
+
+#: ../data/udev-discover.ui:114
+msgid "http://fontanon.org/udevdiscover"
+msgstr ""
+
+#: ../data/udev-discover.ui:854
 msgid "_Discover"
 msgstr ""
 
-#: ../data/udev-discover.ui:893
+#: ../data/udev-discover.ui:894
 msgid "_Options"
 msgstr ""
 
-#: ../data/udev-discover.ui:959
+#: ../data/udev-discover.ui:960
 msgid "_Help"
 msgstr ""
 
-#: ../data/udev-discover.ui:1159
+#: ../data/udev-discover.ui:1160
 msgid "Filter:"
 msgstr ""
 
-#: ../data/udev-discover.ui:1210 ../data/udev-discover.ui:1438
+#: ../data/udev-discover.ui:1211 ../data/udev-discover.ui:1439
 msgid "Device"
 msgstr ""
 
-#: ../data/udev-discover.ui:1233
+#: ../data/udev-discover.ui:1234
 msgid "Subsystem"
 msgstr ""
 
-#: ../data/udev-discover.ui:1250
+#: ../data/udev-discover.ui:1251
 msgid "Name"
 msgstr ""
 
-#: ../data/udev-discover.ui:1360
+#: ../data/udev-discover.ui:1361
 msgid "<b>Summary:</b>"
 msgstr ""
 
-#: ../data/udev-discover.ui:1411
+#: ../data/udev-discover.ui:1412
 msgid "<b>Device info:</b>"
 msgstr ""
 
-#: ../data/udev-discover.ui:1460
+#: ../data/udev-discover.ui:1461
 msgid "Key"
 msgstr ""
 
-#: ../data/udev-discover.ui:1476
+#: ../data/udev-discover.ui:1477
 msgid "Value"
 msgstr ""
 
-#: ../data/udev-discover.ui:1500
+#: ../data/udev-discover.ui:1501
 msgid "Properties"
 msgstr ""
 
-#: ../data/udev-discover.ui:1550
+#: ../data/udev-discover.ui:1551
 msgid "Events:"
 msgstr ""
 
-#: ../data/udev-discover.ui:1573
+#: ../data/udev-discover.ui:1574
 msgid "Udev Discover preferences"
 msgstr ""
 
-#: ../data/udev-discover.ui:1640
+#: ../data/udev-discover.ui:1641
 msgid "Choose the subsystems whose devices you want to display:"
 msgstr ""
 
-#: ../data/udev-discover.ui:1655
+#: ../data/udev-discover.ui:1656
 msgid "Default subsystems preset"
 msgstr ""
 
-#: ../data/udev-discover.ui:1673
+#: ../data/udev-discover.ui:1674
 msgid "All subsystems preset"
 msgstr ""
 
-#: ../data/udev-discover.ui:1691
+#: ../data/udev-discover.ui:1692
 msgid "Custom subsystem preset"
 msgstr ""
 
-#: ../data/udev-discover.ui:1739
+#: ../data/udev-discover.ui:1740
 msgid "All subsystems"
 msgstr ""
 
-#: ../data/udev-discover.ui:1837
+#: ../data/udev-discover.ui:1838
 msgid "Chosen subsystems"
 msgstr ""
