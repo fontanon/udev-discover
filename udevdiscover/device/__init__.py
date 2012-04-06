@@ -22,7 +22,7 @@
 # Authors : J. Félix Ontañón <fontanon@emergya.es>
 # 
 
-import gudev
+from gi.repository import GUdev
 
 def match_string(device, search_string):
     """ Finds the search string around the device """
@@ -133,15 +133,15 @@ class Device(object):
 
     DEFAULT_ICON = 'dialog-question'
     UNKNOWN_DEV = 'Unknown Device'
-    DEVICE_TYPE_STR = {gudev.DEVICE_TYPE_BLOCK: 'block', 
-        gudev.DEVICE_TYPE_CHAR: 'char',
-        gudev.DEVICE_TYPE_NONE: 'n/a'
+    DEVICE_TYPE_STR = {GUdev.DeviceType.BLOCK: 'block', 
+        GUdev.DeviceType.CHAR: 'char',
+        GUdev.DeviceType.NONE: 'n/a'
     }
 
     def __init__(self, device):
         '''Create a new input device
             
-        @type device: gudev.Device
+        @type device: GUdev.Device
         @param device: The device we are using
         '''
         self.device = device
