@@ -59,7 +59,7 @@ class DeviceFinder(GObject.GObject):
         '''
         GObject.GObject.__init__(self)
 
-        self.client = GUdev.Client.new('subsystems')
+        self.client = GUdev.Client.new(subsystems)
         self.subsystems = subsystems
         self.parent_tree = parent_tree
         self.devices_tree = {}
