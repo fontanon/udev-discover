@@ -334,8 +334,7 @@ class UDevDiscoverGUI(GConfStore):
 
         self.logger.info(_('Device removed: %s') % device.nice_label)
 
-    def changed_device(self, device_finder, device):
-        old_device = self.device_finder.get_devices_tree()[device.path]
+    def changed_device(self, device_finder, device, old_device):
 
         if self.rows.has_key(device.path):
             # Remove from tree first

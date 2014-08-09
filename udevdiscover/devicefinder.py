@@ -48,8 +48,8 @@ class DeviceFinder(GObject.GObject):
             (GObject.TYPE_PYOBJECT,)),
         'removed': (GObject.SignalFlags.RUN_LAST, None, 
             (GObject.TYPE_PYOBJECT,)),
-        'changed': (GObject.SignalFlags.RUN_LAST, None, 
-            (GObject.TYPE_PYOBJECT,)),
+        'changed': (GObject.SignalFlags.RUN_LAST, None,
+            (GObject.TYPE_PYOBJECT, GObject.TYPE_PYOBJECT,)),
     }
 
     def __init__(self, subsystems='', parent_tree=False):
@@ -143,7 +143,9 @@ class DeviceFinder(GObject.GObject):
         '''Called when a device has been updated'''
 
         dev = device.get_device_object(gudevice)
-        self.emit('changed', dev)
+        old_dev = self.devices_tree[dev.path]
+        self.devices_tree[dev.path] = dev
+        self.emit('changed', dev, old_dev)
 
 GObject.type_register(DeviceFinder)
 
