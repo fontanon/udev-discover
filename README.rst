@@ -8,8 +8,7 @@ Dependencies:
 -------------
 
 * python >= 2.7
-* python-gobject
-* python-gudev
+* gir1.2-gudev
 * gir1.2-gtk-3.0
 * gir1.2-gconf-2.0
 * gir1.2-gdkpixbuf-2.0

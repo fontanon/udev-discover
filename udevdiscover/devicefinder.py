@@ -23,11 +23,11 @@
 # 
 
 from gi.repository import GObject
-import gudev
+from gi.repository import GUdev
 import device 
 
 def get_subsystems():
-    client = gudev.Client('')
+    client = GUdev.Client.new('')
     subsys = []
 
     for device in client.query_by_subsystem('*'):
@@ -48,8 +48,8 @@ class DeviceFinder(GObject.GObject):
             (GObject.TYPE_PYOBJECT,)),
         'removed': (GObject.SignalFlags.RUN_LAST, None, 
             (GObject.TYPE_PYOBJECT,)),
-        'changed': (GObject.SignalFlags.RUN_LAST, None, 
-            (GObject.TYPE_PYOBJECT,)),
+        'changed': (GObject.SignalFlags.RUN_LAST, None,
+            (GObject.TYPE_PYOBJECT, GObject.TYPE_PYOBJECT,)),
     }
 
     def __init__(self, subsystems='', parent_tree=False):
@@ -59,7 +59,7 @@ class DeviceFinder(GObject.GObject):
         '''
         GObject.GObject.__init__(self)
 
-        self.client = gudev.Client(subsystems)
+        self.client = GUdev.Client.new(subsystems)
         self.subsystems = subsystems
         self.parent_tree = parent_tree
         self.devices_tree = {}
@@ -68,7 +68,7 @@ class DeviceFinder(GObject.GObject):
         self.client.connect('uevent', self.event)
 
     def scan_subsystems(self, subsystems='', parent_tree=False):
-        self.client = gudev.Client(subsystems)
+        self.client = GUdev.Client.new(subsystems)
         self.subsystems = subsystems
         self.devices_tree = {}
         self.devices_list = []
@@ -143,7 +143,9 @@ class DeviceFinder(GObject.GObject):
         '''Called when a device has been updated'''
 
         dev = device.get_device_object(gudevice)
-        self.emit('changed', dev)
+        old_dev = self.devices_tree[dev.path]
+        self.devices_tree[dev.path] = dev
+        self.emit('changed', dev, old_dev)
 
 GObject.type_register(DeviceFinder)
 
