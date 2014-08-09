@@ -1,3 +1,11 @@
+udev-discover (0.2.3-1) unstable; urgency=low
+
+  * Migrated to gobject-introspection libraries Fixes #7
+  * Device change event: child devices are dropped #8
+  * Device change event: properties are not updated Fixes #9
+
+ -- J. Félix Ontañón <fontanon@emergya.es>  Sun, 10 Aug 2014 01:51:00 +0200
+
 udev-discover (0.2.2-2) unstable; urgency=low
 
   * Migrated to dh_python2 and quilt source 

@@ -9,8 +9,8 @@ X-Python-Version: >=2.7
 
 Package: udev-discover
 Architecture: any
-Depends: ${misc:Depends}, ${python:Depends}, python-gconf, python-gudev,
- python-gobject, gir1.2-gtk-3.0, gir1.2-gconf-2.0, gir1.2-gdkpixbuf-2.0,
+Depends: ${misc:Depends}, ${python:Depends}, python-gconf, gir1.2-gudev,
+ gir1.2-gtk-3.0, gir1.2-gconf-2.0, gir1.2-gdkpixbuf-2.0,
  gnome-icon-theme-full | gnome-icon-theme-extras
 Description: Sysfs browsing tool focused on helping udev users and developers
  A helping tool for udev testers, coders, hackers and consumers.
