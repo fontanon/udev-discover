@@ -341,11 +341,13 @@ class UDevDiscoverGUI(GConfStore):
             # Remove from tree first
             ref_row = self.rows[device.path]
             treeiter = self.devices_treestore.get_iter(ref_row.get_path())
-            self.devices_treestore.remove(treeiter)
-            del(self.rows[device.path])
+            # treestore.remove(treeiter) removes node with all children; we need to update without removing or move children to a new node first
+            self.devices_treestore.set(treeiter, range(6), [device.path,
+                device_icon, device.nice_label, device.subsystem, False,
+                device.name])
 
             # Add again
-            row_ref = self.add_new_device(device)
+            row_ref = self.rows[device.path]
 
             if self.options['expanded']:
                 iter_path = row_ref.get_path()
