@@ -23,11 +23,11 @@
 # 
 
 from gi.repository import GObject
-import gudev
+from gi.repository import GUdev
 import device 
 
 def get_subsystems():
-    client = gudev.Client('')
+    client = GUdev.Client.new('')
     subsys = []
 
     for device in client.query_by_subsystem('*'):
@@ -59,7 +59,7 @@ class DeviceFinder(GObject.GObject):
         '''
         GObject.GObject.__init__(self)
 
-        self.client = gudev.Client(subsystems)
+        self.client = GUdev.Client.new(subsystems)
         self.subsystems = subsystems
         self.parent_tree = parent_tree
         self.devices_tree = {}
@@ -68,7 +68,7 @@ class DeviceFinder(GObject.GObject):
         self.client.connect('uevent', self.event)
 
     def scan_subsystems(self, subsystems='', parent_tree=False):
-        self.client = gudev.Client(subsystems)
+        self.client = GUdev.Client.new(subsystems)
         self.subsystems = subsystems
         self.devices_tree = {}
         self.devices_list = []
