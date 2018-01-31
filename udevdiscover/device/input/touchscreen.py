@@ -21,7 +21,7 @@
 
 from udevdiscover.device import Device
 
-class TochscreenDevice(Device):
+class TouchscreenDevice(Device):
     DEFAULT_ICON = 'video-display'
 
     @property
