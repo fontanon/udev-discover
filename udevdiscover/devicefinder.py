@@ -22,6 +22,9 @@
 # Authors : J. Félix Ontañón <fontanon@emergya.es>
 # 
 
+# (http://mednis.info/use-girequire_versiongtk-30-before-import.html)
+import gi
+gi.require_version("GUdev", "1.0")
 from gi.repository import GObject
 from gi.repository import GUdev
 import device 

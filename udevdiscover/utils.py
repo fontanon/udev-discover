@@ -22,6 +22,9 @@
 
 import exceptions
 import types
+# (http://mednis.info/use-girequire_versiongtk-30-before-import.html)
+import gi
+gi.require_version("GConf", "2.0")
 from gi.repository import GConf
 
 class GConfKeysDict(dict):
