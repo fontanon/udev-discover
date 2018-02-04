@@ -230,7 +230,7 @@ class UDevDiscoverGUI(GConfStore):
                 'help_action', 'preferences_action', 'quit_action',
                 'reload_action', 'showparents_toggleaction', 'about_dialog',
                 'deviceprop_store', 'devices_treestore', 'eventslog_textbuffer',
-                'main_window']):
+                'eventslog_textview', 'eventslog_scrolledwindow', 'main_window']):
             raise 'Cant load %s' % UDEVDISCOVER_UI
         self.builder.connect_signals(self)
 
@@ -250,6 +250,8 @@ class UDevDiscoverGUI(GConfStore):
         self.showparents_toggleaction = self.builder.get_object('showparents_toggleaction')
         self.eventslog_expander = self.builder.get_object('eventslog_expander')
         self.eventslog_textbuffer = self.builder.get_object('eventslog_textbuffer')
+        self.eventslog_textview = self.builder.get_object('eventslog_textview')
+        self.eventslog_scrolledwindow = self.builder.get_object('eventslog_scrolledwindow')
         self.follownew_toggleaction = self.builder.get_object('follownew_toggleaction')
         self.followchanged_toggleaction = \
             self.builder.get_object('followchanged_toggleaction')
@@ -548,6 +550,12 @@ class UDevDiscoverGUI(GConfStore):
             self.expand_toggleaction_toggled_cb(self.expand_toggleaction)
         else:
             self.search_entry_activate_cb(entry)
+
+    def eventslog_textview_size_allocate_cb(self, *args):
+        # From https://stackoverflow.com/a/15988421
+        adj = self.eventslog_scrolledwindow.get_vadjustment()
+        adj.set_value(adj.get_upper() - adj.get_page_size())
+
 
     def about_action_activate_cb(self, widget):
         self.about_dialog.run()
