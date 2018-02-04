@@ -1184,8 +1184,8 @@
     <property name="type_hint">normal</property>
     <property name="transient_for">main_window</property>
     <property name="program_name">udev-discover</property>
-    <property name="version">0.2.3</property>
-    <property name="copyright">Copyright © 2010-2014 J. Félix Ontañón</property>
+    <property name="version">0.2.4</property>
+    <property name="copyright">Copyright © 2010-2017 J. Félix Ontañón</property>
     <property name="comments" translatable="yes">An browser tool for udev curious</property>
     <property name="website">http://fontanon.org/udevdiscover</property>
     <property name="website_label" translatable="yes">http://fontanon.org/udevdiscover</property>
@@ -1863,14 +1863,14 @@ may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 &lt;http://www.gnu.org/philosophy/why-not-lgpl.html&gt;.</property>
-    <property name="authors">J. Félix Ontañón &lt;fontanon@emergya.es&gt;
+    <property name="authors">J. Félix Ontañón &lt;felixonta@gmail.com&gt;
 
 Contributors:
 Juanje Ojeda &lt;jojeda@emergya.es&gt;
 Javier Hernandez &lt;jhernandez@emergya.es&gt;
 Ed Catmur &lt;ed@catmur.co.uk&gt;
 Eugene Shatsky</property>
-    <property name="translator_credits">(es) J. Félix Ontañón &lt;fontanon@emergya.es&gt;
+    <property name="translator_credits">(es) J. Félix Ontañón &lt;felixonta@gmail.com&gt;
 (pl) eloaders &lt;eloaders@yahoo.com&gt;</property>
     <property name="logo">udev-discover.svg</property>
     <property name="wrap_license">True</property>
